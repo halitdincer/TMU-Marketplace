@@ -15,7 +15,7 @@ Welcome to TMU Marketplace - a advertisements platform tailored specifically for
 
 1. **Create Virtual Environment**
 
-   If you haven't installed `virtualenv` yet, you can install it using pip:
+   To set up a new python3 virtual environment, run:
 
    ```bash
     python3 -m venv .venv
