@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Welcome to TMU Marketplace - a classified advertisements platform tailored specifically for students of TMU (Tokyo Metropolitan University). This web application provides a user-friendly interface for students to post and browse classified ads in various categories such as "Items Wanted", "Items for Sale", and "Academic Services". Our goal is to create a responsive and fully functional platform accessible on both desktop and mobile computing platforms, enhancing the TMU student community's experience in trading, selling, and academic collaboration.
+Welcome to TMU Marketplace - a advertisements platform tailored specifically for students of Toronto Metropolitan University.
 
 ## Getting Started
 
