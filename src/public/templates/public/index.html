@@ -1,1 +1,55 @@
-This is the index page!!
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ads Listing</title>
+    <!-- Include Alpine.js via CDN -->
+    <script src="//unpkg.com/alpinejs" defer></script>
+</head>
+<body>
+    <div x-data="adsFetcher()" x-init="fetchAds">
+        <h1>Ads Listing</h1>
+        <template x-if="ads.length">
+            <ul>
+                <template x-for="ad in ads" :key="ad.id">
+                    <li>
+                        <h2 x-text="ad.title"></h2>
+                        <p x-text="ad.description"></p>
+                        <p>Category: <span x-text="ad.category"></span></p>
+                        <p>Price: <span x-text="ad.price"></span></p>
+                        <p>Posted by: <span x-text="ad.owned_by"></span></p>
+                        <p>Posted on: <span x-text="ad.created_at"></span></p>
+                    </li>
+                </template>
+            </ul>
+        </template>
+        <template x-if="!ads.length">
+            <p>No ads available.</p>
+        </template>
+    </div>
+
+    <script>
+        function adsFetcher() {
+            return {
+                ads: [],
+                fetchAds() {
+                    fetch('/api/ads/')  // Adjust the URL to your API endpoint
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log(data)
+                            this.ads = data;
+                        })
+                        .catch(error => {
+                            console.error('There has been a problem with your fetch operation:', error);
+                        });
+                }
+            }
+        }
+    </script>
+</body>
+</html>
