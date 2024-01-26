@@ -40,3 +40,33 @@ Welcome to TMU Marketplace - a advertisements platform tailored specifically for
 
     This command reads the requirements.txt file in your project directory and installs all the necessary Python packages.
 
+### Database Migrations
+
+Before running the server, you need to make sure the database schema is up to date. This is done through migrations.
+   
+1. **Navigate to the src Directory**
+   ```bash
+   cd src
+   ```
+
+2. **Create Migrations**
+   ```bash
+   python manage.py makemigrations
+   ```
+
+2. **Run Migrations**
+   ```bash
+   python manage.py migrate
+   ```
+
+### Running the Server
+
+After completing the migrations, you can start the server.
+
+1. **Start the Django Server**
+   ```bash
+   python manage.py runserver
+   ```
+
+This command starts a development server on your local machine. By default, the server runs at http://127.0.0.1:8000/.
+
