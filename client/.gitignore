@@ -1,5 +1,3 @@
-# React
-
 # dependencies
 /node_modules
 /.pnp
@@ -21,3 +19,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# environment variable for development
+.env.*
+!.env
