@@ -3,7 +3,7 @@ import AdsList from 'components/AdsList'
 import Header from 'components/Header';
 import Sidebar from 'components/Sidebar';
 
-function InboxPage(){
+function InboxPage({isConnected}){
   return (
     <div className="flex">
       <Sidebar />
@@ -12,6 +12,7 @@ function InboxPage(){
         <div className="bg-white py-6 sm:py-6">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <h1 className="text-5xl font-semibold">Inbox</h1>
+            <p>State: { '' + isConnected }</p>
           </div>
         </div>
       </div>
