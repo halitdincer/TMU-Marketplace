@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'users',
     'ads',
+    'chat',
     'public'
 ]
 
@@ -85,7 +86,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'core.wsgi.application'
-ASGI_APPLICATION = 'core.routing.application'
+ASGI_APPLICATION = "core.asgi.application"
 
 
 # Database
