@@ -1,10 +1,16 @@
 import React from 'react';
+import AdsList from 'components/AdsList'
+import Header from 'components/Header';
+import Sidebar from 'components/Sidebar';
 
 function HomePage(){
   return (
-    <div>
-      <h1>Home Page</h1>
-      {/* Add your home page content here */}
+    <div className="flex">
+      <Sidebar />
+      <div class="flex-1">
+        <Header />
+        <AdsList />
+      </div>
     </div>
   );
 };
