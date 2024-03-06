@@ -8,7 +8,7 @@ function HomePage(){
     <div className="flex">
       <Sidebar />
       <div class="flex-1">
-        <Header />
+        <Header/>
         <AdsList />
       </div>
     </div>

@@ -8,11 +8,9 @@ function ProfilePage(){
     <div className="flex">
       <Sidebar />
       <div class="flex-1">
-        <Header />
+        <Header/>
         <div className="bg-white py-6 sm:py-6">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <h1 className="text-5xl font-semibold">Profile</h1>
-          </div>
+          {/* Page content here */}
         </div>
       </div>
     </div>
