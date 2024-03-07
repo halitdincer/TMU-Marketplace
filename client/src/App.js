@@ -1,18 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
 import React from 'react';
-import AdsList from './components/AdsList'; // Make sure this path is correct
+import { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import HomePage from 'pages/HomePage';
+import ProfilePage from 'pages/ProfilePage';
+import CategoriesPage from 'pages/CategoriesPage';
+import InboxPage from 'pages/InboxPage';
 
 function App() {
+
   return (
-    <div className="App">
-      <header>
-        <h1>Welcome to TMU Marketplace</h1>
-      </header>
-      <main>
-        <AdsList />
-      </main>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route index element={<HomePage />} />
+        <Route path="categories" element={<CategoriesPage />} />
+        <Route path="inbox" element={<InboxPage />} />
+        <Route path="profile" element={<ProfilePage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

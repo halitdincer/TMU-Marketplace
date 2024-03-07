@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import AdCard from './AdCard';
 
 function AdsList() {
   // State to store the ads
@@ -35,18 +36,24 @@ function AdsList() {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div>
-      <h2>Ads List</h2>
-      {ads.length > 0 ? (
-        <ul>
-          {ads.map(ad => (
-            <li key={ad.id}>{ad.title} - {ad.description}</li>
-          ))}
-        </ul>
-      ) : (
-        <p>No ads found.</p>
-      )}
+    <>
+    
+    <div className="bg-white py-6 sm:py-6">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <h1 className="text-5xl font-semibold">Browse</h1>
+        <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 pt-2 sm:mt-5 sm:pt-5 lg:mx-0 lg:max-w-none lg:grid-cols-4">
+          {ads.length > 0 ? (
+            ads.map(ad => (
+              <AdCard key={ad.id} ad={ad} />
+            ))
+          ) : (
+            <p>No ads found.</p>
+          )}
+        </div>
+      </div>
     </div>
+
+    </>
   );
 }
 
