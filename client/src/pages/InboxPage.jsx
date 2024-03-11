@@ -75,12 +75,14 @@ function InboxPage() {
       <Sidebar />
       <div class="flex-1 flex h-screen overflow-hidden pt-6 sm:pt-6">
 
-        <ChatsList  chats={chats} />
+        <ChatsList  chats={chats} conversantId={conversantId} />
 
         {activeChatMessages && activeChatMessages.length > 0 ? (
           <ChatWindow userId={1} messages={activeChatMessages} />
         ) : (
-          <p>No messages to display</p>
+          <div className='flex justify-center items-center text-center h-screen w-full'>
+            <p>No messages to display</p>
+          </div>
         )}
 
       </div>
