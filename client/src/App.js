@@ -18,7 +18,8 @@ function App() {
       <Routes>
         <Route index element={<HomePage />} />
         <Route path="categories" element={<CategoriesPage />} />
-        <Route path="inbox" element={<InboxPage />} />
+        <Route path="inbox/" element={<InboxPage />} />
+        <Route path="inbox/:conversantId" element={<InboxPage />} />
         <Route path="profile" element={<ProfilePage />} />
         <Route path="login" element={<LogInPage />} />
         <Route path="filters" element={<Filters />} />

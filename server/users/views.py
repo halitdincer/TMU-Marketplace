@@ -1,7 +1,9 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.generics import ListAPIView
 
-from .serializers import UserSerializer
+from .models import CustomUser
+from .serializers import CustomUserSerializer
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
@@ -10,6 +12,10 @@ from django.shortcuts import get_object_or_404
 from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+
+class CustomUserListView(ListAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
 
 @api_view(['POST'])
 def login(request):
@@ -52,5 +58,4 @@ def logout(request):
 @permission_classes([IsAuthenticated])
 def test_token(request):
     return Response("passed!")
-
 

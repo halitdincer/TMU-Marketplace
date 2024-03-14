@@ -1,5 +1,4 @@
 import React from 'react';
-import AdsList from 'components/AdsList'
 import Header from 'components/Header';
 import Sidebar from 'components/Sidebar';
 
