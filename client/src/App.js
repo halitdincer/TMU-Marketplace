@@ -10,6 +10,8 @@ import SignUp from 'pages/SignUp';
 import Filters from 'components/Filters'
 import ForgotPasswordPage from 'pages/ForgotPassword';
 import AdDetailsPage from 'pages/AdDetailsPage';
+import CreateAdForm from 'components/CreateAdForm';
+import CreatePage from 'pages/CreatePage';
 
 function App() {
 
@@ -26,6 +28,7 @@ function App() {
         <Route path="signup" element={<SignUp />} />
         <Route path="forgotPassword" element={<ForgotPasswordPage />} />
         <Route path="ad/:id" element={<AdDetailsPage />} /> 
+        <Route path="create" element={<CreatePage />} />
       </Routes>
     </BrowserRouter>
   );
