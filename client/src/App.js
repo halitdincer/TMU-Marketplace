@@ -9,7 +9,7 @@ import LogInPage from 'pages/LogInPage';
 import SignUp from 'pages/SignUp';
 import Filters from 'components/Filters'
 import ForgotPasswordPage from 'pages/ForgotPassword';
-
+import AdDetailsPage from 'pages/AdDetailsPage';
 
 function App() {
 
@@ -25,6 +25,7 @@ function App() {
         <Route path="filters" element={<Filters />} />
         <Route path="signup" element={<SignUp />} />
         <Route path="forgotPassword" element={<ForgotPasswordPage />} />
+        <Route path="ad/:id" element={<AdDetailsPage />} /> 
       </Routes>
     </BrowserRouter>
   );
