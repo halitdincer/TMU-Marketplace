@@ -150,7 +150,7 @@ AUTH_USER_MODEL = 'users.CustomUser'
 REACT_APP_BUILD_PATH = os.path.abspath(os.path.join(BASE_DIR, '..', 'client', 'build'))
 REACT_APP_STATIC_PATH = os.path.abspath(os.path.join(BASE_DIR, '..', 'client', 'build', 'static'))
 
-# Static files (CSS, JavaScript, Images)
+# Static files (CSS, JavaScript)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
@@ -158,3 +158,7 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     REACT_APP_STATIC_PATH,
 ]
+
+# Media files (CSS, JavaScript, Images)
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
