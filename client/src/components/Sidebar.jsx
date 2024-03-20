@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 function Sidebar(){
   return (
@@ -7,14 +6,21 @@ function Sidebar(){
         <aside class="flex flex-col justify-between content-center w-32 h-screen px-5 py-4 overflow-y-auto bg-white border-r ">
             
             <div class="flex justify-center flex-1">
-                <a href="#">
-                    <img class="w-auto h-8" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="" />
+                <a href="/">
+                    <img class="w-auto h-8" src="../images/logo.jpg" alt="Logo" />
                 </a>
             </div>
 
             <div class="flex flex-col justify-between flex-1">
                 <nav class="-mx-3 space-y-6 ">
                     <div class="space-y-3 ">
+
+                        <a class="flex flex-col items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700" href="create">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-6-6h12" />
+                            </svg>
+                            <span class="m-2 text-sm font-medium">Create</span>
+                        </a>
 
                         <a class="flex flex-col items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700" href="/">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
@@ -42,6 +48,13 @@ function Sidebar(){
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                             </svg>
                             <span class="m-2 text-sm font-medium">Profile</span>
+                        </a>
+
+                        <a class="flex flex-col items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700" href="/profile">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
+                            <span class="m-2 text-sm font-medium">Add Post</span>
                         </a>
                     </div>
 
@@ -101,7 +114,7 @@ function Sidebar(){
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
 
-                    <span class="m-2 text-sm font-medium">Setting</span>
+                    <span class="m-2 text-sm font-medium">Settings</span>
                 </a>
             </div>
         </aside>
