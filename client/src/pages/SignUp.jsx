@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import logo from '../images/logo.jpg'; 
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function SignUp() {
@@ -11,7 +12,6 @@ function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [passwordMatchError, matchPasswordError] = useState('');
-
 
   async function checkIfEmailExists(emailToCheck) {
     try {
@@ -85,6 +85,13 @@ function SignUp() {
         setEmailError('An unexpected error occurred. Please try again.');
       }
     }
+  };
+
+  let navigate = useNavigate();
+
+  // Function to handle navigation to the home page
+  const navigateToHome = () => {
+    navigate('/');
   };
 
   return (
