@@ -1,16 +1,31 @@
 import React, { useState } from 'react';
 import logo from '../images/logo.jpg'; 
 import { useNavigate } from 'react-router-dom'; 
+import axios from 'axios';
 
 
 function LoginPage() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
     // Sending a request to your server
-    console.log('Logging in with:', username, password);
+    console.log('Logging in with:', email, password);
+    try{
+      const response = await axios.post('/api/users/login/',
+        JSON.stringify({ username: email, password}),
+        {
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true
+        }
+      );
+      // TODO: remove console.logs before deployment
+      console.log(JSON.stringify(response?.data));
+      //console.log(JSON.stringify(response))
+    } catch(error){
+      console.error('Error:', error);
+    }
   };
 
   let navigate = useNavigate();
@@ -31,16 +46,16 @@ function LoginPage() {
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-              Username
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+              Email
             </label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="username"
+              id="email"
               type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="mb-6">

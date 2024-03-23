@@ -6,7 +6,7 @@ import Filters from 'components/Filters';
 import HeaderLoggedIn from 'components/HeaderLoggedIn';
 
 function HomePage(){
-  const loggedIn = false;
+  const loggedIn = true;
   return (
     <div className="flex">
       <Sidebar />

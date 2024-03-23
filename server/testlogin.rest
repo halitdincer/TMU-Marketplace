@@ -1,7 +1,7 @@
 POST http://127.0.0.1:8000/api/users/signup
 Content-Type: application/json
 
-{ "username": "Elena2", "password": "Pass123!", "email": "elena@email.com" }
+{ "username": "Elena", "password": "Pass123!", "email": "elena@email.com" }
 
 ###
 
@@ -20,4 +20,4 @@ Authorization: Token 47bf836f222b8f6647fdb02914768844c62771ea
 
 POST http://127.0.0.1:8000/api/users/logout
 Content-Type: application/json 
-Authorization: Token 6c837621f9515aa096c5a096df6e8d5269bbad31
+Authorization: Token 2c7054feafc246e637268348cc7ad6f7a7ad71d0
