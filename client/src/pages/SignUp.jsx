@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from '../images/logo.jpg'; 
+import axios from 'axios';
 
 function SignUp() {
   const [firstName, setFirstName] = useState('');
@@ -8,14 +9,72 @@ function SignUp() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleSignUp = (event) => {
+  /*useEffect(() => {
+    // Function to fetch ads data
+    const createUser = async () => {
+      try {
+        const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ firstName, password, email }),
+        };
+        const response = await fetch('/api/users/signup/', requestOptions);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+  
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    createUser(); // Call the fetch function
+  }, []); // Empty dependency array means this effect runs once on mount
+  */
+  const handleSignUp = async (event) => {
     event.preventDefault();
-    if (password !== confirmPassword) {
+    /*if (password !== confirmPassword) {
       alert("Passwords don't match.");
       return;
     }
     // After validation, data needs to be sent to server??
     console.log('Signing up with:', firstName, lastName, email, password);
+    //
+    const createUser = async () => {
+      try {
+        const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ firstName, password, email }),
+        };
+        const response = fetch('/api/users/signup/', requestOptions);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+  
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    createUser(); // Call the fetch function
+    */
+
+    //post request from lab 2
+    try{
+      const response = await axios.post('/api/users/signup/',
+        JSON.stringify({ username: firstName, password, email }),
+        {
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true
+        }
+      );
+      // TODO: remove console.logs before deployment
+      //console.log(JSON.stringify(response?.data));
+      //console.log(JSON.stringify(response))
+    } catch(error){
+      console.error('Error:', error);
+    }
   };
 
   return (

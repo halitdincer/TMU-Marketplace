@@ -36,7 +36,7 @@ def signup(request):
         user.set_password(request.data['password'])
         user.save()
         #create auth token 
-        token = Token.objects.create(user = user )
+        token = Token.objects.create(user = user)
         
         #return Response({"token": token.key, "user": serializer.data})
         return Response({"Authorization": "Token "+token.key, "user": serializer.data})
