@@ -7,25 +7,83 @@ function SignUp() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [passwordMatchError, matchPasswordError] = useState('');
+
+  async function checkIfEmailExists(emailToCheck) {
+    try {
+      const response = await axios.get('/api/users/check-email/', {
+        params: { email: emailToCheck },
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true
+      });
+      
+      return response.data.exists;
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
+  }
+
+  const validatePassword = (pwd) => {
+    const regex = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()]).{8,}');
+    if (!regex.test(pwd)) {
+      setPasswordError('Password must contain at least one number, one uppercase and lowercase letter, 8 or more characters, and at least one special character');
+      return false;
+    } else {
+      setPasswordError('');
+      return true;
+    }
+  };
+
+  const handleConfirmPassword = (e) => {
+      if (password !== confirmPassword) {
+
+      matchPasswordError('Passwords do not match.');
+      return false;
+    } else {
+      matchPasswordError('');
+      return true;
+    }
+  }
 
   const handleSignUp = async (event) => {
+    handleConfirmPassword();
+    validatePassword(password);
+
+    const isPasswordValid = validatePassword(password);
+    const isConfirmPasswordValid = handleConfirmPassword();
+
     event.preventDefault();
-    try{
-      const response = await axios.post('/api/users/signup/',
-        JSON.stringify({ username: email, password, firstName, lastName}),
-        {
-            headers: { 'Content-Type': 'application/json' },
-            withCredentials: true
+   
+    if (isPasswordValid && isConfirmPasswordValid) {
+      try {
+        const emailExists = await checkIfEmailExists(email);
+        if (emailExists) {
+          setEmailError('An account with this email already exists.');
+          return;
         }
-      );
-      // TODO: remove console.logs before deployment
-      //console.log(JSON.stringify(response?.data));
-      //console.log(JSON.stringify(response))
-      navigateToHome();
-    } catch(error){
-      console.error('Error:', error);
+        else{
+          setEmailError('');
+        }
+        try{
+          const response = await axios.post('/api/users/signup/',
+            JSON.stringify({ username: firstName, password, email }),
+            {
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
+            }
+          );
+
+        } catch(error){
+          console.error('Error:', error);
+        }
+      } catch (error) {
+        setEmailError('An unexpected error occurred. Please try again.');
+      }
     }
   };
 
@@ -86,8 +144,12 @@ function SignUp() {
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+              title="Email must be in the format name@email.com"
               required
             />
+          {emailError && <div className="text-red-500">{emailError}</div>}
+
           </div>
 
           <div className="mb-4">
@@ -101,10 +163,9 @@ function SignUp() {
               placeholder="************"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" // Regex for password validation
-              title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
               required
             />
+            {passwordError && <div className="text-red-500">{passwordError}</div>}
           </div>
 
           <div className="mb-6">
@@ -120,6 +181,7 @@ function SignUp() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
+            {passwordMatchError && <div className="text-red-500">{passwordMatchError}</div>}
           </div>
 
           <div className="flex flex-col items-center justify-between space-y-4">
