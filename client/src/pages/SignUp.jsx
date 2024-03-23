@@ -6,74 +6,84 @@ function SignUp() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [passwordMatchError, matchPasswordError] = useState('');
 
-  /*useEffect(() => {
-    // Function to fetch ads data
-    const createUser = async () => {
-      try {
-        const requestOptions = {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ firstName, password, email }),
-        };
-        const response = await fetch('/api/users/signup/', requestOptions);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-  
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
 
-    createUser(); // Call the fetch function
-  }, []); // Empty dependency array means this effect runs once on mount
-  */
-  const handleSignUp = async (event) => {
-    event.preventDefault();
-    /*if (password !== confirmPassword) {
-      alert("Passwords don't match.");
-      return;
-    }
-    // After validation, data needs to be sent to server??
-    console.log('Signing up with:', firstName, lastName, email, password);
-    //
-    const createUser = async () => {
-      try {
-        const requestOptions = {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ firstName, password, email }),
-        };
-        const response = fetch('/api/users/signup/', requestOptions);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-  
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
-
-    createUser(); // Call the fetch function
-    */
-
-    //post request from lab 2
-    try{
-      const response = await axios.post('/api/users/signup/',
-        JSON.stringify({ username: firstName, password, email }),
-        {
-            headers: { 'Content-Type': 'application/json' },
-            withCredentials: true
-        }
-      );
-      // TODO: remove console.logs before deployment
-      //console.log(JSON.stringify(response?.data));
-      //console.log(JSON.stringify(response))
-    } catch(error){
+  async function checkIfEmailExists(emailToCheck) {
+    try {
+      const response = await axios.get('/api/users/check-email/', {
+        params: { email: emailToCheck },
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true
+      });
+      
+      return response.data.exists;
+    } catch (error) {
       console.error('Error:', error);
+      throw error;
+    }
+  }
+
+  const validatePassword = (pwd) => {
+    const regex = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()]).{8,}');
+    if (!regex.test(pwd)) {
+      setPasswordError('Password must contain at least one number, one uppercase and lowercase letter, 8 or more characters, and at least one special character');
+      return false;
+    } else {
+      setPasswordError('');
+      return true;
+    }
+  };
+
+  const handleConfirmPassword = (e) => {
+      if (password !== confirmPassword) {
+
+      matchPasswordError('Passwords do not match.');
+      return false;
+    } else {
+      matchPasswordError('');
+      return true;
+    }
+  }
+
+  const handleSignUp = async (event) => {
+    handleConfirmPassword();
+    validatePassword(password);
+
+    const isPasswordValid = validatePassword(password);
+    const isConfirmPasswordValid = handleConfirmPassword();
+
+    event.preventDefault();
+   
+    if (isPasswordValid && isConfirmPasswordValid) {
+      try {
+        const emailExists = await checkIfEmailExists(email);
+        if (emailExists) {
+          setEmailError('An account with this email already exists.');
+          return;
+        }
+        else{
+          setEmailError('');
+        }
+        try{
+          const response = await axios.post('/api/users/signup/',
+            JSON.stringify({ username: firstName, password, email }),
+            {
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
+            }
+          );
+
+        } catch(error){
+          console.error('Error:', error);
+        }
+      } catch (error) {
+        setEmailError('An unexpected error occurred. Please try again.');
+      }
     }
   };
 
@@ -126,8 +136,12 @@ function SignUp() {
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+              title="Email must be in the format name@email.com"
               required
             />
+          {emailError && <div className="text-red-500">{emailError}</div>}
+
           </div>
 
           <div className="mb-4">
@@ -141,10 +155,9 @@ function SignUp() {
               placeholder="************"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" // Regex for password validation
-              title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
               required
             />
+            {passwordError && <div className="text-red-500">{passwordError}</div>}
           </div>
 
           <div className="mb-6">
@@ -160,6 +173,7 @@ function SignUp() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
+            {passwordMatchError && <div className="text-red-500">{passwordMatchError}</div>}
           </div>
 
           <div className="flex flex-col items-center justify-between space-y-4">

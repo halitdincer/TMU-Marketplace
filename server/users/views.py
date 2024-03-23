@@ -59,3 +59,11 @@ def logout(request):
 def test_token(request):
     return Response("passed!")
 
+@api_view(['GET'])
+def check_email(request):
+    email = request.query_params.get('email', None)
+    if email is None:
+        return Response({"error": "Email parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+    email_exists = CustomUser.objects.filter(email=email).exists()
+    return Response({"exists": email_exists})
