@@ -7,7 +7,7 @@ function Sidebar(){
             
             <div class="flex justify-center flex-1">
                 <a href="/">
-                    <img class="w-auto h-8" src="../images/logo.jpg" alt="Logo" />
+                    <img class="w-auto h-8" src="./logo192.png" alt="Logo" />
                 </a>
             </div>
 

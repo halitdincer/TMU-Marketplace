@@ -5,7 +5,12 @@ function AdCard({ ad }) {
 
   return (
     <article className="max-w-md mx-auto bg-white border border-gray-200 shadow-lg rounded-lg overflow-hidden my-5">
-      <img src={ad.image || "https://placehold.co/600x400"} alt={ad.title} className="w-full h-56 object-cover object-center" />
+      
+      <img
+        src={(ad.images && ad.images.length > 0) ? ad.images[0].image_url : "https://placehold.co/600x400?text=No+Image"}
+        alt={ad.title}
+        className="w-full h-56 object-cover object-center"
+      />
       
       <div className="p-6">
         <div className="flex items-center justify-between text-xs text-gray-600 mb-2">

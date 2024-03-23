@@ -10,33 +10,12 @@ const product = {
 
 href: '#',
 
-images: [
-  {
-    src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-secondary-product-shot.jpg',
-    alt: 'Two each of gray, white, and black shirts laying flat.',
-  },
-  {
-    src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-01.jpg',
-    alt: 'Model wearing plain black basic tee.',
-  },
-  {
-    src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-02.jpg',
-    alt: 'Model wearing plain gray basic tee.',
-  },
-  {
-    src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-featured-product-shot.jpg',
-    alt: 'Model wearing plain white basic tee.',
-  },
-],
-
-
 highlights: [
   'Hand cut and sewn locally',
   'Dyed with our proprietary colors',
   'Pre-washed & pre-shrunk',
   'Ultra-soft 100% cotton',
 ],
-
 
 }
 
@@ -57,6 +36,7 @@ function DetailedAd() {
         const options = { month: 'long', day: 'numeric', year: 'numeric' };
         return date.toLocaleDateString('en-US', options);
     }
+
     return (
     <div className="bg-white">
         <div >
@@ -140,9 +120,12 @@ function DetailedAd() {
             
             </div>
 
-            <div className="lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 ">
-            <ImageCarousel images={product.images} />
-            </div>
+            {ad.images && ad.images.length > 0 && (
+                <div className="lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8">
+                <ImageCarousel images={ad.images} />
+                </div>
+            )}
+
             </div>
         </div>
     </div>
