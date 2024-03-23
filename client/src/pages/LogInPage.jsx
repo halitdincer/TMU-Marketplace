@@ -20,9 +20,8 @@ function LoginPage() {
             withCredentials: true
         }
       );
-      //Save token to local cache
-      let token = response.data.Authorization
-      token = token.split(' ')[1];
+      //Strip and Save token to local cache
+      const token = (response.data.Authorization).split(' ')[1];
       localStorage.setItem('authtoken', token);
 
       navigateToHome();

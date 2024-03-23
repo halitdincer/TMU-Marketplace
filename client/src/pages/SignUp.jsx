@@ -77,7 +77,10 @@ function SignUp() {
                 withCredentials: true
             }
           );
-
+          //Strip and Save token to local cache
+          const token = (response.data.Authorization).split(' ')[1];
+          localStorage.setItem('authtoken', token);    
+          navigateToHome();
         } catch(error){
           console.error('Error:', error);
         }
