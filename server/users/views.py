@@ -40,8 +40,8 @@ def signup(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["POST"])
-#@authentication_classes([SessionAuthentication, TokenAuthentication])
-#@permission_classes([IsAuthenticated])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def logout(request):
     if request.method == "POST":
         #check the user is logged in
@@ -54,12 +54,3 @@ def logout(request):
 @permission_classes([IsAuthenticated])
 def test_token(request):
     return Response("passed!")
-
-@api_view(['GET'])
-def check_email(request):
-    email = request.query_params.get('email', None)
-    if email is None:
-        return Response({"error": "Email parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
-
-    email_exists = CustomUser.objects.filter(email=email).exists()
-    return Response({"exists": email_exists})

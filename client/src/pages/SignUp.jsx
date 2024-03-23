@@ -13,21 +13,6 @@ function SignUp() {
   const [passwordError, setPasswordError] = useState('');
   const [passwordMatchError, matchPasswordError] = useState('');
 
-  async function checkIfEmailExists(emailToCheck) {
-    try {
-      const response = await axios.get('/api/users/check-email/', {
-        params: { email: emailToCheck },
-        headers: { 'Content-Type': 'application/json' },
-        withCredentials: true
-      });
-      
-      return response.data.exists;
-    } catch (error) {
-      console.error('Error:', error);
-      throw error;
-    }
-  }
-
   const validatePassword = (pwd) => {
     const regex = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()]).{8,}');
     if (!regex.test(pwd)) {
@@ -59,39 +44,27 @@ function SignUp() {
 
     event.preventDefault();
    
-    if (isPasswordValid && isConfirmPasswordValid) {
-      try {
-        const emailExists = await checkIfEmailExists(email);
-        if (emailExists) {
-          setEmailError('An account with this email already exists.');
-          return;
-        }
-        else{
-          setEmailError('');
-        }
-        try{
-          const response = await axios.post('/api/users/signup/',
-            JSON.stringify({ username: firstName, password, email }),
-            {
-                headers: { 'Content-Type': 'application/json' },
-                withCredentials: true
-            }
-          );
-          //Strip and Save token to local cache
-          const token = (response.data.Authorization).split(' ')[1];
-          localStorage.setItem('authtoken', token);    
-          navigateToHome();
-        } catch(error){
-          console.error('Error:', error);
-        }
-      } catch (error) {
-        setEmailError('An unexpected error occurred. Please try again.');
+    if (isPasswordValid && isConfirmPasswordValid) { 
+      try{
+        const response = await axios.post('/api/users/signup/',
+          JSON.stringify({ username: email, password, firstName, lastName}),
+          {
+              headers: { 'Content-Type': 'application/json' },
+              withCredentials: true
+          }
+        );
+        //Strip and Save token to local cache
+        const token = (response.data.Authorization).split(' ')[1];
+        localStorage.setItem('authtoken', token);    
+        navigateToHome();
+      } catch(error){
+        console.error('Error:', error);
+        setEmailError('An account with this email already exists.');
       }
     }
   };
 
   let navigate = useNavigate();
-
   // Function to handle navigation to the home page
   const navigateToHome = () => {
     navigate('/');
