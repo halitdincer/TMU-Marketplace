@@ -24,7 +24,6 @@ def login(request):
         return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
     token, created = Token.objects.get_or_create(user = user)
     serializer = CustomUserSerializer(instance = user)
-    #return Response({"token": token.key, "user": serializer.data})
     return Response({"Authorization": "Token "+token.key, "user": serializer.data})
 
 @api_view(['POST'])
@@ -37,14 +36,12 @@ def signup(request):
         user.save()
         #create auth token 
         token = Token.objects.create(user = user)
-        
-        #return Response({"token": token.key, "user": serializer.data})
         return Response({"Authorization": "Token "+token.key, "user": serializer.data})
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["POST"])
-@authentication_classes([SessionAuthentication, TokenAuthentication])
-@permission_classes([IsAuthenticated])
+#@authentication_classes([SessionAuthentication, TokenAuthentication])
+#@permission_classes([IsAuthenticated])
 def logout(request):
     if request.method == "POST":
         #check the user is logged in

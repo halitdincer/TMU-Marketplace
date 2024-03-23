@@ -14,16 +14,20 @@ function HeaderLoggedIn({ title }) {
     event.preventDefault();
     // Sending a request to your server
     try{
+      const token = localStorage.getItem("authtoken");
       const response = await axios.post('/api/users/logout/',
-        JSON.stringify({ Token: "ff43a2c32ede0cadd9137568097a0ef272f5c6c1"}),
+        JSON.stringify({Authorization: 'Token ' + token}),
         {
-            headers: { 'Content-Type': 'application/json' },
-            withCredentials: true
+            headers: { 'Content-Type': 'application/json' ,
+            'Authorization': 'Token ' + token},
         }
+        
       );
+      
       // TODO: remove console.logs before deployment
       console.log(JSON.stringify(response?.data));
       //console.log(JSON.stringify(response))
+      localStorage.removeItem('authtoken');
     } catch(error){
       console.error('Error:', error);
     }

@@ -20,9 +20,14 @@ function LoginPage() {
             withCredentials: true
         }
       );
-      // TODO: remove console.logs before deployment
+      //Save token to local cache
+      let token = response.data.Authorization
+      token = token.split(' ')[1];
+      localStorage.setItem('authtoken', token);
+
+      navigateToHome();
+      //delete later
       console.log(JSON.stringify(response?.data));
-      //console.log(JSON.stringify(response))
     } catch(error){
       console.error('Error:', error);
     }
@@ -30,6 +35,12 @@ function LoginPage() {
 
   let navigate = useNavigate();
 
+  // Function to handle navigation to the home page
+  const navigateToHome = () => {
+    navigate('/');
+  };
+  
+  
   // Function to handle navigation to the signup page
   const navigateToSignUp = () => {
     navigate('/signup');
