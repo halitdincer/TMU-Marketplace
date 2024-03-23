@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
+import axios from 'axios';
 
 function HeaderLoggedIn({ title }) {
 
@@ -8,6 +9,30 @@ function HeaderLoggedIn({ title }) {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const handleLogout = async (event) => {
+    event.preventDefault();
+    // Sending a request to your server
+    try{
+      const token = localStorage.getItem("authtoken");
+      const response = await axios.post('/api/users/logout/',
+        JSON.stringify({Authorization: 'Token ' + token}),
+        {
+            headers: { 'Content-Type': 'application/json' ,
+            'Authorization': 'Token ' + token},
+        }
+        
+      );
+      
+      // TODO: remove console.logs before deployment
+      console.log(JSON.stringify(response?.data));
+      //console.log(JSON.stringify(response))
+      localStorage.removeItem('authtoken');
+    } catch(error){
+      console.error('Error:', error);
+    }
+  };
+
   return (
     <>
       <header class="bg-white border- border-gray-300">
@@ -50,7 +75,8 @@ function HeaderLoggedIn({ title }) {
               {isMenuOpen && (
                 <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button">
                   <a href="/profile" className="block px-4 py-2 text-sm text-gray-700" role="menuitem">My Profile </a>
-                  <a href="/login" className="block px-4 py-2 text-sm text-gray-700" role="menuitem">Sign Out</a>
+                  {/*<a href="/login" className="block px-4 py-2 text-sm text-gray-700" role="menuitem">Sign Out</a>*/}
+                  <button onClick={handleLogout}>Logout</button>
                   <a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem">Help and FAQ</a>
                   <a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem">Create a New Listing</a>
                   <a href="/inbox" className="block px-4 py-2 text-sm text-gray-700" role="menuitem">My Chats</a>
