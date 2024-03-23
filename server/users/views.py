@@ -23,20 +23,20 @@ def login(request):
     if not user.check_password(request.data['password']):
         return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
     token, created = Token.objects.get_or_create(user = user)
-    serializer = UserSerializer(instance = user)
+    serializer = CustomUserSerializer(instance = user)
     #return Response({"token": token.key, "user": serializer.data})
     return Response({"Authorization": "Token "+token.key, "user": serializer.data})
 
 @api_view(['POST'])
 def signup(request):
-    serializer = UserSerializer(data=request.data)
+    serializer = CustomUserSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         user = CustomUser.objects.get(username = request.data['username'])
         user.set_password(request.data['password'])
         user.save()
         #create auth token 
-        token = Token.objects.create(user = user )
+        token = Token.objects.create(user = user)
         
         #return Response({"token": token.key, "user": serializer.data})
         return Response({"Authorization": "Token "+token.key, "user": serializer.data})
