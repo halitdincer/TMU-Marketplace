@@ -20,3 +20,14 @@ class Ad(models.Model):
 
     def __str__(self):
         return self.title
+    
+class AdImage(models.Model):
+    ad = models.ForeignKey(Ad, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='ad_images/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['uploaded_at']
+
+    def __str__(self):
+        return f"Ad Image for {self.ad.title} uploaded at {self.uploaded_at}"
