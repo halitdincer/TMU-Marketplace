@@ -9,19 +9,19 @@ function Avatar({ avatarUrl, altText }) {
 }
 
 function ChatMessage({ message, isSender }) {
-  const messageClass = isSender ? "flex justify-end mb-4 cursor-pointer" : "flex mb-4 cursor-pointer";
-  const messageBoxClass = isSender ? "flex max-w-96 bg-indigo-500 text-white rounded-lg p-3 gap-3" : "flex max-w-96 bg-white rounded-lg p-3 gap-3";
-  const avatarUrl = isSender
+  const messageClass = !isSender ? "flex justify-end mb-4 cursor-pointer" : "flex mb-4 cursor-pointer";
+  const messageBoxClass = !isSender ? "flex max-w-96 bg-indigo-500 text-white rounded-lg p-3 gap-3" : "flex max-w-96 bg-white rounded-lg p-3 gap-3";
+  const avatarUrl = !isSender
     ? "https://placehold.co/200x/b7a8ff/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
     : "https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato";
   
   return (
     <div className={messageClass}>
-      {!isSender && <Avatar avatarUrl={avatarUrl} altText="User Avatar" />}
+      {isSender && <Avatar avatarUrl={avatarUrl} altText="User Avatar" />}
       <div className={messageBoxClass}>
         <p>{message.text}</p>
       </div>
-      {isSender && <Avatar avatarUrl={avatarUrl} altText="My Avatar" />}
+      {!isSender && <Avatar avatarUrl={avatarUrl} altText="My Avatar" />}
     </div>
   );
 }
@@ -33,7 +33,7 @@ function ChatWindow({ messages, userId }) {
   return (
     <div className="flex-1 relative">
       <header className="bg-white p-4 text-gray-700">
-        <h1 className="text-2xl font-semibold">{messages[0].receiver_name}</h1>
+        <h1 className="text-2xl font-semibold">{messages[0].receiver_id === userId ? messages[0].receiver_name : messages[0].sender_name}</h1>
       </header>
       <div className="h-screen overflow-y-auto p-4 pb-36">
         {sortedMessages.map((msg) => (

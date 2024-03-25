@@ -11,15 +11,24 @@ function InboxPage() {
   const [chats, setChats] = useState([]);
   const [activeChatMessages, setActiveChatMessages] = useState([]);
   let { conversantId } = useParams();
-  const { userData } = useContext(AuthContext);
+  const { userData, apiToken } = useContext(AuthContext);
+
+  
 
   useEffect(() => {
-    const userId = 1; // Assuming this is the logged-in user's ID
+    const userId = userData.id; 
     const fetchMessages = async () => {
       try {
+
+        const options = {
+          headers: {
+            'Authorization': `Token ${apiToken}` 
+          }
+        };
+
         const [receivedResponse, sentResponse] = await Promise.all([
-          fetch(`http://localhost:8000/api/messages/?receiver_id=${userId}`),
-          fetch(`http://localhost:8000/api/messages/?sender_id=${userId}`)
+          fetch('http://localhost:8000/api/messages/received', options),
+          fetch('http://localhost:8000/api/messages/sent', options)
         ]);
   
         if (!receivedResponse.ok || !sentResponse.ok) {
