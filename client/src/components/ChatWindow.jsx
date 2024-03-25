@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
+import { AuthContext } from './AuthProvider';
+import axios from 'axios';
 
 function Avatar({ avatarUrl, altText }) {
   return (
@@ -27,6 +29,33 @@ function ChatMessage({ message, isSender }) {
 }
 
 function ChatWindow({ messages, userId }) {
+
+  const [inputText, setInputText] = useState('');
+  const { apiToken } = useContext(AuthContext);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault(); // Prevents the page from refreshing
+    if (!inputText.trim()) return; // Don't send empty messages
+    
+    const messageData = {
+      text: inputText,
+      receiver: messages[0].receiver_id === userId ? messages[0].receiver_id :  userId,
+    };
+
+    console.log(messageData);
+
+    try {
+      const response = await axios.post('http://localhost:8000/api/messages/', messageData, {
+        headers: { Authorization: `Token ${apiToken}`,},
+      });
+      if (response.status === 201) {
+        setInputText(''); // Clear input field after sending
+      }
+    } catch (error) {
+      console.error('Failed to send message:', error);
+    }
+  };
+
   // Sort messages by timestamp before rendering
   const sortedMessages = messages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
   
@@ -41,10 +70,16 @@ function ChatWindow({ messages, userId }) {
         ))}
       </div>
       <footer className="bg-white p-4 absolute bottom-0 w-full">
-        <div className="flex items-center">
-          <input type="text" placeholder="Type a message..." className="w-full p-2 rounded-md border border-gray-400 focus:outline-none focus:border-blue-500" />
-          <button className="bg-indigo-500 text-white px-4 py-2 rounded-md ml-2">Send</button>
-        </div>
+        <form className="flex items-center" onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Type a message..."
+            className="w-full p-2 rounded-md border border-gray-400 focus:outline-none focus:border-blue-500"
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+          />
+          <button type="submit" className="bg-indigo-500 text-white px-4 py-2 rounded-md ml-2">Send</button>
+        </form>
       </footer>
     </div>
   );
