@@ -1,37 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import logo from '../images/logo.jpg'; 
-import { useNavigate } from 'react-router-dom'; 
-import axios from 'axios';
-
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from 'components/AuthProvider';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { login } = useContext(AuthContext); // Destructure the login function from AuthContext
+  let navigate = useNavigate();
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    // Sending a request to your server
     console.log('Logging in with:', email, password);
-    try{
-      const response = await axios.post('/api/users/login/',
-        JSON.stringify({ username: email, password}),
-        {
-            headers: { 'Content-Type': 'application/json' },
-            withCredentials: true
-        }
-      );
-      //Strip and Save token to local cache
-      const token = (response.data.Authorization).split(' ')[1];
-      localStorage.setItem('authtoken', token);
-      navigateToHome();
-      //delete later
-      console.log(JSON.stringify(response?.data));
-    } catch(error){
-      console.error('Error:', error);
+    try {
+      // Using the login function from AuthProvider instead of axios directly
+      await login(email, password);
+      navigate('/'); // Navigate to home page on successful login
+    } catch (error) {
+      console.error('Login error:', error);
     }
   };
-
-  let navigate = useNavigate();
 
   // Function to handle navigation to the home page
   const navigateToHome = () => {

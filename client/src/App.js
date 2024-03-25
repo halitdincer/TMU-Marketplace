@@ -14,6 +14,7 @@ import CreateAdForm from 'components/CreateAdForm';
 import CreatePage from 'pages/CreatePage';
 import { AuthProvider } from 'components/AuthProvider';
 import { PrivateRoute } from 'components/PrivateRoute';
+import { GuestRoute } from 'components/GuestRoute';
 
 function App() {
 
@@ -24,15 +25,28 @@ function App() {
         <Route path="categories" element={<CategoriesPage />} />
         <Route path="inbox/" element={<InboxPage />} />
         <Route path="inbox/:conversantId" element={<InboxPage />} />
+        <Route path="filters" element={<Filters />} />
+        <Route path="ad/:id" element={<AdDetailsPage />} /> 
+        
+        {/* Private Routes */}
         <Route exact path='profile' element={<PrivateRoute/>}>
           <Route exact path="profile" element={<ProfilePage />} />
         </Route>
-        <Route path="login" element={<LogInPage />} />
-        <Route path="filters" element={<Filters />} />
-        <Route path="signup" element={<SignUp />} />
-        <Route path="forgotPassword" element={<ForgotPasswordPage />} />
-        <Route path="ad/:id" element={<AdDetailsPage />} /> 
-        <Route path="create" element={<CreatePage />} />
+        <Route exact path='create' element={<PrivateRoute/>}>
+          <Route path="create" element={<CreatePage />} />
+        </Route>
+
+        {/* Guest Routes */}
+        <Route exact path='login' element={<GuestRoute/>}>
+          <Route path="login" element={<LogInPage />} />
+        </Route>
+        <Route exact path='signup' element={<GuestRoute/>}>
+          <Route path="signup" element={<SignUp />} />
+        </Route>
+        <Route exact path='forgotPassword' element={<GuestRoute/>}>
+          <Route path="forgotPassword" element={<ForgotPasswordPage />} />
+        </Route>
+
       </Routes>
     </AuthProvider>
   );
