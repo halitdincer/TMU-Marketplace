@@ -8,19 +8,22 @@ import InboxPage from 'pages/InboxPage';
 import LogInPage from 'pages/LogInPage'; 
 import SignUp from 'pages/SignUp';
 import Filters from 'components/Filters'
+import Logout from 'components/Logout';
 import ForgotPasswordPage from 'pages/ForgotPassword';
 import AdDetailsPage from 'pages/AdDetailsPage';
 import CreateAdForm from 'components/CreateAdForm';
 import CreatePage from 'pages/CreatePage';
 import { AuthProvider } from 'components/AuthProvider';
 import { PrivateRoute } from 'components/PrivateRoute';
-import { GuestRoute } from 'components/GuestRoute';
+import GuestRoute from 'components/GuestRoute';
 
 function App() {
 
   return (
     <AuthProvider>
       <Routes>
+
+        {/* Public Routes */}
         <Route index element={<HomePage />} />
         <Route path="categories" element={<CategoriesPage />} />
         <Route path="inbox/" element={<InboxPage />} />
@@ -28,23 +31,27 @@ function App() {
         <Route path="filters" element={<Filters />} />
         <Route path="ad/:id" element={<AdDetailsPage />} /> 
         
+        
         {/* Private Routes */}
-        <Route exact path='profile' element={<PrivateRoute/>}>
-          <Route exact path="profile" element={<ProfilePage />} />
+        <Route path='profile' element={<PrivateRoute/>}>
+          <Route index element={<ProfilePage />} />
         </Route>
-        <Route exact path='create' element={<PrivateRoute/>}>
-          <Route path="create" element={<CreatePage />} />
+        <Route path='create' element={<PrivateRoute/>}>
+          <Route index element={<CreatePage />} />
+        </Route>
+        <Route path='logout' element={<PrivateRoute/>}>
+          <Route index element={<Logout />} />
         </Route>
 
         {/* Guest Routes */}
-        <Route exact path='login' element={<GuestRoute/>}>
-          <Route path="login" element={<LogInPage />} />
+        <Route path='login' element={<GuestRoute/>}>
+          <Route index element={<LogInPage />} />
         </Route>
-        <Route exact path='signup' element={<GuestRoute/>}>
-          <Route path="signup" element={<SignUp />} />
+        <Route path='signup' element={<GuestRoute/>}>
+          <Route index element={<SignUp />} />
         </Route>
-        <Route exact path='forgotPassword' element={<GuestRoute/>}>
-          <Route path="forgotPassword" element={<ForgotPasswordPage />} />
+        <Route path='forgotPassword' element={<GuestRoute/>}>
+          <Route index element={<ForgotPasswordPage />} />
         </Route>
 
       </Routes>
