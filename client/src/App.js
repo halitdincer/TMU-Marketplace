@@ -12,17 +12,21 @@ import ForgotPasswordPage from 'pages/ForgotPassword';
 import AdDetailsPage from 'pages/AdDetailsPage';
 import CreateAdForm from 'components/CreateAdForm';
 import CreatePage from 'pages/CreatePage';
+import { AuthProvider } from 'components/AuthProvider';
+import { PrivateRoute } from 'components/PrivateRoute';
 
 function App() {
 
   return (
-    <BrowserRouter>
+    <AuthProvider>
       <Routes>
         <Route index element={<HomePage />} />
         <Route path="categories" element={<CategoriesPage />} />
         <Route path="inbox/" element={<InboxPage />} />
         <Route path="inbox/:conversantId" element={<InboxPage />} />
-        <Route path="profile" element={<ProfilePage />} />
+        <Route exact path='profile' element={<PrivateRoute/>}>
+          <Route exact path="profile" element={<ProfilePage />} />
+        </Route>
         <Route path="login" element={<LogInPage />} />
         <Route path="filters" element={<Filters />} />
         <Route path="signup" element={<SignUp />} />
@@ -30,7 +34,7 @@ function App() {
         <Route path="ad/:id" element={<AdDetailsPage />} /> 
         <Route path="create" element={<CreatePage />} />
       </Routes>
-    </BrowserRouter>
+    </AuthProvider>
   );
 }
 
