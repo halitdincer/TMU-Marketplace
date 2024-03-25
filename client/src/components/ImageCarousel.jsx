@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { useWindowSize } from "@react-hook/window-size";
+
 import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
 import { RxDotFilled } from "react-icons/rx";
 
 function ImageCarousel({ images }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [width, height] = useWindowSize();
 
   const prevSlide = () => {
     const isFirstSlide = currentIndex === 0;
