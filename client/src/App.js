@@ -12,8 +12,30 @@ import ForgotPasswordPage from 'pages/ForgotPassword';
 import AdDetailsPage from 'pages/AdDetailsPage';
 import CreateAdForm from 'components/CreateAdForm';
 import CreatePage from 'pages/CreatePage';
+import AdsList from 'components/AdsList';
+import Header from './components/Header'; 
+
 
 function App() {
+
+  const [ads, setAds] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Call this function from the Header component when the form is submitted
+  const handleSearchSubmit = (query) => {
+    setSearchQuery(query);
+    //console.log('query: ',query);
+  };
+
+  const handleAdSubmit = (ad) => {
+    setAds([...ads, ad]);
+  };
+
+  const [user, setUser] = React.useState({
+    name: '',
+    email: '',
+    image: null,
+  });
 
   return (
     <BrowserRouter>
@@ -28,7 +50,10 @@ function App() {
         <Route path="signup" element={<SignUp />} />
         <Route path="forgotPassword" element={<ForgotPasswordPage />} />
         <Route path="ad/:id" element={<AdDetailsPage />} /> 
-        <Route path="create" element={<CreatePage />} />
+        <Route path="create" element={<CreatePage onAdSubmit={handleAdSubmit} />} />
+        <Route path="ads" element={<AdsList ads={ads} searchQuery={searchQuery} />} />
+        {/*<Route path="ads" element={<AdsList ads={ads} />} /> {/* Pass ads as a prop here */}
+
       </Routes>
     </BrowserRouter>
   );
