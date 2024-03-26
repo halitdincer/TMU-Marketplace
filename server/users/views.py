@@ -44,8 +44,6 @@ def signup(request):
 @permission_classes([IsAuthenticated])
 def logout(request):
     if request.method == "POST":
-        #check the user is logged in
-        #check if Token.objects.filter(user=user).exist()
         request.user.auth_token.delete()
         return Response({"Message": "Logged out"}, status=status.HTTP_200_OK)
 
