@@ -16,8 +16,29 @@ import CreatePage from 'pages/CreatePage';
 import { AuthProvider } from 'components/AuthProvider';
 import { PrivateRoute } from 'components/PrivateRoute';
 import GuestRoute from 'components/GuestRoute';
+import AdsList from 'components/AdsList';
+import Header from './components/Header'; 
 
 function App() {
+
+  const [ads, setAds] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Call this function from the Header component when the form is submitted
+  const handleSearchSubmit = (query) => {
+    setSearchQuery(query);
+    //console.log('query: ',query);
+  };
+
+  const handleAdSubmit = (ad) => {
+    setAds([...ads, ad]);
+  };
+
+  const [user, setUser] = React.useState({
+    name: '',
+    email: '',
+    image: null,
+  });
 
   return (
     <AuthProvider>
@@ -30,7 +51,7 @@ function App() {
         <Route path="inbox/:conversantId" element={<InboxPage />} />
         <Route path="filters" element={<Filters />} />
         <Route path="ad/:id" element={<AdDetailsPage />} /> 
-        
+        <Route path="ads" element={<AdsList ads={ads} searchQuery={searchQuery} />} />
         
         {/* Private Routes */}
         <Route path='profile' element={<PrivateRoute/>}>
