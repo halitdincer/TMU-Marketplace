@@ -1,8 +1,10 @@
 import React from 'react';
-import { useState } from 'react';
-import axios from 'axios';
+import { useState, useContext } from 'react';
+import { AuthContext } from './AuthProvider';
 
 function HeaderLoggedIn({ title, onSearchSubmit }) {
+
+  const { userData } = useContext(AuthContext);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -39,6 +41,7 @@ function HeaderLoggedIn({ title, onSearchSubmit }) {
     }
   };
 
+
   return (
     <>
       <header className="bg-white border- border-gray-300">
@@ -63,8 +66,9 @@ function HeaderLoggedIn({ title, onSearchSubmit }) {
             </svg>
             </a>
 
-            <button type="button" className="px-4 py-2 bg-custom-blue text-white rounded-md">Buy & Sell</button>
-            <button type="button" className="px-4 py-2 bg-custom-blue text-white rounded-md">Study Groups</button>
+            <button type="button" class="px-4 py-2 bg-custom-blue text-white rounded-md">Buy & Sell</button>
+            <button type="button" class="px-4 py-2 bg-custom-blue text-white rounded-md">Academic Services</button>
+            <p>{(userData) ? userData.profile_picture : '' }</p>
             <div className="relative">
               <button
                 type="button"
@@ -75,24 +79,20 @@ function HeaderLoggedIn({ title, onSearchSubmit }) {
                 onClick={toggleMenu}
               >
                 <span className="sr-only">Open user menu</span>
-                <img className="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="User" />
+                <img 
+                  className="h-8 w-8 rounded-full" 
+                  src={(userData && userData.profile_picture) ? userData.profile_picture : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"} 
+                  alt="User" />
               </button>
               {/* Dropdown menu */}
               {isMenuOpen && (
                 <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button">
                   <a href="/profile" className="block px-4 py-2 text-sm text-gray-700" role="menuitem">My Profile </a>
-                  {/*<a href="/login" className="block px-4 py-2 text-sm text-gray-700" role="menuitem">Sign Out</a>*/}
-                  <button onClick={handleLogout}>Logout</button>
-                  <a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem">Help and FAQ</a>
-                  <a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem">Create a New Listing</a>
-                  <a href="/inbox" className="block px-4 py-2 text-sm text-gray-700" role="menuitem">My Chats</a>
+                  <a href="/logout" className="block px-4 py-2 text-sm text-gray-700" role="menuitem">Sign out</a>
                 </div>
               )}
 
             </div>
-
-
-
           </div>
         </nav>
       </header>

@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Sidebar from 'components/Sidebar';
 import ChatsList from 'components/ChatsList';
 import { useParams } from 'react-router-dom';
 import ChatWindow from 'components/ChatWindow';
+import { AuthContext } from 'components/AuthProvider';
+
 
 function InboxPage() {
   
   const [chats, setChats] = useState([]);
   const [activeChatMessages, setActiveChatMessages] = useState([]);
   let { conversantId } = useParams();
+  const { userData } = useContext(AuthContext);
 
   useEffect(() => {
     const userId = 1; // Assuming this is the logged-in user's ID
@@ -70,21 +73,37 @@ function InboxPage() {
   }, [conversantId]);
 
 
+
   return (
     <div className="flex">
       <Sidebar />
+      
       <div class="flex-1 flex h-screen overflow-hidden pt-6 sm:pt-6">
 
-        <ChatsList  chats={chats} conversantId={conversantId} />
-
-        {activeChatMessages && activeChatMessages.length > 0 ? (
-          <ChatWindow userId={1} messages={activeChatMessages} />
-        ) : (
+        {/* Check if user signed in yet */}
+        {!userData ? (
+          <>
+          {/* If user is not signed in, display warning */}
           <div className='flex justify-center items-center text-center h-screen w-full'>
-            <p>No messages to display</p>
+            <p>Login required to view your messages. Please <a href='login' className='text-blue-600'>sign in</a>.</p>
           </div>
-        )}
+          </>
+        ) : (
+          <>
+          {/* If user already signed in, display chatsList and chatWindow */}
+          <ChatsList  chats={chats} conversantId={conversantId} />
 
+          {activeChatMessages && activeChatMessages.length > 0 ? (
+            <ChatWindow userId={1} messages={activeChatMessages} />
+          ) : (
+            <div className='flex justify-center items-center text-center h-screen w-full'>
+              <p>No messages to display. Please select a conversation</p>
+            </div>
+          )}
+
+          </>
+
+        )}
       </div>
     </div>
 
