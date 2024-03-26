@@ -1,9 +1,5 @@
+import axios from 'axios';
 import React, { useState } from 'react';
-
-const createAd = (ad) => {
-  // Implement your ad creation logic here
-  console.log('Creating ad:', ad);
-};
 
 function CreateAdForm() {
   const [title, setTitle] = useState('');
@@ -12,9 +8,21 @@ function CreateAdForm() {
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    createAd({ title, description, image, price, category });
+    //createAd({ title, description, image, price, category });
+    try{
+      const response = await axios.post('/api/ads/create-ad/',
+        JSON.stringify({ title, description, category, price }),
+        {
+            headers: { 'Content-Type': 'application/json' },
+        }
+      );
+      //delete later
+      console.log(JSON.stringify(response?.data));
+    } catch(error){
+      console.error('Error:', error);
+    }
   };
 
   const handleImageChange = (e) => {
@@ -41,11 +49,11 @@ function CreateAdForm() {
       <label style={{ marginBottom: '5px' }}>
         Category:
         <br />
-        <select value={category} onChange={e => setCategory(e.target.value)} style={{ padding: '10px', border: '1px solid #ccc', borderRadius: '4px', width: '100%' }}>
+        <select id="CATEGORY_CHOICES" value={category} onChange={e => setCategory(e.target.value)} style={{ padding: '10px', border: '1px solid #ccc', borderRadius: '4px', width: '100%' }}>
           <option value="">Select:</option>
-          <option value="Items Wanted">Items Wanted</option>
-          <option value="Items for Sale">Items for Sale</option>
-          <option value="Academic Services">Academic Services</option>
+          <option value='IW'>Items Wanted</option>
+          <option value='IS'>Items for Sale</option>
+          <option value="AS">Academic Services</option>
         </select>
       </label>
       <label style={{ marginBottom: '5px' }}>
