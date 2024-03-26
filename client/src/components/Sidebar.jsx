@@ -22,7 +22,7 @@ function Sidebar() {
   return (
     <>
       {isMobile ? (
-        <div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 py-2 sm:hidden">
+        <div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 py-2 sm:hidden z-10">
           <div class="flex justify-evenly">
             {/* Navigation links for mobile */}
             <a
