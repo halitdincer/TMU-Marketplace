@@ -1,5 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
+import logo from "../images/logo.jpg";
+
 
 function Header({ title , onSearchSubmit }) {
 
@@ -17,7 +19,13 @@ function Header({ title , onSearchSubmit }) {
   return (
     <>
       <header className="bg-white border- border-gray-300">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
+        <nav className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-6" aria-label="Global">
+        <div class="pr-20">
+            <a href="/">
+              <img class="w-auto h-16 rounded " src={logo} alt="Logo" />
+            </a>
+          </div>
+
           <div className="flex-2">
             <form className="pt-2 relative mx-auto text-gray-600" onSubmit={handleSearchSubmit}>
               <input className="border-2 border-gray-300 bg-white h-10 px-5 pr-32 rounded-lg text-sm focus:outline-none" type="search" name="search" placeholder="Search" />
@@ -32,7 +40,7 @@ function Header({ title , onSearchSubmit }) {
           <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-4">
             {/* Buttons for "Buy" and "Study Groups" */}
             <button type="button" className="px-4 py-2 bg-custom-blue text-white rounded-md">Buy & Sell</button>
-            <button type="button" className="px-4 py-2 bg-custom-blue text-white rounded-md">Study Groups</button>
+            <button type="button" className="px-4 py-2 bg-custom-blue text-white rounded-md">Academic Services</button>
 
           
               <a href="/login" className="block px-4 py-2 text-sm text-custom-blue hover:bg-custom-blue hover:rounded-md hover:text-white" role="menuitem">Log In</a>
