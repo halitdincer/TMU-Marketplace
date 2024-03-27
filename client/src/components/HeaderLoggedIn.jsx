@@ -1,6 +1,9 @@
 import React from 'react';
 import { useState, useContext } from 'react';
 import { AuthContext } from './AuthProvider';
+import logo from "../images/logo.jpg";
+import axios from 'axios';
+
 
 function HeaderLoggedIn({ title, onSearchSubmit }) {
 
@@ -45,7 +48,14 @@ function HeaderLoggedIn({ title, onSearchSubmit }) {
   return (
     <>
       <header className="bg-white border- border-gray-300">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-6" aria-label="Global">
+
+        <div class="pr-20">
+            <a href="/">
+              <img class="w-auto h-16 rounded " src={logo} alt="Logo" />
+            </a>
+          </div>
+
           <div className="flex-2">
             <form className="pt-2 relative mx-auto text-gray-600" onSubmit={handleSearchSubmit}>
               <input className="border-2 border-gray-300 bg-white h-10 px-5 pr-32 rounded-lg text-sm focus:outline-none" type="search" name="search" placeholder="Search" />
