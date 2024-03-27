@@ -26,3 +26,4 @@ class AdSerializer(serializers.ModelSerializer):
     def get_images(self, obj):
         images = obj.images.all()
         return AdImageSerializer(images, many=True, context=self.context).data
+

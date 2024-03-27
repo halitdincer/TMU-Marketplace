@@ -31,3 +31,5 @@ class AdImage(models.Model):
 
     def __str__(self):
         return f"Ad Image for {self.ad.title} uploaded at {self.uploaded_at}"
+
+

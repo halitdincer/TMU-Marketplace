@@ -41,3 +41,4 @@ class AdAdmin(admin.ModelAdmin):
 
 admin.site.register(Ad, AdAdmin)
 admin.site.register(AdImage)
+
