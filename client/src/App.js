@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from 'pages/HomePage';
 import ProfilePage from 'pages/ProfilePage';
+import EditProfile from 'pages/EditProfile';
 import CategoriesPage from 'pages/CategoriesPage';
 import InboxPage from 'pages/InboxPage';
 import LogInPage from 'pages/LogInPage'; 
@@ -56,6 +57,9 @@ function App() {
         {/* Private Routes */}
         <Route path='profile' element={<PrivateRoute/>}>
           <Route index element={<ProfilePage />} />
+        </Route>
+        <Route path='edit-profile' element={<PrivateRoute/>}>
+          <Route index element={<EditProfile />} />
         </Route>
         <Route path='create' element={<PrivateRoute/>}>
           <Route index element={<CreatePage />} />
