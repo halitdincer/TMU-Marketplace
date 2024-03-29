@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import Sidebar from 'components/Sidebar';
+import Header from 'components/Header';
 import { AuthContext } from 'components/AuthProvider'; // replace 'path-to-AuthProvider' with the actual path to AuthProvider.jsx
 
 const updateProfile = (profile) => {
@@ -7,10 +8,11 @@ const updateProfile = (profile) => {
   };
 
 function EditProfile() {
-    const { userData, setUserData } = useContext(AuthContext);
-    const [username, setUsername] = useState(userData.username);
-    const [email, setEmail] = useState(userData.email);
-    const [name, setName] = useState(userData.name);
+  const initialState = {};
+  const [userData, setUserData] = useState(initialState);
+  const [username, setUsername] = useState(userData.username);
+  const [email, setEmail] = useState(userData.email);
+  const [name, setName] = useState(userData.name);
   
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -21,13 +23,14 @@ function EditProfile() {
     <div className="flex lg:flex-row">
       <Sidebar />
       <div className="flex-1">
+        <Header/>
         <div className="bg-white py-6 sm:py-6">
             <div className="mx-auto lg:max-w-7xl px-6 lg:px-8">
               <div className="text-center mb-4 p-4 rounded-md bg-custom-blue shadow-md px-2 py-2">
                 <h1 className="text-5xl font-semibold" style={{color: 'white'}}>Edit Profile</h1>              
               </div>                
               <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
-                <article className="lg:max-w-md mx-auto bg-white border border-gray-200 shadow-lg rounded-lg overflow-hidden my-5" style={{width: '100%', height: '450px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                <article className="lg:max-w-md mx-auto bg-white border border-gray-200 shadow-lg rounded-lg overflow-hidden my-5" style={{width: '90%', height: '450px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                   <label style={{ marginBottom: '10px', width: '80%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                       Image:
                       <br />

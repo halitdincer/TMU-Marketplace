@@ -13,7 +13,9 @@ function AdsList({ searchQuery }) {
   const [error, setError] = useState(null);
 
   const filteredAds = useMemo(() => ads.filter(ad => {
-    return ad.title.toLowerCase().includes(searchQuery.toLowerCase()) || ad.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const lowerSearchQuery = searchQuery ? searchQuery.toLowerCase() : '';
+    return (ad.title ? ad.title.toLowerCase().includes(lowerSearchQuery) : false) || 
+           (ad.description ? ad.description.toLowerCase().includes(lowerSearchQuery) : false);
   }), [ads, searchQuery]);
 
   useEffect(() => {
