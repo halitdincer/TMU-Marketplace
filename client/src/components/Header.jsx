@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import logo from "../images/logo.jpg";
 import logoSmall from "../images/logo_small.jpg";
 
+import LogoSmall from "../assets/LogoSmall.svg";
 function Header({ title, onSearchSubmit }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -36,11 +37,11 @@ function Header({ title, onSearchSubmit }) {
           {isMobile ? (
             // Mobile menu toggle button
             <>
-              <div>
+              <div className="w-auto h-20">
                 <a href="/">
                   <img
-                    className="w-auto h-auto rounded"
-                    src={logoSmall}
+                    className="w-full h-full object-cover "
+                    src={LogoSmall}
                     alt="Logo"
                   />
                 </a>
@@ -98,11 +99,11 @@ function Header({ title, onSearchSubmit }) {
           ) : (
             // Non-mobile elements
             <>
-              <div className="pr-4">
+              {/* <div className="pr-4">
                 <a href="/">
                   <img className="w-auto h-16 rounded" src={logo} alt="Logo" />
                 </a>
-              </div>
+              </div> */}
 
               <div className="flex-grow">
                 <form
