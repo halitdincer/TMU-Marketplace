@@ -72,6 +72,12 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  // Function to check if user logged in
+  function checkAuth() {
+    // Check if the apiToken is present to determine authentication status
+    return apiToken !== null;
+  }
+
   // Function to retrive API token
   function getToken(){
     return apiToken;
@@ -79,7 +85,7 @@ export const AuthProvider = ({ children }) => {
 
   // Providing the authentication context value to the children components
   return (
-    <AuthContext.Provider value={{ apiToken, userData, login, logout, getToken }}>
+    <AuthContext.Provider value={{ apiToken, userData, login, logout, checkAuth, getToken }}>
       {children}
     </AuthContext.Provider>
   );
