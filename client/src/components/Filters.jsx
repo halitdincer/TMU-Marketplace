@@ -47,20 +47,12 @@ function Filters() {
     
     if (category) params.set('category', category);
     if (location) params.set('location', location);
-    // Add more parameters here as needed, like minPrice and maxPrice
+    if (minPrice) params.set('min_price', minPrice); 
+    if (maxPrice) params.set('max_price', maxPrice);
 
     // Update the URL without navigating to a new page
     navigate(`?${params.toString()}`, { replace: true });
-  }, [category, location, navigate]);
-
-  // Handlers for setting state
-  const handleCategoryChange = (e) => {
-    setCategory(e.target.value);
-  };
-
-  const handleLocationChange = (e) => {
-    setLocation(e.target.value);
-  };
+  }, [category, location, minPrice, maxPrice, navigate]);
 
   return (
     <div className="bg-custom-blue shadow-md px-2 py-2">
@@ -72,7 +64,7 @@ function Filters() {
           <select
             id="category-select"
             value={category}
-            onChange={handleCategoryChange}
+            onChange={(e) => setCategory(e.target.value)}
             className="py-1 px-3 border border-gray-200 bg-white rounded-md shadow-sm focus:outline-none focus:ring-custom-blue focus:border-blue-500 text-gray-700"
           >
             <option value="">Select a category</option>
@@ -114,7 +106,7 @@ function Filters() {
           <select
             id="location-select"
             value={location}
-            onChange={handleLocationChange}
+            onChange={(e) => setLocation(e.target.value)}
             className="py-1 px-3 border border-gray-200 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-700"
           >
             <option value="">Select a location</option>
