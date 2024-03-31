@@ -157,7 +157,7 @@ function InboxPage() {
                 {activeChatMessages && activeChatMessages.length > 0 ? (
                   <ChatWindow userId={1} messages={activeChatMessages} />
                 ) : (
-                  <div className="flex justify-center items-center text-center h-screen w-full">
+                  <div className="flex flex-col justify-center items-center flex-1">
                     <p>No messages to display. Please select a conversation</p>
                   </div>
                 )}
