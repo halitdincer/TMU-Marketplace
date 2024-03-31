@@ -72,12 +72,6 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  // Function to check if user logged in
-  function checkAuth() {
-    // Check if the apiToken is present to determine authentication status
-    return apiToken !== null;
-  }
-
   // Function to retrive API token
   function getToken(){
     return apiToken;
