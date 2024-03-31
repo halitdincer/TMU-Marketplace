@@ -84,8 +84,8 @@ function ChatWindow({ messages, userId }) {
   );
 
   return (
-    <div className="flex-1  border-l border-gray-300 pt-0">
-      <header className="bg-white lg:p-4 pl-10 pb-3 text-gray-700 border-b border-gray-100 flex items-center">
+    <div className="flex-1 relative border-l border-gray-300 pt-0">
+      <header className="bg-white lg:p-4 pl-10 pb-4 text-gray-700 border-b border-gray-100 flex items-center">
         <div className="w-10 h-10 rounded-full flex items-center justify-center mr-2">
           <img
             src={
