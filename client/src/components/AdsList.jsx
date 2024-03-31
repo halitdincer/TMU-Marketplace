@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import AdCard from './AdCard';
 import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 function AdsList({ searchQuery }) {
   // State to store the ads
@@ -12,15 +13,24 @@ function AdsList({ searchQuery }) {
   // State to store any potential error from the fetch operation
   const [error, setError] = useState(null);
 
+  const location = useLocation();
+
   const filteredAds = useMemo(() => ads.filter(ad => {
     return ad.title.toLowerCase().includes(searchQuery.toLowerCase()) || ad.description.toLowerCase().includes(searchQuery.toLowerCase());
   }), [ads, searchQuery]);
+
+  const getQueryStringFromSearchParams = () => {
+    const searchParams = new URLSearchParams(location.search);
+    return searchParams.toString();
+  };
 
   useEffect(() => {
     // Function to fetch ads data
     const fetchAds = async () => {
       try {
-        const response = await fetch('/api/ads/');
+        const queryString = getQueryStringFromSearchParams();
+        console.log(`/api/ads/?${queryString}`);
+        const response = await fetch(`/api/ads/?${queryString}`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -34,7 +44,7 @@ function AdsList({ searchQuery }) {
     };
 
     fetchAds(); // Call the fetch function
-  }, []); // Empty dependency array means this effect runs once on mount
+  }, [location]); // Empty dependency array means this effect runs once on mount
 
   // Conditional rendering based on the state
   if (isLoading) return <div>Loading...</div>;
