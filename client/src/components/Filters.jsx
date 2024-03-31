@@ -11,7 +11,7 @@ function Filters() {
     'EL': 'Electronics',
     'CL': 'Clothing',
     'SP': 'Sports & Outdoors',
-    'GA': 'Games & Hobbies',
+    'GH': 'Games & Hobbies',
     'MU': 'Music & Instruments',
     'FA': 'Furniture & Appliances',
     'BE': 'Beauty & Personal Care',
