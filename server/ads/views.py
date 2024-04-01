@@ -5,7 +5,10 @@ from rest_framework import status
 from .models import Ad
 from .serializers import AdSerializer, AdImageSerializer
 from users.models import CustomUser
-
+from rest_framework.decorators import authentication_classes, permission_classes, parser_classes
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import MultiPartParser, FormParser
 
 class AdListView(ListAPIView):
     serializer_class = AdSerializer
@@ -32,17 +35,19 @@ class AdDetailView(RetrieveAPIView):
     serializer_class = AdSerializer
 
 @api_view(['POST'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+@parser_classes([MultiPartParser, FormParser])
 def createAd(request):
-    #authenticate user later
-    user = CustomUser.objects.get(username = "mike") #primary key = 1 for the first user (just for now)
+    user = request.user  #from permission/auth classes
     ad = Ad(owned_by=user) 
-    image = request.data['images']
-    print(image)
-    print(request.data)
+    #image = request.FILES['images']
+    print("files")
+    print(request.FILES)
     adSerializer = AdSerializer(ad, data=request.data)
     #imageSerializer = AdImageSerializer(ad, data=image)
     if adSerializer.is_valid():
-        print(adSerializer)
+        #print(adSerializer)
         adSerializer.save()
         return Response(adSerializer.data, status=status.HTTP_201_CREATED)
     return Response(adSerializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -8,16 +8,12 @@ function CreateAdForm() {
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('');
 
-  
-  /*const response = await axios.post('/api/ads/create-ad/',
-        JSON.stringify({ title, description, category, price, }),
-        {
-            headers: { 'Content-Type': 'application/json' },
-        }
-      );*/ 
   const handleSubmit = async (event) => {
-    console.log(image);
+    
     event.preventDefault();
+    const token = localStorage.getItem("authtoken");
+    const config = {headers: {'Authorization': 'Token ' + token, 'Content-Type': 'multipart/form-data' }};
+   
     const form = new FormData();
     form.append('images', image);
     form.append('title', title);
@@ -25,9 +21,9 @@ function CreateAdForm() {
     form.append('price', price);
     form.append('category', category);
     try{
-      const response = await axios.post('/api/ads/create-ad/', form);
-      //delete later
-      console.log(JSON.stringify(response?.data));
+      const response = await axios.post('/api/ads/create-ad/', form, config);
+    
+      console.log(response.data);
     } catch(error){
       console.error('Error:', error);
     }
