@@ -113,7 +113,7 @@ function ChatWindow({ messages, userId, sendMessage }) {
         <h1 className="text-2xl font-semibold">{conversantName}</h1>
       </header>
 
-      <div className="h-screen overflow-y-auto lg:p-4 pr-2 p-2 pb-36">
+      <div className="h-[calc(100vh-144px-32px)] overflow-y-auto lg:p-4 pr-2 p-2 pb-36">
         {sortedMessages.map((msg) => (
           <ChatMessage
             key={msg.id}
