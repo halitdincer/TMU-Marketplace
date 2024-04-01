@@ -44,13 +44,13 @@ function CreateAdForm() {
 
   return (
     <div className="min-h-screen p-6  bg-gray-50 flex items-center justify-center lg:pb-0 pb-24">
-      <div className="container  max-w-screen-lg mx-auto">
+      <div className="container max-w-screen-lg mx-auto">
         <div>
           <h2 className="font-semibold text-2xl text-custom-blue pb-3">
             Create Ad
           </h2>
           <form onSubmit={handleSubmit}>
-            <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
+            <div className="bg-white rounded-xl shadow-lg p-4 px-4 md:p-8 mb-6">
               <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
                 <div className="text-gray-600">
                   <p className="font-medium text-lg">Ad Details</p>
