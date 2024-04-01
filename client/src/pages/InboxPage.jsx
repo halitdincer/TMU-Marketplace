@@ -105,7 +105,7 @@ function InboxPage() {
     <div className="flex">
       {/* <Sidebar /> */}
       {!isMobile && <Sidebar />}
-      <div className="flex-1 flex h-screen overflow-hidden pt-6 sm:pt-6">
+      <div className="flex-1 flex h-screen overflow-hidden pt-6 sm:pt-6 sm:ml-28">
         {/* Check if user signed in yet */}
         {!userData ? (
           <>
