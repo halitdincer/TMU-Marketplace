@@ -33,7 +33,7 @@ function LoginPage() {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-  
+
     try {
       setPasswordError('Login failed: Please check your credentials and try again.');
 
@@ -42,7 +42,7 @@ function LoginPage() {
       // This assumes `getToken` is a function that retrieves the stored token,
       // and it will return `undefined` or `null` if no token is stored.
       const apiToken = getToken();
-      
+
       // Only navigate to "/" if `apiToken` is successfully retrieved, 
       // indicating the login was successful.
       if (apiToken) {
@@ -54,8 +54,8 @@ function LoginPage() {
     }
 
   };
-  
-  
+
+
   const navigateToHome = () => {
     navigate('/');
   };
@@ -66,9 +66,9 @@ function LoginPage() {
 
   return (
     <>
-        {/* Mobile-specific layout and components  added in next line*/}
-        <div className={`flex items-center justify-center h-screen bg-gray-100 ${isMobile ? 'px-4 lg:px-20' : ''}`}>
-   
+      {/* Mobile-specific layout and components  added in next line*/}
+      <div className={`flex items-center justify-center h-screen bg-gray-100 ${isMobile ? 'px-4 lg:px-20' : ''}`}>
+
         <div className="w-full max-w-md">
           <form
             className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
@@ -77,14 +77,16 @@ function LoginPage() {
             {/* Logo */}
             <div className="flex justify-center">
               {/* Mobile-specific layout and components  added in next line*/}
-              {isMobile ? (
-                <img src={Logo} alt="Logo" className="w-auto h-32" />
-              ) : (
-                <img src={Logo} alt="Logo" className="w-auto h-36" />
-              )}
+              <a href="/">
+                {isMobile ? (
+                  <img src={Logo} alt="Logo" className="w-auto h-32" />
+                ) : (
+                  <img src={Logo} alt="Logo" className="w-auto h-36" />
+                )}
+              </a>
             </div>
 
-  
+
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
@@ -144,7 +146,7 @@ function LoginPage() {
           </form>
         </div>
       </div>
- 
+
     </>
   );
 }
