@@ -10,7 +10,10 @@ function ChatsList({ messages, conversantId, userId }) {
     const key = message.sender === userId ? message.receiver : message.sender;
 
     // If there's already an entry for this conversation, check if the current message is newer
-    if (!acc[key] || new Date(acc[key].timestamp) < new Date(message.timestamp)) {
+    if (
+      !acc[key] ||
+      new Date(acc[key].timestamp) < new Date(message.timestamp)
+    ) {
       acc[key] = message;
     }
 
@@ -19,9 +22,14 @@ function ChatsList({ messages, conversantId, userId }) {
 
   const chats = Object.values(latestMessages).map((message) => ({
     id: message.sender === userId ? message.receiver : message.sender,
-    name: message.sender === userId ? message.receiver_name : message.sender_name,
-    last_message: message.sender === userId ? `You: ${message.text}` : message.text,
-    profile_picture_url: message.sender === userId ? message.receiver_profile_picture : message.sender_profile_picture,
+    name:
+      message.sender === userId ? message.receiver_name : message.sender_name,
+    last_message:
+      message.sender === userId ? `You: ${message.text}` : message.text,
+    profile_picture_url:
+      message.sender === userId
+        ? message.receiver_profile_picture
+        : message.sender_profile_picture,
     timestamp: message.timestamp,
   }));
 
@@ -31,13 +39,17 @@ function ChatsList({ messages, conversantId, userId }) {
       {chats.map((chat, index) => (
         <Link key={index} to={`/inbox/${chat.id}`}>
           <div
-            className={`flex items-center mb-1 border-b border-t border-gray-100 cursor-pointer p-2 rounded-md ${
+            className={`flex items-center mb-1 border-b border-t border-gray-300 cursor-pointer p-2 rounded-md ${
               chat.id === conversantId ? "bg-gray-100" : "hover:bg-gray-100"
             }`}
           >
             <div className="w-12 h-12 bg-gray-300 rounded-full mr-3">
               <img
-                src={chat.profile_picture_url ? chat.profile_picture_url : `https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato`}
+                src={
+                  chat.profile_picture_url
+                    ? chat.profile_picture_url
+                    : `https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato`
+                }
                 alt="Conversation Avatar"
                 className="w-12 h-12 rounded-full"
               />
