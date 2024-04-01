@@ -17,14 +17,36 @@ class CustomUserListView(ListAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
 
+# @api_view(['POST'])
+# def login(request):
+#     user = get_object_or_404(CustomUser, username = request.data['username'])
+#     if not user.check_password(request.data['password']):
+#         return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
+#     token, created = Token.objects.get_or_create(user = user)
+#     serializer = CustomUserSerializer(instance = user)
+#     return Response({"Authorization": "Token "+token.key, "user": serializer.data})
 @api_view(['POST'])
 def login(request):
-    user = get_object_or_404(CustomUser, username = request.data['username'])
-    if not user.check_password(request.data['password']):
-        return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
-    token, created = Token.objects.get_or_create(user = user)
-    serializer = CustomUserSerializer(instance = user)
-    return Response({"Authorization": "Token "+token.key, "user": serializer.data})
+    username = request.data.get('username')
+    password = request.data.get('password')
+    try:
+        user = CustomUser.objects.get(username=username)
+    except CustomUser.DoesNotExist:
+        # User not found, but return a generic 401 status to avoid giving away information
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    # Check if the provided password is correct
+    if not user.check_password(password):
+        # Password is incorrect, return a generic 401 status
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    # Authentication is successful, create or get the token
+    token, created = Token.objects.get_or_create(user=user)
+    serializer = CustomUserSerializer(instance=user)
+    
+    # Return the token and user data
+    return Response({"Authorization": "Token " + token.key, "user": serializer.data})
+
 
 @api_view(['POST'])
 def signup(request):

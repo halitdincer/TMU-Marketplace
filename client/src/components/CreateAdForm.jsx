@@ -67,7 +67,8 @@ function CreateAdForm() {
         <br />
         <input type="text" value={price} onChange={e => setPrice(e.target.value)} style={{ padding: '10px', border: '1px solid #ccc', borderRadius: '4px', width: '100%' }} />
       </label>
-      <input type="submit" value="Post" style={{ backgroundColor: '#003A79', color: 'white', padding: '14px 20px', border: 'none', cursor: 'pointer', width: '100%', opacity: '0.9' }} />    </form>
+      <input type="submit" value="Post" class="bg-custom-blue rounded-md shadow-md px-2 py-2 hover:bg-custom-yellow" style={{ color: 'white', padding: '14px 20px', border: 'none', cursor: 'pointer', opacity: '0.9' }} />    
+    </form>
   );
 }
 
