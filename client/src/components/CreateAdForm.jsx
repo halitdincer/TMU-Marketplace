@@ -1,24 +1,38 @@
+import axios from 'axios';
 import React, { useState } from 'react';
-
-const createAd = (ad) => {
-  // Implement your ad creation logic here
-  console.log('Creating ad:', ad);
-};
 
 function CreateAdForm() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState('');
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
+    
     event.preventDefault();
-    createAd({ title, description, image, price, category });
+    const token = localStorage.getItem("authtoken");
+    const config = {headers: {'Authorization': 'Token ' + token, 'Content-Type': 'multipart/form-data' }};
+   
+    const form = new FormData();
+    form.append('images', image);
+    form.append('title', title);
+    form.append('description', description);
+    form.append('price', price);
+    form.append('category', category);
+    try{
+      const response = await axios.post('/api/ads/create-ad/', form, config);
+    
+      console.log(response.data);
+    } catch(error){
+      console.error('Error:', error);
+    }
   };
 
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
+    console.log(e.target.files[0]);
+    
   };
 
   return (
@@ -26,7 +40,7 @@ function CreateAdForm() {
       <label style={{ marginBottom: '5px' }}>
         Image:
         <br />
-        <input type="file" onChange={handleImageChange} style={{ padding: '10px', border: '1px solid #ccc', borderRadius: '4px' }} />
+        <input type="file" onChange={(e) => setImage(e.target.files[0])} style={{ padding: '10px', border: '1px solid #ccc', borderRadius: '4px' }} />
       </label>
       <label style={{ marginBottom: '5px' }}>
         Title:
@@ -41,11 +55,11 @@ function CreateAdForm() {
       <label style={{ marginBottom: '5px' }}>
         Category:
         <br />
-        <select value={category} onChange={e => setCategory(e.target.value)} style={{ padding: '10px', border: '1px solid #ccc', borderRadius: '4px', width: '100%' }}>
+        <select id="CATEGORY_CHOICES" value={category} onChange={e => setCategory(e.target.value)} style={{ padding: '10px', border: '1px solid #ccc', borderRadius: '4px', width: '100%' }}>
           <option value="">Select:</option>
-          <option value="Items Wanted">Items Wanted</option>
-          <option value="Items for Sale">Items for Sale</option>
-          <option value="Academic Services">Academic Services</option>
+          <option value='IW'>Items Wanted</option>
+          <option value='IS'>Items for Sale</option>
+          <option value="AS">Academic Services</option>
         </select>
       </label>
       <label style={{ marginBottom: '5px' }}>

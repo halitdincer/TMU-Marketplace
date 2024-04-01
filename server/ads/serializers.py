@@ -15,7 +15,6 @@ class AdSerializer(serializers.ModelSerializer):
     type = serializers.SerializerMethodField()
     location = serializers.SerializerMethodField()
     
-
     class Meta:
         model = Ad
         fields = ['id', 'title', 'description', 'category', 'type', 'location', 'price', 'created_at', 'owned_by', 'images']
@@ -35,3 +34,4 @@ class AdSerializer(serializers.ModelSerializer):
     def get_images(self, obj):
         images = obj.images.all()
         return AdImageSerializer(images, many=True, context=self.context).data
+
