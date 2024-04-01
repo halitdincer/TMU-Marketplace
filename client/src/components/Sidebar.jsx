@@ -174,7 +174,7 @@ function Sidebar() {
               <div className="space-y-3 ">
                 <a
                   className="flex flex-col items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
-                  href="create"
+                  href="/create"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
