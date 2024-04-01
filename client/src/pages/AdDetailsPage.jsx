@@ -7,7 +7,7 @@ function AdDetailsPage() {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="flex-1">
+      <div className="flex-1 overflow-y-auto">
         <DetailedAd> </DetailedAd>
       </div>
     </div>

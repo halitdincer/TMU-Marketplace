@@ -107,8 +107,8 @@ function Filters() {
                       className="w-full py-1 px-3 border border-gray-200 bg-white rounded-md shadow-sm focus:outline-none focus:ring-custom-blue focus:border-blue-500 text-gray-700"
                     >
                       <option value="">Select a category</option>
-                      {categories.map((cat) => (
-                        <option key={cat} value={cat}>{cat}</option>
+                      {Object.entries(categories).map(([code, name]) => (
+                        <option key={code} value={code}>{name}</option>
                       ))}
                     </select>
                   </div>
@@ -149,8 +149,8 @@ function Filters() {
                       className="w-full py-1 px-3 border border-gray-200 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-700"
                     >
                       <option value="">Select a location</option>
-                      {locations.map((loc) => (
-                        <option key={loc} value={loc}>{loc}</option>
+                      {Object.entries(locations).map(([code, name]) => (
+                        <option key={code} value={code}>{name}</option>
                       ))}
                     </select>
                   </div>
@@ -176,8 +176,8 @@ function Filters() {
                   className="py-1 px-3 border border-gray-200 bg-white rounded-md shadow-sm focus:outline-none focus:ring-custom-blue focus:border-blue-500 text-gray-700"
                 >
                   <option value="">Select a category</option>
-                  {categories.map((cat) => (
-                    <option key={cat} value={cat}>{cat}</option>
+                  {Object.entries(categories).map(([code, name]) => (
+                    <option key={code} value={code}>{name}</option>
                   ))}
                 </select>
               </div>
@@ -218,8 +218,8 @@ function Filters() {
                   className="py-1 px-3 border border-gray-200 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-700"
                 >
                   <option value="">Select a location</option>
-                  {locations.map((loc) => (
-                    <option key={loc} value={loc}>{loc}</option>
+                  {Object.entries(locations).map(([code, name]) => (
+                    <option key={code} value={code}>{name}</option>
                   ))}
                 </select>
               </div>
