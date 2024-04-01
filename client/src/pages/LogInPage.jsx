@@ -35,32 +35,24 @@ function LoginPage() {
     event.preventDefault();
   
     try {
-      const response = await axios.post('/api/users/login/',
-        JSON.stringify({ username: email, password }),
-        {
-          headers: { 'Content-Type': 'application/json' },
-          withCredentials: true
-        }
-      );
-      const token = response.data.Authorization.split(' ')[1];
-      localStorage.setItem('authtoken', token);
-      navigateToHome();
-    } catch (error) {
-      console.error('Login error:', error);
-      setEmailError('');
-      setPasswordError('');
-  
-      if (error.response) {
-        if (error.response.status === 401) {
-          setEmailError('The email you entered is incorrect.');
-        } else if ( error.response.status === 404){
-          setPasswordError('The password you entered is incorrect.');        }
-      } else if (error.request) {
-        setEmailError('The server did not respond. Please try again later.');
-      } else {
-        setEmailError('An unexpected error occurred. Please try again.');
+      setPasswordError('Login failed: Please check your credentials and try again.');
+
+      await login(email, password);
+      // After the login attempt, get the token to verify if login was successful.
+      // This assumes `getToken` is a function that retrieves the stored token,
+      // and it will return `undefined` or `null` if no token is stored.
+      const apiToken = getToken();
+      
+      // Only navigate to "/" if `apiToken` is successfully retrieved, 
+      // indicating the login was successful.
+      if (apiToken) {
+        navigate("/");
       }
+
+    } catch (error) {
+      setPasswordError('Login failed: Please check your credentials and try again.');
     }
+
   };
   
   
