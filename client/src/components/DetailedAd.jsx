@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   StarIcon,
   ArrowUturnLeftIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
 import ImageCarousel from "./ImageCarousel";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import useAdDetails from "./useAdDetails";
+import { AuthContext } from "./AuthProvider";
 
 const product = {
   href: "#",
@@ -29,7 +30,44 @@ function classNames(...classes) {
 function DetailedAd() {
   const { ad } = useAdDetails();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+  const { apiToken, userData } = useContext(AuthContext);
+  const navigate = useNavigate();
 
+
+  const sendMessage = async () => {
+    // Ensure ad details and apiToken are available
+    if (!ad || !apiToken) {
+      console.error("Ad details or API token is missing.");
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:8000/api/messages/send/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${apiToken}` // Assuming the token is used as a Bearer token
+        },
+        body: JSON.stringify({
+          sender: userData.id,
+          receiver: ad.owned_by_id,
+          text: `Interested in: ${ad.title} - ${ad.description}`
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Message sent successfully:", data);
+      navigate(`/inbox/${ad.owned_by_id}`);
+    } catch (error) {
+      console.error("Failed to send message:", error);
+    }
+  };
+
+  // Effect for mobile responsiveness
   useEffect(() => {
     function handleResize() {
       setIsMobile(window.innerWidth < 640);
@@ -133,7 +171,8 @@ function DetailedAd() {
             </div>
 
             <button
-              type="submit"
+              type="button"
+              onClick={sendMessage}
               className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               Message
