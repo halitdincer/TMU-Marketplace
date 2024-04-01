@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Filters() {
   const [category, setCategory] = useState('');
@@ -25,8 +26,52 @@ function Filters() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const categories = ['Books', 'Electronics', 'Clothing', 'Furniture', 'Toys', "Study Goods", "Sports Equipment", "Other"];
-  const locations = ['Toronto', 'GTA', 'Vancouver', 'Montreal', 'Calgary', 'Ottawa', 'Other'];
+  const categories = {
+    'EL': 'Electronics',
+    'CL': 'Clothing',
+    'SP': 'Sports & Outdoors',
+    'GH': 'Games & Hobbies',
+    'MU': 'Music & Instruments',
+    'FA': 'Furniture & Appliances',
+    'BE': 'Beauty & Personal Care',
+    'GA': 'Garden',
+    'TB': 'Textbooks',
+    'LO': 'Lost & Found',
+    'SG': 'Study Groups',
+    'TU': 'Tutoring',
+    'RS': 'Research & Surveys',
+    'OT': 'Others',
+  };
+  const locations = {
+    'TE': 'Toronto & East York',
+    'EB': 'Etobicoke',
+    'NY': 'North York',
+    'SC': 'Scarborough',
+    'VA': 'Vaughan',
+    'MK': 'Markham',
+    'RH': 'Richmond Hill',
+    'MV': 'Mississauga',
+    'BR': 'Brampton',
+    'AP': 'Ajax & Pickering',
+    'OS': 'Whitby & Oshawa',
+    'OK': 'Oakville & Milton',
+    'OT': 'Other Locations',
+  };
+
+  const navigate = useNavigate();
+
+  // Function to update the URL parameters
+  useEffect(() => {
+    const params = new URLSearchParams();
+    
+    if (category) params.set('category', category);
+    if (location) params.set('location', location);
+    if (minPrice) params.set('min_price', minPrice); 
+    if (maxPrice) params.set('max_price', maxPrice);
+
+    // Update the URL without navigating to a new page
+    navigate(`?${params.toString()}`, { replace: true });
+  }, [category, location, minPrice, maxPrice, navigate]);
 
   // Toggle for showing/hiding filters
   const toggleFilters = () => {
@@ -183,7 +228,6 @@ function Filters() {
         </>
       )}
     </>
-
   );
 }
 

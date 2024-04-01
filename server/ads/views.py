@@ -8,11 +8,15 @@ class AdListView(ListAPIView):
     def get_queryset(self):
         queryset = Ad.objects.all()
         category = self.request.query_params.get('category')
+        location = self.request.query_params.get('location')
         min_price = self.request.query_params.get('min_price', None)
         max_price = self.request.query_params.get('max_price', None)
 
         if category is not None:
             queryset = queryset.filter(category=category)
+
+        if location is not None:
+            queryset = queryset.filter(location=location)
 
         if min_price is not None:
             queryset = queryset.filter(price__gte=min_price)

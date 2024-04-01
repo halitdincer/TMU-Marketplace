@@ -121,7 +121,7 @@ function HeaderLoggedIn({ title, onSearchSubmit }) {
 
             <button type="button" class="px-4 py-2 bg-custom-blue text-white rounded-md">Buy & Sell</button>
             <button type="button" class="px-4 py-2 bg-custom-blue text-white rounded-md">Academic Services</button>
-            <p>{(userData) ? userData.profile_picture : '' }</p>
+            <p>{(userData) ? userData.username : '' }</p>
             <div className="relative">
               <button
                 type="button"
