@@ -21,6 +21,7 @@ function ChatsList({ messages, conversantId, userId }) {
     id: message.sender === userId ? message.receiver : message.sender,
     name: message.sender === userId ? message.receiver_name : message.sender_name,
     last_message: message.sender === userId ? `You: ${message.text}` : message.text,
+    profile_picture_url: message.sender === userId ? message.receiver_profile_picture : message.sender_profile_picture,
     timestamp: message.timestamp,
   }));
 
@@ -36,7 +37,7 @@ function ChatsList({ messages, conversantId, userId }) {
           >
             <div className="w-12 h-12 bg-gray-300 rounded-full mr-3">
               <img
-                src={`https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato`}
+                src={chat.profile_picture_url ? chat.profile_picture_url : `https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato`}
                 alt="Conversation Avatar"
                 className="w-12 h-12 rounded-full"
               />

@@ -39,16 +39,14 @@ function ChatMessage({ message, isSender }) {
   const messageBoxClass = isSender
     ? "flex lg:max-w-96 max-w-64 bg-indigo-500 text-white rounded-tl-xl rounded-tr-xl rounded-bl-xl p-3 gap-3 "
     : "flex lg:max-w-96 max-w-64 bg-gray-100 rounded-tl-xl rounded-tr-xl rounded-br-xl p-3 gap-3 ";
-  const avatarUrl = isSender
-    ? "https://placehold.co/200x/b7a8ff/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
-    : "https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato";
+  const avatarUrl = message.sender_profile_picture;
 
   return (
     <div className={messageClass}>
       {!isSender && (
         <>
           {!isMobile ? (
-            <Avatar avatarUrl={avatarUrl} altText="User Avatar" />
+            <Avatar avatarUrl={avatarUrl ? avatarUrl: "https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"} altText="User Avatar" />
           ) : null}
           <div className={messageBoxClass}>
             <p>{message.text}</p>
@@ -69,7 +67,7 @@ function ChatMessage({ message, isSender }) {
           </div>
 
           {!isMobile ? (
-            <Avatar avatarUrl={avatarUrl} altText="My Avatar" />
+            <Avatar avatarUrl={avatarUrl ? avatarUrl: "https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"} altText="My Avatar" />
           ) : null}
         </>
       )}
@@ -94,32 +92,25 @@ function ChatWindow({ messages, userId, sendMessage }) {
     }
   };
 
-  // Handle "Enter" key press to send message
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter" && !event.shiftKey) { // Prevent sending on Shift+Enter
-      event.preventDefault();
-      handleSendMessage();
-    }
-  };
-
   // Sort messages by timestamp before rendering
   const sortedMessages = messages.sort(
     (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
   );
+
+  const conversantName = messages[0].sender === userId ? messages[0].receiver_name : messages[0].sender_name ;
+  const conversantPicture = messages[0].sender === userId ? messages[0].receiver_profile_picture : messages[0].sender_profile_picture ;
 
   return (
     <div className="flex-1 relative border-l border-gray-300 pt-0">
       <header className="bg-white lg:p-4 pl-10 pb-4 text-gray-700 border-b border-gray-100 flex items-center">
         <div className="w-10 h-10 rounded-full flex items-center justify-center mr-2">
           <img
-            src={
-              "https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
-            }
+            src={ conversantPicture ? conversantPicture : "https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"}
             alt={"myavatar"}
             className="w-10 h-10 rounded-full"
           />
         </div>
-        <h1 className="text-2xl font-semibold">{messages[0].sender_name}</h1>
+        <h1 className="text-2xl font-semibold">{conversantName}</h1>
       </header>
 
       <div className="h-screen overflow-y-auto lg:p-4 pr-2 p-2 pb-36">
