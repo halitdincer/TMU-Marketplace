@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { useState, useContext } from 'react';
 import AdsList from 'components/AdsList'
@@ -17,7 +18,6 @@ function HomePage({}){
     //console.log('query: ',query);
   };
 
-
   const loggedIn = false;
   return (
     <div className="flex">
@@ -27,9 +27,8 @@ function HomePage({}){
         <Filters />
         <AdsList searchQuery={searchQuery} />
       </div>
-
     </div>
   );
-};
+}
 
 export default HomePage;

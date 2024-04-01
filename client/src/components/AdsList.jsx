@@ -14,10 +14,23 @@ function AdsList({ searchQuery }) {
   const [error, setError] = useState(null);
 
   const location = useLocation();
+  
+  const filteredAds = useMemo(
+    () =>
+      ads.filter((ad) => {
+        const lowerSearchQuery = searchQuery ? searchQuery.toLowerCase() : "";
+        return (
+          (ad.title
+            ? ad.title.toLowerCase().includes(lowerSearchQuery)
+            : false) ||
+          (ad.description
+            ? ad.description.toLowerCase().includes(lowerSearchQuery)
+            : false)
+        );
+      }),
+    [ads, searchQuery]
+  );
 
-  const filteredAds = useMemo(() => ads.filter(ad => {
-    return ad.title.toLowerCase().includes(searchQuery.toLowerCase()) || ad.description.toLowerCase().includes(searchQuery.toLowerCase());
-  }), [ads, searchQuery]);
 
   const getQueryStringFromSearchParams = () => {
     const searchParams = new URLSearchParams(location.search);
@@ -52,23 +65,21 @@ function AdsList({ searchQuery }) {
 
   return (
     <>
-    
-    <div className="bg-white py-6 sm:py-6">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 pt-2 sm:mt-5 sm:pt-5 lg:mx-0 lg:max-w-none lg:grid-cols-4">
-          {ads.length > 0 ? (
-            filteredAds.map(ad => (
-              //<Link to={`/ad/${ad.id}`}>
-              <AdCard key={ad.id} ad={ad} />
-              //</Link>
-            ))
-          ) : (
-            <p>No ads found.</p>
-          )}
+      <div className="bg-white py-6 sm:py-6 pb-24">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 pt-2 sm:mt-5 sm:pt-5 lg:mx-0 lg:max-w-none lg:grid-cols-4">
+            {ads.length > 0 ? (
+              filteredAds.map((ad) => (
+                <Link to={`/ad/${ad.id}`}>
+                  <AdCard key={ad.id} ad={ad} />
+                </Link>
+              ))
+            ) : (
+              <p>No ads found.</p>
+            )}
+          </div>
         </div>
       </div>
-    </div>
-
     </>
   );
 }
