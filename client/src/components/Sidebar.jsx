@@ -148,7 +148,7 @@ function Sidebar() {
           </div>
         </div>
       ) : (
-        <aside className=" fixed left-0 top-0 h-full flex flex-col justify-between content-center w-28 h-screen px-5 py-10 overflow-y-auto bg-white border-r ">
+        <aside className=" fixed top-0 left-0 h-full flex flex-col justify-between content-center w-28 h-screen px-5 py-10  bg-white border-r ">
           <div className=" flex justify-center flex-1">
             <a href="/">
               <img src={LogoSmall} alt="Main Logo" />

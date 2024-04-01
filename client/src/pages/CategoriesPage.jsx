@@ -7,12 +7,11 @@ function CategoriesPage() {
   return (
     <div className="flex">
       <Sidebar />
-      <div class="flex-1">
+      <div class="flex-1 sm:ml-28">
         <Header />
-        <div className="bg-white py-6 sm:py-6">
-          {/* Page content here */}
-          <CategoryGrid></CategoryGrid>
-        </div>
+
+        {/* Page content here */}
+        <CategoryGrid></CategoryGrid>
       </div>
     </div>
   );
