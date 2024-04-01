@@ -65,10 +65,10 @@ function HeaderLoggedIn({ title, onSearchSubmit }) {
           {isMobile ? (
             // Mobile menu toggle button
             <>
-              <div>
+              <div className="w-auto h-20">
                 <a href="/">
                   <img
-                    className="w-auto h-auto rounded"
+                    className="w-full h-full rounded"
                     src={LogoSmall}
                     alt="Logo"
                   />
