@@ -26,6 +26,8 @@ SECRET_KEY = 'django-insecure-p#8zlv&t4(x5pxl(t$r*wr)+x8(qix3p4(j-4m)11mhfy8q*1-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+ASGI_APPLICATION = 'core.asgi.application'
+
 ALLOWED_HOSTS = [
     '127.0.0.1', 
     'localhost'
@@ -56,6 +58,13 @@ INSTALLED_APPS = [
     'chat',
     'public'
 ]
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [    
@@ -92,9 +101,6 @@ TEMPLATES = [
         },
     },
 ]
-
-WSGI_APPLICATION = 'core.wsgi.application'
-ASGI_APPLICATION = "core.asgi.application"
 
 
 # Database
