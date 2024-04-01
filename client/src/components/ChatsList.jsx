@@ -1,7 +1,28 @@
 import React from "react";
 import { Link } from "react-router-dom";
-function ChatsList({ chats, conversantId }) {
+
+function ChatsList({ messages, conversantId, userId }) {
   conversantId = parseInt(conversantId);
+
+  // Group messages by conversation and find the latest message in each
+  const latestMessages = messages.reduce((acc, message) => {
+    // Determine the other party in the conversation
+    const key = message.sender === userId ? message.receiver : message.sender;
+
+    // If there's already an entry for this conversation, check if the current message is newer
+    if (!acc[key] || new Date(acc[key].timestamp) < new Date(message.timestamp)) {
+      acc[key] = message;
+    }
+
+    return acc;
+  }, {});
+
+  const chats = Object.values(latestMessages).map((message) => ({
+    id: message.sender === userId ? message.receiver : message.sender,
+    name: message.sender === userId ? message.receiver_name : message.sender_name,
+    last_message: message.sender === userId ? `You: ${message.text}` : message.text,
+    timestamp: message.timestamp,
+  }));
 
   return (
     <div className="lg:w-1/3 w-full h-screen overflow-y-auto p-3 mb-9 pb-20">
@@ -23,7 +44,6 @@ function ChatsList({ chats, conversantId }) {
             <div className="flex-1">
               <h2 className="text-lg font-semibold">{chat.name}</h2>
               <p className="text-gray-600">{chat.last_message}</p>
-              <p className="text-gray-600">{chat.last_message.timestamp}</p>
             </div>
           </div>
         </Link>

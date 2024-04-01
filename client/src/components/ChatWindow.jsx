@@ -77,7 +77,31 @@ function ChatMessage({ message, isSender }) {
   );
 }
 
-function ChatWindow({ messages, userId }) {
+function ChatWindow({ messages, userId, sendMessage }) {
+
+  const [messageText, setMessageText] = useState("");
+
+  // Handle message text change
+  const handleMessageChange = (event) => {
+    setMessageText(event.target.value);
+  };
+
+  // Send message and clear input
+  const handleSendMessage = () => {
+    if (messageText.trim()) {
+      sendMessage(messageText);
+      setMessageText(""); // Clear the input field after sending the message
+    }
+  };
+
+  // Handle "Enter" key press to send message
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter" && !event.shiftKey) { // Prevent sending on Shift+Enter
+      event.preventDefault();
+      handleSendMessage();
+    }
+  };
+
   // Sort messages by timestamp before rendering
   const sortedMessages = messages.sort(
     (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
@@ -113,8 +137,13 @@ function ChatWindow({ messages, userId }) {
             type="text"
             placeholder="Type a message..."
             className="w-full p-2 rounded-md border border-gray-400 focus:outline-none focus:border-blue-500"
+            value={messageText}
+            onChange={handleMessageChange}
           />
-          <button className="bg-indigo-500 text-white px-4 py-2 rounded-md ml-2">
+          <button
+            className="bg-indigo-500 text-white px-4 py-2 rounded-md ml-2"
+            onClick={handleSendMessage}
+          >
             Send
           </button>
         </div>
