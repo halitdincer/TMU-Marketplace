@@ -96,7 +96,10 @@ function InboxPage() {
       console.error('WebSocket is not connected.');
     }
   };
-  
+
+  const filteredMessages = messages.filter((m) =>
+    String(m.sender) === String(conversantId) || String(m.receiver) === String(conversantId)
+  );
 
   return (
     <div className="flex">
@@ -147,8 +150,7 @@ function InboxPage() {
                       </Link>
                     </div>
                     {/* Render ChatWindow for the selected conversation */}
-
-                    <ChatWindow userId={userData.id} messages={messages} sendMessage={sendMessage} />
+                    <ChatWindow userId={userData.id} messages={filteredMessages} sendMessage={sendMessage} />
                   </>
                 ) : (
                   // If no specific conversation selected, display the ChatsList
@@ -161,8 +163,8 @@ function InboxPage() {
             ) : (
               <>
                 <ChatsList messages={messages} userId={userData.id} conversantId={conversantId} />
-                {messages && messages.length > 0 ? (
-                  <ChatWindow userId={userData.id} messages={messages} />
+                {filteredMessages && filteredMessages.length > 0 ? (
+                  <ChatWindow userId={userData.id} messages={filteredMessages} sendMessage={sendMessage}  />
                 ) : (
                   <div className="flex flex-col justify-center items-center flex-1">
                     <p>No messages to display. Please select a conversation</p>
