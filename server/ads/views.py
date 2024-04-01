@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Ad
-from .serializers import AdSerializer
+from .serializers import AdSerializer, AdImageSerializer
 from users.models import CustomUser
 
 
@@ -35,12 +35,14 @@ class AdDetailView(RetrieveAPIView):
 def createAd(request):
     #authenticate user later
     user = CustomUser.objects.get(username = "mike") #primary key = 1 for the first user (just for now)
-    ad = Ad(owned_by=user)
-    
-    serializer = AdSerializer(ad, data=request.data)
-    
-    if serializer.is_valid():
-        print(serializer)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    ad = Ad(owned_by=user) 
+    image = request.data['images']
+    print(image)
+    print(request.data)
+    adSerializer = AdSerializer(ad, data=request.data)
+    #imageSerializer = AdImageSerializer(ad, data=image)
+    if adSerializer.is_valid():
+        print(adSerializer)
+        adSerializer.save()
+        return Response(adSerializer.data, status=status.HTTP_201_CREATED)
+    return Response(adSerializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -4,20 +4,28 @@ import React, { useState } from 'react';
 function CreateAdForm() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState('');
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('');
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    //createAd({ title, description, image, price, category });
-    try{
-      const response = await axios.post('/api/ads/create-ad/',
-        JSON.stringify({ title, description, category, price }),
+  
+  /*const response = await axios.post('/api/ads/create-ad/',
+        JSON.stringify({ title, description, category, price, }),
         {
             headers: { 'Content-Type': 'application/json' },
         }
-      );
+      );*/ 
+  const handleSubmit = async (event) => {
+    console.log(image);
+    event.preventDefault();
+    const form = new FormData();
+    form.append('images', image);
+    form.append('title', title);
+    form.append('description', description);
+    form.append('price', price);
+    form.append('category', category);
+    try{
+      const response = await axios.post('/api/ads/create-ad/', form);
       //delete later
       console.log(JSON.stringify(response?.data));
     } catch(error){
@@ -27,6 +35,8 @@ function CreateAdForm() {
 
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
+    console.log(e.target.files[0]);
+    
   };
 
   return (
@@ -34,7 +44,7 @@ function CreateAdForm() {
       <label style={{ marginBottom: '5px' }}>
         Image:
         <br />
-        <input type="file" onChange={handleImageChange} style={{ padding: '10px', border: '1px solid #ccc', borderRadius: '4px' }} />
+        <input type="file" onChange={(e) => setImage(e.target.files[0])} style={{ padding: '10px', border: '1px solid #ccc', borderRadius: '4px' }} />
       </label>
       <label style={{ marginBottom: '5px' }}>
         Title:
