@@ -10,6 +10,7 @@ class AdImageSerializer(serializers.ModelSerializer):
 
 class AdSerializer(serializers.ModelSerializer):
     owned_by = serializers.SerializerMethodField()
+    owned_by_id = serializers.SerializerMethodField()
     category = serializers.SerializerMethodField()
     images = serializers.SerializerMethodField()
     type = serializers.SerializerMethodField()
@@ -17,10 +18,13 @@ class AdSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Ad
-        fields = ['id', 'title', 'description', 'category', 'type', 'location', 'price', 'created_at', 'owned_by', 'images']
+        fields = ['id', 'title', 'description', 'category', 'type', 'location', 'price', 'created_at', 'owned_by', 'owned_by_id', 'images']
 
     def get_owned_by(self, obj):
         return obj.owned_by.username
+    
+    def get_owned_by_id(self, obj):
+        return obj.owned_by.id
     
     def get_category(self, obj):
         return dict(Ad.CATEGORY_CHOICES)[obj.category]
