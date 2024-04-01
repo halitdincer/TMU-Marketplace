@@ -148,8 +148,8 @@ function Sidebar() {
           </div>
         </div>
       ) : (
-        <aside className="flex flex-col justify-between content-center w-28 h-screen px-5 py-10 overflow-y-auto bg-white border-r ">
-          <div className="flex justify-center flex-1">
+        <aside className=" fixed left-0 top-0 h-full flex flex-col justify-between content-center w-28 h-screen px-5 py-10 overflow-y-auto bg-white border-r ">
+          <div className=" flex justify-center flex-1">
             <a href="/">
               <img src={LogoSmall} alt="Main Logo" />
               {/* <svg
@@ -255,7 +255,6 @@ function Sidebar() {
                   </svg>
                   <span className="m-2 text-sm font-medium">Inbox</span>
                 </a>
-
               </div>
             </nav>
           </div>
