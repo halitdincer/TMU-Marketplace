@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import logo from "../images/logo.jpg";
-import logoSmall from "../images/logo_small.jpg";
-
 import LogoSmall from "../assets/LogoSmall.svg";
+
 function Header({ title, onSearchSubmit }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
