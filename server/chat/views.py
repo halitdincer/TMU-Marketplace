@@ -1,22 +1,18 @@
-# views.py
 from rest_framework.generics import ListAPIView
+from rest_framework.permissions import IsAuthenticated
 from .models import Message
 from .serializers import MessageSerializer
+from django.db.models import Q
+
 
 class MessageListView(ListAPIView):
-    queryset = Message.objects.all()
     serializer_class = MessageSerializer
+    permission_classes = [IsAuthenticated]  # Ensure the user is authenticated
 
     def get_queryset(self):
         """
-        Optionally restricts the returned messages to a given user,
-        by filtering against a `sender_id` and `receiver_id` query parameter in the URL.
+        Restricts the returned messages to those where the authenticated user
+        is either the sender or the receiver.
         """
-        queryset = Message.objects.all()
-        sender_id = self.request.query_params.get('sender_id')
-        receiver_id = self.request.query_params.get('receiver_id')
-        if sender_id is not None:
-            queryset = queryset.filter(sender_id=sender_id)
-        if receiver_id is not None:
-            queryset = queryset.filter(receiver_id=receiver_id)
-        return queryset
+        user = self.request.user
+        return Message.objects.filter(Q(sender=user) | Q(receiver=user))
