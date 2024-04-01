@@ -121,11 +121,14 @@ function SignUp() {
           onSubmit={handleSignUp}
         >
           <div className="flex justify-center">
-            {isMobile ? (
-              <img src={Logo} alt="Logo" className="w-auto h-32 " />
-            ) : (
-              <img src={Logo} alt="Logo" className="w-auto h-36" />
-            )}
+            <a href="/">
+
+              {isMobile ? (
+                <img src={Logo} alt="Logo" className="w-auto h-32 " />
+              ) : (
+                <img src={Logo} alt="Logo" className="w-auto h-36" />
+              )}
+            </a>
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor="first-name">
