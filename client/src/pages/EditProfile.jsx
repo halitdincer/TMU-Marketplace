@@ -19,7 +19,6 @@ function EditProfile() {
     password: userData.password,
   });
   useEffect(() => {
-    // Set the app element for react-modal
     Modal.setAppElement("#root"); // Assuming '#root' is the ID of your root element
   }, []);
 
@@ -202,13 +201,13 @@ function EditProfile() {
                           overlayClassName="Overlay"
                           style={{
                             overlay: {
-                              backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
+                              backgroundColor: "rgba(0, 0, 0, 0.5)",
                               position: "fixed",
                               top: 0,
                               left: 0,
                               right: 0,
                               bottom: 0,
-                              zIndex: 1000, // Adjust this value as needed
+                              zIndex: 1000,
                             },
                             content: {
                               position: "absolute",
@@ -222,7 +221,7 @@ function EditProfile() {
                               borderRadius: "8px",
                               padding: "30px",
                               boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                              zIndex: 1100, // Adjust this value to be higher than overlay
+                              zIndex: 1100,
                             },
                           }}
                         >
