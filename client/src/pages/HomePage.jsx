@@ -21,7 +21,7 @@ function HomePage({}) {
   return (
     <div className="flex">
       <Sidebar />
-      <div class="flex-1 sm:ml-28">
+      <div className="flex-1 sm:ml-28">
         {userData ? (
           <HeaderLoggedIn onSearchSubmit={handleSearchSubmit} />
         ) : (
