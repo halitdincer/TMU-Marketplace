@@ -1,21 +1,36 @@
 import axios from "axios";
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from 'components/AuthProvider';
+import useAdDetails from "./useAdDetails";
 
-function CreateAdForm() {
-  const [title, setTitle] = useState("");
+
+function EditAdForm() {
+
+  //Get ad from url
+  const { ad } = useAdDetails();
+  //console.log(ad);
+  //set form values
+  const [title, setTitle] = useState('');
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
   const [price, setPrice] = useState("");
   const [type, setType] = useState("");
   const [category, setCategory] = useState("");
   const [location, setLocation] = useState("");
+  const [image, setImage] = useState(null);
   const { apiToken } = useContext(AuthContext);
+  
+  //Init default Form values from "ad"
+  useEffect(() => {setTitle(ad.title) }, [ad.title]);
+  useEffect(() => {setDescription(ad.description) }, [ad.description]);
+  useEffect(() => {setPrice(ad.price) }, [ad.price]);
+  useEffect(() => {setType(ad.type) }, [ad.type]);
+  useEffect(() => {setCategory(ad.category) }, [ad.category]);
+  useEffect(() => {setLocation(ad.location) }, [ad.location]);
+  useEffect(() => {setImage(ad.images) }, [ad.images]);
 
+    //handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
-     
-
     const config = {
       headers: {
         Authorization: "Token " + apiToken,
@@ -24,7 +39,8 @@ function CreateAdForm() {
     };
 
     const form = new FormData();
-    form.append("image", image);
+    form.append('id', ad.id);
+    form.append("images", image);
     form.append("title", title);
     form.append("description", description);
     form.append("price", price);
@@ -32,7 +48,7 @@ function CreateAdForm() {
     form.append("category", category);
     form.append("location", location);
     try {
-      const response = await axios.post("/api/ads/create-ad/", form, config);
+      const response = await axios.put("/api/ads/edit-ad/", form, config);
 
       console.log(response.data);
     } catch (error) {
@@ -43,7 +59,6 @@ function CreateAdForm() {
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
     console.log(e.target.files[0]);
-    console.log(image);
   };
 
   return (
@@ -51,7 +66,7 @@ function CreateAdForm() {
       <div className="container max-w-screen-lg mx-auto">
         <div>
           <h2 className="font-semibold text-2xl text-custom-blue pb-3">
-            Create Ad
+            Edit Ad
           </h2>
           <form onSubmit={handleSubmit}>
             <div className="bg-white rounded-xl shadow-lg p-4 px-4 md:p-8 mb-6">
@@ -245,4 +260,4 @@ function CreateAdForm() {
   );
 }
 
-export default CreateAdForm;
+export default EditAdForm;

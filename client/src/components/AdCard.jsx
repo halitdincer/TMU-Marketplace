@@ -31,8 +31,8 @@ function AdCard({ ad }) {
     <article className="max-w-md mx-auto bg-white border border-gray-200 shadow-lg rounded-lg overflow-hidden my-5">
       <img
         src={
-          ad.images && ad.images.length > 0
-            ? ad.images[0].image_url
+          ad.image && ad.image.length > 0
+            ? ad.image.image_url
             : "https://placehold.co/600x400?text=No+Image"
         }
         alt={ad.title}

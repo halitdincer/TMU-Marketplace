@@ -15,7 +15,7 @@ function EditProfile() {
     first_name: userData.first_name,
     last_name: userData.last_name,
     email: userData.email,
-    password: userData.password,
+    password: '',
   });
 
   const [profile_picture, setProfilePic] = useState(userData.profile_picture);
