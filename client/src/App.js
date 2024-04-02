@@ -12,8 +12,8 @@ import Filters from 'components/Filters'
 import Logout from 'components/Logout';
 import ForgotPasswordPage from 'pages/ForgotPassword';
 import AdDetailsPage from 'pages/AdDetailsPage';
-import CreateAdForm from 'components/CreateAdForm';
 import CreatePage from 'pages/CreatePage';
+import EditPage from 'pages/EditPage';
 import { AuthProvider } from 'components/AuthProvider';
 import { PrivateRoute } from 'components/PrivateRoute';
 import GuestRoute from 'components/GuestRoute';
@@ -63,6 +63,9 @@ function App() {
         </Route>
         <Route path='create' element={<PrivateRoute/>}>
           <Route index element={<CreatePage />} />
+        </Route>
+        <Route path='edit/ad/:id' element={<PrivateRoute/>}>
+          <Route index element={<EditPage />} />
         </Route>
         <Route path='logout' element={<PrivateRoute/>}>
           <Route index element={<Logout />} />

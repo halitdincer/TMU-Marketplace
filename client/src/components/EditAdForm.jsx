@@ -1,22 +1,36 @@
 import axios from "axios";
-import React, { useContext, useState } from "react";
-import { AuthContext } from "./AuthProvider";
+import React, { useState, useEffect, useContext } from "react";
+import { AuthContext } from 'components/AuthProvider';
+import useAdDetails from "./useAdDetails";
 
 
-function CreateAdForm() {
-  // Use useState to manage multiple images
-  const [images, setImages] = useState([]);
-  const [title, setTitle] = useState("");
+function EditAdForm() {
+
+  //Get ad from url
+  const { ad } = useAdDetails();
+  //console.log(ad);
+  //set form values
+  const [title, setTitle] = useState('');
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [type, setType] = useState("");
   const [category, setCategory] = useState("");
   const [location, setLocation] = useState("");
-  const {apiToken} = useContext(AuthContext);
+  const [image, setImage] = useState(null);
+  const { apiToken } = useContext(AuthContext);
+  
+  //Init default Form values from "ad"
+  useEffect(() => {setTitle(ad.title) }, [ad.title]);
+  useEffect(() => {setDescription(ad.description) }, [ad.description]);
+  useEffect(() => {setPrice(ad.price) }, [ad.price]);
+  useEffect(() => {setType(ad.type) }, [ad.type]);
+  useEffect(() => {setCategory(ad.category) }, [ad.category]);
+  useEffect(() => {setLocation(ad.location) }, [ad.location]);
+  useEffect(() => {setImage(ad.images) }, [ad.images]);
 
+    //handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     const config = {
       headers: {
         Authorization: "Token " + apiToken,
@@ -25,24 +39,17 @@ function CreateAdForm() {
     };
 
     const form = new FormData();
-
-    images.forEach((image) => {
-      form.append("images", image);
-    });
-
+    form.append('id', ad.id);
+    form.append("images", image);
     form.append("title", title);
     form.append("description", description);
     form.append("price", price);
     form.append("type", type);
     form.append("category", category);
     form.append("location", location);
-
-    for (let [key, value] of form.entries()) {
-      console.log(`${key}: ${value}`);
-    }
-
     try {
-      const response = await axios.post("/api/ads/create/", form, config);
+      const response = await axios.put("/api/ads/edit-ad/", form, config);
+
       console.log(response.data);
     } catch (error) {
       console.error("Error:", error);
@@ -50,17 +57,16 @@ function CreateAdForm() {
   };
 
   const handleImageChange = (e) => {
-    setImages([...e.target.files]);
-    console.log([...e.target.files]);
+    setImage(e.target.files[0]);
+    console.log(e.target.files[0]);
   };
-
 
   return (
     <div className="min-h-screen p-6  bg-gray-50 flex items-center justify-center lg:pb-0 pb-24">
       <div className="container max-w-screen-lg mx-auto">
         <div>
           <h2 className="font-semibold text-2xl text-custom-blue pb-3">
-            Create Ad
+            Edit Ad
           </h2>
           <form onSubmit={handleSubmit}>
             <div className="bg-white rounded-xl shadow-lg p-4 px-4 md:p-8 mb-6">
@@ -120,9 +126,9 @@ function CreateAdForm() {
                         <option value="" disabled>
                           Select Ad Type
                         </option>
-                        <option value="IW">Items Wanted</option>
-                        <option value="IS">Items for Sale</option>
-                        <option value="AS">
+                        <option value="Items Wanted">Items Wanted</option>
+                        <option value="Items for Sale">Items for Sale</option>
+                        <option value="Academic Services">
                           Academic Services
                         </option>
                       </select>
@@ -191,16 +197,49 @@ function CreateAdForm() {
                     </div>
 
                     <div className=" md:col-span-5 justify-center">
-                    <label htmlFor="upload" className="block mb-2 text-sm font-medium text-gray-900 ">
+                      <label
+                        htmlFor="upload"
+                        className="block mb-2 text-sm font-medium text-gray-900 "
+                      >
                         Upload Photos
                       </label>
-                      <input
-                        id="upload"
-                        type="file"
-                        multiple // Allow multiple file selections
-                        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-custom-blue file:text-white hover:file:bg-custom-yellow"
-                        onChange={handleImageChange}
-                      />
+                      <label
+                        htmlFor="dropzone-file"
+                        className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 "
+                      >
+                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                          <svg
+                            className="w-8 h-8 mb-4 text-gray-500 "
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 20 16"
+                          >
+                            <path
+                              stroke="currentColor"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                            />
+                          </svg>
+                          <p className="mb-2 text-sm text-gray-500 ">
+                            <span className="font-semibold">
+                              Click to upload
+                            </span>{" "}
+                            or drag and drop
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            SVG, PNG, JPG
+                          </p>
+                        </div>
+                        <input
+                          id="dropzone-file"
+                          type="file"
+                          className="hidden"
+                          onChange={handleImageChange}
+                        />
+                      </label>
                     </div>
 
                     <div className="md:col-span-5 pt-4">
@@ -221,4 +260,4 @@ function CreateAdForm() {
   );
 }
 
-export default CreateAdForm;
+export default EditAdForm;

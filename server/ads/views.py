@@ -61,12 +61,25 @@ def createAd(request):
     user = request.user  #from permission/auth classes
     ad = Ad(owned_by=user) 
     #image = request.FILES['images']
-    print("files")
-    print(request.FILES)
+    #print("files")
+    #print(request.FILES['image'])
     adSerializer = AdSerializer(ad, data=request.data)
-    #imageSerializer = AdImageSerializer(ad, data=image)
     if adSerializer.is_valid():
         #print(adSerializer)
+        adSerializer.save()
+        return Response(adSerializer.data, status=status.HTTP_201_CREATED)
+    return Response(adSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PUT'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+@parser_classes([MultiPartParser, FormParser])
+def editAd(request):
+    user = request.user  #from permission/auth classes
+    #print(request.data)
+    ad = Ad.objects.get(pk = request.data["id"])   
+    adSerializer = AdSerializer(ad, data=request.data)
+    if adSerializer.is_valid():
         adSerializer.save()
         return Response(adSerializer.data, status=status.HTTP_201_CREATED)
     return Response(adSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
