@@ -148,8 +148,10 @@ function Sidebar() {
           </div>
         </div>
       ) : (
-        <aside className="flex flex-col justify-between content-center w-32 h-screen px-5 py-10 overflow-y-auto bg-white border-r ">
-          <div className="flex justify-center flex-1">
+
+        <aside className=" fixed top-0 left-0 flex flex-col justify-between content-center w-28 h-screen px-5 py-10  overflow-y-auto bg-white border-r ">
+          <div className=" flex justify-center flex-1">
+
             <a href="/">
               <img src={LogoSmall} alt="Main Logo" />
               {/* <svg
@@ -174,7 +176,7 @@ function Sidebar() {
               <div className="space-y-3 ">
                 <a
                   className="flex flex-col items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
-                  href="create"
+                  href="/create"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
