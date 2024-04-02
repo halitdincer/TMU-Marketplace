@@ -11,7 +11,7 @@ class AdImageSerializer(serializers.ModelSerializer):
 class AdSerializer(serializers.ModelSerializer):
     owned_by = serializers.SerializerMethodField()
     owned_by_id = serializers.SerializerMethodField()
-    category = serializers.SerializerMethodField()
+    #category = serializers.SerializerMethodField()
     images = serializers.SerializerMethodField()
     type = serializers.SerializerMethodField()
     location = serializers.SerializerMethodField()
