@@ -1,9 +1,11 @@
 from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework import status
 from .models import Ad
-from .serializers import AdSerializer, AdImageSerializer
+from .serializers import AdSerializer, AdImageSerializer, AdFormSerializer
 from users.models import CustomUser
 from rest_framework.decorators import authentication_classes, permission_classes, parser_classes
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
@@ -37,6 +39,19 @@ class AdListView(ListAPIView):
 class AdDetailView(RetrieveAPIView):
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
+
+class CreateAdView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        serializer = AdFormSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            ad = serializer.save(owned_by=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
