@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect, useContext } from "react";
-import { AuthContext } from 'components/AuthProvider';
+import { AuthContext } from './AuthProvider';
 import useAdDetails from "./useAdDetails";
 
 
@@ -27,7 +27,7 @@ function EditAdForm() {
   useEffect(() => {setType(ad.type) }, [ad.type]);
   useEffect(() => {setCategory(ad.category) }, [ad.category]);
   useEffect(() => {setLocation(ad.location) }, [ad.location]);
-  useEffect(() => {setImages(ad.images) }, [ad.images]);
+  //useEffect(() => {setImages(ad.images) }, [ad.images]);
 
     //handle form submission
   const handleSubmit = async (event) => {
@@ -44,13 +44,17 @@ function EditAdForm() {
     images.forEach((image) => {
       form.append("images", image);
     });
-    form.append("id", ad.id);
+    
+    form.append("pk", ad.id);
     form.append("title", title);
     form.append("description", description);
     form.append("price", price);
     form.append("type", type);
     form.append("category", category);
     form.append("location", location);
+    for (let [key, value] of form.entries()) {
+      console.log(`${key}: ${value}`);
+    }
     
     try {
       const response = await axios.put("/api/ads/edit/", form, config);
@@ -61,8 +65,8 @@ function EditAdForm() {
   };
 
   const handleImageChange = (e) => {
-    setImages(...e.target.files);
-    console.log(...e.target.files);
+    setImages([...e.target.files]);
+    console.log([...e.target.files]);
   };
 
   return (
@@ -130,9 +134,9 @@ function EditAdForm() {
                         <option value="" disabled>
                           Select Ad Type
                         </option>
-                        <option value="Items Wanted">Items Wanted</option>
-                        <option value="Items for Sale">Items for Sale</option>
-                        <option value="Academic Services">
+                        <option value="IW">Items Wanted</option>
+                        <option value="IS">Items for Sale</option>
+                        <option value="AS">
                           Academic Services
                         </option>
                       </select>
@@ -237,14 +241,15 @@ function EditAdForm() {
                             SVG, PNG, JPG
                           </p>
                         </div>
-                        <input
+                      </label>
+                         <input
                           id="dropzone-file"
                           type="file"
-                          className="hidden"
                           multiple // Allow multiple file selections
+                          className="hidden"
                           onChange={handleImageChange}
                         />
-                      </label>
+
                     </div>
 
                     <div className="md:col-span-5 pt-4">

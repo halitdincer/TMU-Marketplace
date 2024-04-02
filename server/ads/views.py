@@ -19,6 +19,7 @@ class AdListView(ListAPIView):
         queryset = Ad.objects.all()
         category = self.request.query_params.get('category')
         location = self.request.query_params.get('location')
+        status = self.request.query_params.get('status')
         min_price = self.request.query_params.get('min_price', None)
         max_price = self.request.query_params.get('max_price', None)
 
@@ -27,6 +28,9 @@ class AdListView(ListAPIView):
 
         if location is not None:
             queryset = queryset.filter(location=location)
+
+        if status is not None:
+            queryset = queryset.filter(status=status)
 
         if min_price is not None:
             queryset = queryset.filter(price__gte=min_price)
@@ -59,14 +63,14 @@ class EditAdView(APIView):
     permission_classes = [IsAuthenticated]
 
     def put(self, request, *args, **kwargs):
-        user = request.user  #from permission/auth classes
-
-        ad = Ad.objects.get(pk = request.data["id"])   
-        adSerializer = AdSerializer(ad, data=request.data)
+        #user = request.user  #from permission/auth classes
+        ad = Ad.objects.get(pk = request.data["pk"])   
+        adSerializer = AdFormSerializer(data=request.data, context={'request': request})
+        #adSerializer = AdSerializer(ad, data=request.data, context={'request': request})
         print(adSerializer)
         if adSerializer.is_valid():
-            print(adSerializer)
-            adSerializer.save()
+            #print(adSerializer.errors)
+            adSerializer.save(ad)
             return Response(adSerializer.data, status=status.HTTP_201_CREATED)
         return Response(adSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
