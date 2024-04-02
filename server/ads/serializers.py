@@ -3,17 +3,17 @@ from rest_framework.fields import ListField
 from .models import Ad, AdImage
 
 
-"""class AdImageSerializer(serializers.ModelSerializer):
+class AdImageSerializer(serializers.ModelSerializer):
     image_url = serializers.ImageField(source='image', read_only=True)
 
     class Meta:
         model = AdImage
         fields = ['image_url', 'uploaded_at']
-"""
+
 class AdSerializer(serializers.ModelSerializer):
     owned_by = serializers.SerializerMethodField()
     owned_by_id = serializers.SerializerMethodField()
-    category = serializers.SerializerMethodField()
+    #category = serializers.SerializerMethodField()
     images = serializers.SerializerMethodField()
     type = serializers.SerializerMethodField()
     location = serializers.SerializerMethodField()

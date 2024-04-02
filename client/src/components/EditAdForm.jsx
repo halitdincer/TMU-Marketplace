@@ -10,13 +10,14 @@ function EditAdForm() {
   const { ad } = useAdDetails();
   //console.log(ad);
   //set form values
+  const [images, setImages] = useState([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [type, setType] = useState("");
   const [category, setCategory] = useState("");
   const [location, setLocation] = useState("");
-  const [image, setImage] = useState(null);
+  
   const { apiToken } = useContext(AuthContext);
   
   //Init default Form values from "ad"
@@ -26,7 +27,7 @@ function EditAdForm() {
   useEffect(() => {setType(ad.type) }, [ad.type]);
   useEffect(() => {setCategory(ad.category) }, [ad.category]);
   useEffect(() => {setLocation(ad.location) }, [ad.location]);
-  useEffect(() => {setImage(ad.images) }, [ad.images]);
+  useEffect(() => {setImages(ad.images) }, [ad.images]);
 
     //handle form submission
   const handleSubmit = async (event) => {
@@ -39,17 +40,20 @@ function EditAdForm() {
     };
 
     const form = new FormData();
-    form.append('id', ad.id);
-    form.append("images", image);
+
+    images.forEach((image) => {
+      form.append("images", image);
+    });
+    form.append("id", ad.id);
     form.append("title", title);
     form.append("description", description);
     form.append("price", price);
     form.append("type", type);
     form.append("category", category);
     form.append("location", location);
+    
     try {
-      const response = await axios.put("/api/ads/edit-ad/", form, config);
-
+      const response = await axios.put("/api/ads/edit/", form, config);
       console.log(response.data);
     } catch (error) {
       console.error("Error:", error);
@@ -57,8 +61,8 @@ function EditAdForm() {
   };
 
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
-    console.log(e.target.files[0]);
+    setImages(...e.target.files);
+    console.log(...e.target.files);
   };
 
   return (
@@ -237,6 +241,7 @@ function EditAdForm() {
                           id="dropzone-file"
                           type="file"
                           className="hidden"
+                          multiple // Allow multiple file selections
                           onChange={handleImageChange}
                         />
                       </label>
