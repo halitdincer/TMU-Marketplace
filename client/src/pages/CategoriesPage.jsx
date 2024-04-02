@@ -6,12 +6,12 @@ import { AuthContext } from "components/AuthProvider";
 import HeaderLoggedIn from "components/HeaderLoggedIn";
 
 function CategoriesPage() {
-  const {userData} = useContext(AuthContext);
+  const { userData } = useContext(AuthContext);
   return (
     <div className="flex">
       <Sidebar />
-      <div class="flex-1">
-        {userData ? <HeaderLoggedIn /> :  <Header />}
+      <div class="flex-1 lg:ml-28">
+        {userData ? <HeaderLoggedIn /> : <Header />}
         <div className="bg-white py-6 sm:py-6">
           {/* Page content here */}
           <CategoryGrid></CategoryGrid>
