@@ -24,8 +24,8 @@ function EditProfile() {
 
   const [profile_picture, setProfilePic] = useState(userData.profile_picture);
   const [username, setUsername] = useState(userData.username);
-  const [firstName, setFirstName] = useState(userData.first_name);
-  const [lastName, setLastName] = useState(userData.last_name);
+  const [first_name, setFirstName] = useState(userData.first_name);
+  const [last_name, setLastName] = useState(userData.last_name);
   const [email, setEmail] = useState(userData.email);
   const [password, setPassword] = useState(userData.password);
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -34,6 +34,40 @@ function EditProfile() {
   const [emailError, setEmailError] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
+
+  const handleUpdate = async (event) => {
+    event.preventDefault();
+  
+    const updatedUserInfo = {
+      profilePic: profile_picture,
+      username: username,
+      first_name: first_name,
+      last_name: last_name,
+      email: email,
+      password: password,
+    };
+  
+    try {
+      const response = await axios.put('/api/users/profile/', 
+        JSON.stringify(updatedUserInfo), 
+        {
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('authtoken')}` },
+          withCredentials: true
+        }
+      );
+  
+      // Update local cache if necessary
+      // localStorage.setItem('userInfo', JSON.stringify(updatedUserInfo));
+  
+      // Navigate or do something else
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle error
+    }
+  };
+  
+  // Attach this function to your form submission event
+  // <form onSubmit={handleUpdate}>...</form>
 
   const validatePassword = (pwd) => {
     const regex = new RegExp(
@@ -80,7 +114,7 @@ function EditProfile() {
       try {
         const response = await axios.post(
           "/api/users/signup/",
-          JSON.stringify({ username: email, password, firstName, lastName }),
+          JSON.stringify({ username: email, password, first_name, last_name }),
           {
             headers: { "Content-Type": "application/json" },
             withCredentials: true,
@@ -293,11 +327,11 @@ function EditProfile() {
                         />
                       </div>
                       <div className="md:col-span-2">
-                        <label htmlFor="firstName">First Name</label>
+                        <label htmlFor="first_name">First Name</label>
                         <input
                           type="text"
-                          name="firstName"
-                          id="firstName"
+                          name="first_name"
+                          id="first_name"
                           className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                           value={formState.first_name}
                           onChange={(e) =>
@@ -310,11 +344,11 @@ function EditProfile() {
                         />
                       </div>
                       <div className="md:col-span-3">
-                        <label htmlFor="lastName">Last Name</label>
+                        <label htmlFor="last_name">Last Name</label>
                         <input
                           type="text"
-                          name="lastName"
-                          id="lastName"
+                          name="last_name"
+                          id="last_name"
                           className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                           value={formState.last_name}
                           onChange={(e) =>
