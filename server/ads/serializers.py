@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.fields import ListField
 from .models import Ad, AdImage
 
 class AdImageSerializer(serializers.ModelSerializer):
@@ -39,3 +40,25 @@ class AdSerializer(serializers.ModelSerializer):
         images = obj.images.all()
         return AdImageSerializer(images, many=True, context=self.context).data
 
+class AdFormSerializer(serializers.ModelSerializer):
+    images = ListField(
+        child=serializers.FileField(),
+        required=False,
+        write_only=True
+    )
+
+    class Meta:
+        model = Ad
+        fields = ('title', 'description', 'price', 'type', 'category', 'location', 'images')
+        extra_kwargs = {
+            'images': {'required': False},
+        }
+
+    def create(self, validated_data):
+        images_data = validated_data.pop('images', [])
+        ad = Ad.objects.create(**validated_data)
+
+        for image_file in images_data:
+            AdImage.objects.create(ad=ad, image=image_file)
+
+        return ad
