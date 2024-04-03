@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import AdCard from './AdCard';
-import { Link } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from "react";
+import AdCard from "./AdCard";
+import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 function AdsList({ searchQuery }) {
   // State to store the ads
@@ -14,7 +14,7 @@ function AdsList({ searchQuery }) {
   const [error, setError] = useState(null);
 
   const location = useLocation();
-  
+
   const filteredAds = useMemo(
     () =>
       ads.filter((ad) => {
@@ -30,7 +30,6 @@ function AdsList({ searchQuery }) {
       }),
     [ads, searchQuery]
   );
-
 
   const getQueryStringFromSearchParams = () => {
     const searchParams = new URLSearchParams(location.search);
