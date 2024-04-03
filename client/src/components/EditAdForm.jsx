@@ -317,7 +317,7 @@ function EditAdForm() {
                         Upload Photos
                       </label>
                       {/* Thumbnails of uploaded images */}
-                      <div className="grid grid-cols-6 gap-2 mb-2">
+                      <div className="grid grid-cols-2 sm:grid-cols-6 gap-2 mb-2">
                         {imagePreviews.map((image, index) => (
                           <div key={index} className="relative" style={{ width: "100px", height: "100px" }}>
                             <img
