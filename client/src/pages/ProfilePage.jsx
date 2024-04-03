@@ -137,7 +137,9 @@ function ProfilePage() {
                 {ads.map(
                   (ad) =>
                     ad.owned_by === userData.username && (
-                      <Link to={`/ad/${ad.id}`}>
+
+                      <Link to={`/edit/ad/${ad.id}`}>
+
                         <AdCard key={ad.id} ad={ad} />
                       </Link>
                     )
