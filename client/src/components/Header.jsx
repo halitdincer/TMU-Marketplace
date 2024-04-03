@@ -97,12 +97,6 @@ function Header({ title, onSearchSubmit }) {
           ) : (
             // Non-mobile elements
             <>
-              {/* <div className="pr-4">
-                <a href="/">
-                  <img className="w-auto h-16 rounded" src={logo} alt="Logo" />
-                </a>
-              </div> */}
-
               <div className="flex-grow">
                 <form
                   className="pt-2 relative mx-auto text-gray-600 w-full"
@@ -139,12 +133,14 @@ function Header({ title, onSearchSubmit }) {
                 <button
                   type="button"
                   className="px-2 py-2 bg-custom-blue text-white rounded-md"
+                  onClick={() => window.location.replace("/buy-and-sell")}
                 >
                   Buy & Sell
                 </button>
                 <button
                   type="button"
                   className="px-2 py-2 bg-custom-blue text-white rounded-md"
+                  onClick={() => window.location.replace("/academic-services")}
                 >
                   Academic Services
                 </button>
@@ -185,14 +181,14 @@ function Header({ title, onSearchSubmit }) {
                 Log In
               </a>
               <a
-                href="/"
+                href="/buy-and-sell"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Buy & Sell
               </a>
               <a
-                href="/"
+                href="/academic-services"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                 onClick={() => setIsMenuOpen(false)}
               >

@@ -19,6 +19,9 @@ import { PrivateRoute } from 'components/PrivateRoute';
 import GuestRoute from 'components/GuestRoute';
 import AdsList from 'components/AdsList';
 import Header from './components/Header'; 
+import Category from 'components/Category';
+import AcademicServices from 'pages/AcademicServicesPage';
+import BuyAndSell from 'pages/BuyAndSellPage';
 
 function App() {
 
@@ -53,6 +56,9 @@ function App() {
         <Route path="filters" element={<Filters />} />
         <Route path="ad/:id" element={<AdDetailsPage />} /> 
         <Route path="ads" element={<AdsList ads={ads} searchQuery={searchQuery} />} />
+        <Route path="category/:category" element={<Category />} />
+        <Route path="academic-services" element={<AcademicServices />} />
+        <Route path="buy-and-sell" element={<BuyAndSell />} />  
         
         {/* Private Routes */}
         <Route path='profile' element={<PrivateRoute/>}>
