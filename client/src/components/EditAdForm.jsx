@@ -12,7 +12,6 @@ function EditAdForm() {
   const { ad } = useAdDetails();
 
   //set form values
-  const [images, setImages] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -20,6 +19,10 @@ function EditAdForm() {
   const [category, setCategory] = useState("");
   const [location, setLocation] = useState("");
 
+  const [images, setImages] = useState([]);
+  const [existingImages, setExistingImages] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
+  
   const { userData } = useContext(AuthContext);
   const { apiToken } = useContext(AuthContext);
 
@@ -34,15 +37,60 @@ function EditAdForm() {
     setPrice(ad.price);
   }, [ad.price]);
   useEffect(() => {
-    setType(ad.type);
+    const typeMapping = {
+      "Items Wanted": "IW",
+      "Items for Sale": "IS",
+      "Academic Services": "AS",
+    };
+    setType(typeMapping[ad.type]);
   }, [ad.type]);
   useEffect(() => {
-    setCategory(ad.category);
+    const categoryMapping = {
+      "Electronics": "EL",
+      "Clothing": "CL",
+      "Home & Garden": "HM",
+      "Sports & Outdoors": "SP",
+      "Games & Hobbies": "GA",
+      "Music & Instruments": "MU",
+      "Furniture & Appliances": "FA",
+      "Beauty & Personal Care": "BE",
+      "Textbooks": "TB",
+      "Lost & Found": "LO",
+      "Study Groups": "SG",
+      "Tutoring": "TU",
+      "Research & Surveys": "RS",
+      "Others": "OT",
+    };
+    setCategory(categoryMapping[ad.category]);
   }, [ad.category]);
   useEffect(() => {
-    setLocation(ad.location);
+    const locationMapping = {
+      "Toronto & East York": "TE",
+      "Etobicoke": "EB",
+      "North York": "NY",
+      "Scarborough": "SC",
+      "Vaughan": "VA",
+      "Markham": "MK",
+      "Richmond Hill": "RH",
+      "Mississauga": "MV",
+      "Brampton": "BR",
+      "Ajax & Pickering": "AP",
+      "Whitby & Oshawa": "OS",
+      "Oakville & Milton": "OK",
+      "Other Locations": "OT",
+    };
+    setLocation(locationMapping[ad.location]);
   }, [ad.location]);
-  //useEffect(() => {setImages(ad.images) }, [ad.images]);
+  useEffect(() => {
+    if (ad.images) {
+      const initialImages = ad.images.map((image) => ({
+        ...image,
+        existing: true, // Mark as existing image
+      }));
+      setExistingImages(initialImages);
+      setImagePreviews(initialImages.concat(imagePreviews));
+    }
+ }, [ad.images]);
 
   //handle form submission
   const handleSubmit = async (event) => {
@@ -56,6 +104,11 @@ function EditAdForm() {
 
     const form = new FormData();
 
+    // Append IDs of images to keep
+    existingImages.forEach(image => {
+      form.append('images_to_keep', image.id);
+    });
+
     images.forEach((image) => {
       form.append("images", image);
     });
@@ -67,9 +120,6 @@ function EditAdForm() {
     form.append("type", type);
     form.append("category", category);
     form.append("location", location);
-    for (let [key, value] of form.entries()) {
-      console.log(`${key}: ${value}`);
-    }
 
     try {
       const response = await axios.put("/api/ads/edit/", form, config);
@@ -81,8 +131,23 @@ function EditAdForm() {
   };
 
   const handleImageChange = (e) => {
-    setImages([...e.target.files]);
-    console.log([...e.target.files]);
+    const files = Array.from(e.target.files);
+    setImages(images.concat(files));
+    const mappedPreviews = files.map(image => ({
+      name: image.name,
+      image_url: URL.createObjectURL(image),
+      existing: false, // Mark as new image
+    }));
+    setImagePreviews(imagePreviews.concat(mappedPreviews));
+  };
+
+  const removeImage = (image_url, isExisting) => {
+    if (isExisting) {
+      setExistingImages(existingImages.filter(image => image.image_url !== image_url));
+    } else {
+      setImages(images.filter((image) => image.image_url !== image_url));
+    }
+    setImagePreviews(imagePreviews.filter((image) => image.image_url !== image_url));
   };
 
   //Conditional render based on if the selected ad is owned by the current logged in user
@@ -251,6 +316,26 @@ function EditAdForm() {
                       >
                         Upload Photos
                       </label>
+                      {/* Thumbnails of uploaded images */}
+                      <div className="grid grid-cols-6 gap-2 mb-2">
+                        {imagePreviews.map((image, index) => (
+                          <div key={index} className="relative" style={{ width: "100px", height: "100px" }}>
+                            <img
+                              src={image.image_url}
+                              alt={image.name}
+                              className="w-full h-auto border rounded"
+                              style={{ width: "100px", height: "100px" }}
+                            />
+                            <button
+                              type="button"
+                              className="absolute top-0 right-0 bg-red-600 text-white rounded-full p-1 m-1"
+                              onClick={() => removeImage(image.image_url, image.existing)}
+                            >
+                              <XMarkIcon className="h-4 w-4" />
+                            </button>
+                          </div>
+                        ))}
+                      </div> 
                       <label
                         htmlFor="dropzone-file"
                         className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 "
