@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useContext, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from "./AuthProvider";
+import OpenAI from "openai";
 
 
 function CreateAdForm() {
@@ -15,6 +16,7 @@ function CreateAdForm() {
   const [category, setCategory] = useState("");
   const [location, setLocation] = useState("");
   const {apiToken} = useContext(AuthContext);
+  const openai = new OpenAI({apiKey: process.env.REACT_APP_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -57,6 +59,22 @@ function CreateAdForm() {
     console.log([...e.target.files]);
   };
 
+  const fetchDescription = async () => {
+    try {
+        const completion = await openai.chat.completions.create({
+          messages: [
+            { role: "system", content: 'You are a bot that writes description for for items or services listed on an online marketplace. The user will give you the listing title and you will reply back with realistic listing description under 50 words that is written from the user perspective.' },
+            { role: "user", content: title }
+          ],
+          model: "gpt-3.5-turbo",
+        });
+        console.log(completion.choices[0]);
+        setDescription(completion.choices[0].message.content);
+    } catch (error) {
+        console.error('There was an error fetching the description:', error);
+    }
+  };
+
 
   return (
     <div className="min-h-screen p-6  bg-gray-50 flex items-center justify-center lg:pb-0 pb-24">
@@ -86,18 +104,23 @@ function CreateAdForm() {
                       />
                     </div>
 
-                    <div className="md:col-span-5">
+                    <div className="md:col-span-5 relative">
                       <label htmlFor="description">Description </label>
                       <textarea
-                        id="description"
-                        rows="7"
-                        className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500   "
-                        placeholder="Your description here"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
+                          id="description"
+                          rows="7"
+                          className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500"
+                          placeholder="Your description here"
+                          value={description}
+                          onChange={(e) => setDescription(e.target.value)}
                       />
+                      <button
+                          className="bg-custom-blue hover:bg-custom-yellow text-white font-bold py-2 px-4 rounded cursor-pointer absolute bottom-5 right-5 mt-2 mr-2"
+                          onClick={fetchDescription}
+                      >
+                          Write with AI
+                      </button>
                     </div>
-
                     <div className="md:col-span-3">
                       <label htmlFor="price">Price</label>
                       <input
