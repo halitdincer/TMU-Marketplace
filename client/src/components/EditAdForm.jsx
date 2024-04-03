@@ -20,6 +20,8 @@ function EditAdForm() {
   const [category, setCategory] = useState("");
   const [location, setLocation] = useState("");
 
+  const [imagePreviews, setImagePreviews] = useState([]);
+
   const { userData } = useContext(AuthContext);
   const { apiToken } = useContext(AuthContext);
 
@@ -42,7 +44,16 @@ function EditAdForm() {
   useEffect(() => {
     setLocation(ad.location);
   }, [ad.location]);
-  //useEffect(() => {setImages(ad.images) }, [ad.images]);
+  useEffect(() => {
+    if (ad.images) {
+      const initialImages = ad.images.map((image) => ({
+        ...image,
+        existing: true, // Mark as existing image
+      }));
+      setImages(initialImages);
+      setImagePreviews(initialImages.concat(imagePreviews));
+    }
+ }, [ad.images]);
 
   //handle form submission
   const handleSubmit = async (event) => {
@@ -81,8 +92,26 @@ function EditAdForm() {
   };
 
   const handleImageChange = (e) => {
-    setImages([...e.target.files]);
-    console.log([...e.target.files]);
+    const files = Array.from(e.target.files);
+    setImages(images.concat(files));
+    const mappedPreviews = files.map(image => ({
+      name: image.name,
+      image_url: URL.createObjectURL(image),
+      existing: false, // Mark as new image
+    }));
+    setImagePreviews(imagePreviews.concat(mappedPreviews));
+  };
+
+  const removeImage = (image_url, isExisting) => {
+    if (isExisting) {
+      // Handle removal of existing images
+      setImages(images.filter(image => image.image_url !== image_url));
+      // Optionally, mark the image for deletion on backend here or add to a 'toDelete' list
+    } else {
+      // Handle removal of newly added images
+      setImages(images.filter((image) => image.image_url !== image_url));
+    }
+    setImagePreviews(imagePreviews.filter((image) => image.image_url !== image_url));
   };
 
   //Conditional render based on if the selected ad is owned by the current logged in user
@@ -251,6 +280,26 @@ function EditAdForm() {
                       >
                         Upload Photos
                       </label>
+                      {/* Thumbnails of uploaded images */}
+                      <div className="grid grid-cols-6 gap-2 mb-2">
+                        {imagePreviews.map((image, index) => (
+                          <div key={index} className="relative" style={{ width: "100px", height: "100px" }}>
+                            <img
+                              src={image.image_url}
+                              alt={image.name}
+                              className="w-full h-auto border rounded"
+                              style={{ width: "100px", height: "100px" }}
+                            />
+                            <button
+                              type="button"
+                              className="absolute top-0 right-0 bg-red-600 text-white rounded-full p-1 m-1"
+                              onClick={() => removeImage(image.image_url, image.existing)}
+                            >
+                              <XMarkIcon className="h-4 w-4" />
+                            </button>
+                          </div>
+                        ))}
+                      </div> 
                       <label
                         htmlFor="dropzone-file"
                         className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 "
