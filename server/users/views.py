@@ -9,9 +9,10 @@ from rest_framework.authtoken.models import Token
 from .models import CustomUser
 from django.shortcuts import get_object_or_404
 
-from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.decorators import authentication_classes, permission_classes, parser_classes
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import FormParser
 
 class CustomUserListView(ListAPIView):
     queryset = CustomUser.objects.all()
@@ -25,6 +26,7 @@ class CustomUserListView(ListAPIView):
 #     token, created = Token.objects.get_or_create(user = user)
 #     serializer = CustomUserSerializer(instance = user)
 #     return Response({"Authorization": "Token "+token.key, "user": serializer.data})
+    
 @api_view(['POST'])
 def login(request):
     username = request.data.get('username')
@@ -60,26 +62,23 @@ def signup(request):
         return Response({"Authorization": "Token "+token.key, "user": serializer.data})
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['POST'])
+@api_view(['PUT'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def update(request):
-    username = request.data.get('username')
-    user_data = request.data
-
+def updateUser(request):
     # Get the current user and update the fields with the provided data
-    user = CustomUser.objects.get(username=username)
-    user.first_name = user_data.get('first_name', user.first_name)
-    user.last_name = user_data.get('last_name', user.last_name)
-    user.username = user_data.get('username', user.username)
-    user.email = user_data.get('email', user.email)
-    user.set_password(user_data.get('password', user.password))
-
-    # Save the updated user and return the updated user data
-    user.save()
-    serializer = CustomUserSerializer(instance=user)
-    return Response(serializer.data)
-
+    user = CustomUser.objects.get(username = request.data['username'])
+    password = request.data.get('password')
+    serializer = CustomUserSerializer(user, request.data)
+    print(serializer)
+    if serializer.is_valid():
+        # Save the updated user and return the updated user data
+        if(password != ''):
+            user.set_password(password)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 @api_view(["POST"])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])

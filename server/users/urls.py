@@ -11,5 +11,6 @@ urlpatterns = [
     re_path('update', views.update),
     re_path('test_token', views.test_token),
     re_path('logout', views.logout),
+    re_path('updateUser', views.updateUser),
 
 ]

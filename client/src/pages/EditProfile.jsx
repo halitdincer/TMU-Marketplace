@@ -8,11 +8,11 @@ import { XMarkIcon } from "@heroicons/react/20/solid";
 import Modal from "react-modal";
 
 function EditProfile() {
-  const { updateProfile, userData } = useContext(AuthContext);
-
+  const { userData } = useContext(AuthContext);
+  const {apiToken} = useContext(AuthContext);
   // Use state to manage form data
   const [formState, setFormState] = useState({
-    profilePic: userData.profilePic,
+    //profilePic: userData.profilePic,
     username: userData.username,
     first_name: userData.first_name,
     last_name: userData.last_name,
@@ -98,7 +98,45 @@ function EditProfile() {
       ...formState,
       [event.target.name]: event.target.value,
     });
-};
+  };
+
+ /* const handleUpdate = async (event) => {
+    handleConfirmPassword();
+    validatePassword(password);
+
+    const isPasswordValid = validatePassword(password);
+    const isConfirmPasswordValid = handleConfirmPassword();
+
+    event.preventDefault();
+    const config = {
+      headers: { 
+        Authorization: "Token " + apiToken,
+        'Content-Type': 'application/json' },
+      withCredentials: true
+    };
+    const form = new FormData();
+
+    form.append("username", formState.username);
+    form.append("email", formState.email);
+    form.append("first_name", formState.first_name);
+    form.append("last_name", formState.last_name);
+    form.append("password", formState.password);
+    for (let [key, value] of form.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+    
+    //if (isPasswordValid && isConfirmPasswordValid) {
+    try {     
+      const response = await axios.put("/api/users/updateUser/", form, config);
+      console.log(response?.data);
+    } catch (error) {
+      console.error("Error:", error);
+      setEmailError("An account with this email already exists.");
+    }
+    
+   };*/
+  // Attach this function to your form submission event
+  // <form onSubmit={handleUpdate}>...</form>
 
   const handleChangeProfilePic = () => {
     setShowUploadModal(true);
