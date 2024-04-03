@@ -1,14 +1,16 @@
 import axios from "axios";
 import React, { useState, useEffect, useContext } from "react";
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from './AuthProvider';
 import useAdDetails from "./useAdDetails";
 
 
 function EditAdForm() {
-
+  const navigate = useNavigate(); // Hook for navigation
+  
   //Get ad from url
   const { ad } = useAdDetails();
-  //console.log(ad);
+
   //set form values
   const [images, setImages] = useState([]);
   const [title, setTitle] = useState('');
@@ -62,6 +64,7 @@ function EditAdForm() {
     } catch (error) {
       console.error("Error:", error);
     }
+    navigate('/profile');
   };
 
   const handleImageChange = (e) => {

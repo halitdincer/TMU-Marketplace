@@ -65,12 +65,12 @@ class EditAdView(APIView):
     def put(self, request, *args, **kwargs):
         #user = request.user  #from permission/auth classes
         ad = Ad.objects.get(pk = request.data["pk"])   
-        adSerializer = AdFormSerializer(data=request.data, context={'request': request})
-        #adSerializer = AdSerializer(ad, data=request.data, context={'request': request})
+        #adSerializer = AdFormSerializer(data=request.data, context={'request': request})
+        adSerializer = AdSerializer(ad, data=request.data, context={'request': request})
         print(adSerializer)
         if adSerializer.is_valid():
             #print(adSerializer.errors)
-            adSerializer.save(ad)
+            adSerializer.save()
             return Response(adSerializer.data, status=status.HTTP_201_CREATED)
         return Response(adSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
