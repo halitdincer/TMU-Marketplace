@@ -36,38 +36,6 @@ function EditProfile() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
 
-  const handleuserUpdate = async (event) => {
-    event.preventDefault();
-
-    const updatedUserInfo = {
-      // Instead of using the local state data, use the updatedUserInfo directly
-      profilePic: profile_picture,
-      username: username,
-      first_name: first_name,
-      last_name: last_name,
-      email: email,
-      password: password,
-    };
-
-    try {
-      // Send a PUT request to your server with the updated user info
-      const response = await axios.put("/api/users/update-user/", updatedUserInfo, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      });
-
-      // Update the AuthContext with the updated user info received from server response.data
-      updateProfile(response.data);
-
-      // Navigate or do something else
-    } catch (error) {
-      console.error("Error:", error);
-      // Handle error
-    }
-  };
-  // Attach this function to your form submission event
-  // <form onSubmit={handleUpdate}>...</form>
-
   const validatePassword = (pwd) => {
     const regex = new RegExp(
       "(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()]).{8,}"
@@ -100,54 +68,27 @@ function EditProfile() {
     });
   };
 
- const handleUpdate = async (event) => {
-  event.preventDefault();
-
-    const updatedUserInfo = {
-      // Instead of using the local state data, use the updatedUserInfo directly
-      profilePic: profile_picture,
-      username: username,
-      first_name: first_name,
-      last_name: last_name,
-      email: email,
-      password: password,
-    };
-
+  const handleUpdate = async (event) => {
+    event.preventDefault();
     handleConfirmPassword();
     validatePassword(password);
 
     const isPasswordValid = validatePassword(password);
     const isConfirmPasswordValid = handleConfirmPassword();
 
-    const config = {
-      headers: { 
-        Authorization: "Token " + apiToken,
-        'Content-Type': 'application/json' },
-      withCredentials: true
-    };
     const form = new FormData();
 
     form.append("username", formState.username);
     form.append("email", formState.email);
     form.append("first_name", formState.first_name);
     form.append("last_name", formState.last_name);
-    form.append("password", formState.password);
+    form.append("password", userData.password);
+    //check form values
     for (let [key, value] of form.entries()) {
       console.log(`${key}: ${value}`);
     }
-    
-    //if (isPasswordValid && isConfirmPasswordValid) {
-    try {     
-      const response = await axios.put("/api/users/update-user/", form, config);
-      console.log(response?.data);
-      // Update the AuthContext with the updated user info received from server response.data
-      updateProfile(response.data);
-    } catch (error) {
-      console.error("Error:", error);
-      setEmailError("An account with this email already exists.");
-    }
-    
-   };
+    updateProfile(form);
+    };
   // Attach this function to your form submission event
   // <form onSubmit={handleUpdate}>...</form>
 

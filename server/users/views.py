@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.generics import ListAPIView
 
 from .models import CustomUser
-from .serializers import CustomUserSerializer
+from .serializers import CustomUserSerializer, CustomProfileSerializer, CustomPasswordSerializer
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from .models import CustomUser
@@ -68,15 +68,13 @@ def signup(request):
 def updateUser(request):
     # Get the current user and update the fields with the provided data
     user = CustomUser.objects.get(username = request.data['username'])
-    password = request.data.get('password')
-    serializer = CustomUserSerializer(user, request.data)
-    print(serializer)
+    serializer = CustomProfileSerializer(user, request.data)
+    print(user.password)
     if serializer.is_valid():
         # Save the updated user and return the updated user data
-        if(password != ''):
-            user.set_password(password)
         serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    print(serializer.errors)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 @api_view(["POST"])
