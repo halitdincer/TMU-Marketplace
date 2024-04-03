@@ -99,7 +99,7 @@ function ProfilePage() {
                   alt={userData.username}
                 />
                 <h5 className="mb-1 text-2xl font-medium text-gray-900 ">
-                  {userData.first_name} {userData.last_name} 
+                  @{userData.username}
                 </h5>
 
                 <p className="text-md text-gray-700">
