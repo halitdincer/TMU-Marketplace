@@ -9,6 +9,8 @@ import Modal from "react-modal";
 
 function EditProfile() {
   const { userData, updateProfile, apiToken } = useContext(AuthContext);
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   // Use state to manage form data
   const [formState, setFormState] = useState({
     //profilePic: userData.profilePic,
@@ -25,7 +27,16 @@ function EditProfile() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
 
-
+  const validateEmail = (email) => {
+    const regex = new RegExp('^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$');
+    if (!regex.test(email)) {
+      setEmailError('Please enter a valid email address.');
+      return false;
+    } else {
+      setEmailError('');
+      return true;
+    }
+  };
   const handleChange = (event) => {
     setFormState({
       ...formState,
@@ -35,6 +46,7 @@ function EditProfile() {
 
   const handleUpdate = async (event) => {
     event.preventDefault();
+    setEmailError(email === '' ? 'Please enter your email.' : !validateEmail(email) ? 'Email must be in the format something@mail.com.' : '');
 
     const form = new FormData();
     form.append('id', userData.id);
@@ -47,7 +59,12 @@ function EditProfile() {
     for (let [key, value] of form.entries()) {
       console.log(`${key}: ${value}`);
     }
-    updateProfile(form);
+    try{
+       updateProfile(form);
+    }
+    catch(error){
+      
+    }
     };
   // Attach this function to your form submission event
   // <form onSubmit={handleUpdate}>...</form>
