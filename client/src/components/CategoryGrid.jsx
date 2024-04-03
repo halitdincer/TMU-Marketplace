@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from 'react-router-dom'; // Import Link
 
+
 import Beauty from "../images/beauty.jpg";
 import Clothing from "../images/clothes.jpg";
 import Electronics from "../images/electronics.jpg";
@@ -15,6 +16,7 @@ import Sports from "../images/sports.jpg";
 import StudyGroups from "../images/study_groups.jpg";
 import Textbooks from "../images/textbooks.jpg";
 import Tutoring from "../images/tutoring.jpg";
+
 
 const callouts = [
   {
@@ -117,7 +119,16 @@ const callouts = [
   },
 ];
 
-function CategoryGrid() {
+
+
+
+const CategoryGrid = () => {
+  const navigate = useNavigate();
+
+
+  const handleCategoryClick = (categoryShortCode) => {
+    navigate(`/category/${categoryShortCode}`); // Navigate to the category route
+  };
 
 
   return (
@@ -126,42 +137,32 @@ function CategoryGrid() {
         <div className="mx-auto max-w-2xl py-10 sm:py-24 lg:max-w-none lg:py-12 ">
           <h2 className="text-2xl font-bold text-gray-900">Shop by Category</h2>
 
+
           <div className="mt-6 space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:space-y-0 lg:grid-rows-2 lg:gap-y-6 sm:pb-30">
             {callouts.map((callout) => (
-              <div key={callout.name} className="group relative">
+              <div key={callout.name} onClick={() => handleCategoryClick(callout.short)}>
                 <div className="relative h-80 w-full overflow-hidden rounded-lg bg-white sm:aspect-w-1 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-64">
                   <img
                     src={callout.imageSrc}
                     alt={callout.imageAlt}
                     className="h-full w-full object-cover object-center"
+                    onClick={() => handleCategoryClick(callout.short)} // Adding click handler
+
                   />
                 </div>
-                <h2 className="mt-6 text-lg leading-6 font-medium space-y-1">
-                  <button
-                    className="text-gray-900"
-                  >
+                <h2 className=" text-lg leading-6 font-medium">
+                  <span className="inline-block bg-white text-black rounded-lg px-2 py-1">
                     {callout.name}
-                  </button>
+                  </span>
                 </h2>
               </div>
             ))}
           </div>
         </div>
       </div>
-    </div> 
+    </div>
   );
 }
 
+
 export default CategoryGrid;
-
-
-
-
-
-
-
-
-
-
-
-
