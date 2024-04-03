@@ -1,46 +1,62 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from "./AuthProvider";
+
 
 function CreateAdForm() {
+  // Use useState to manage multiple images
+  const navigate = useNavigate(); // Hook for navigation
+  const [images, setImages] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
   const [price, setPrice] = useState("");
   const [type, setType] = useState("");
   const [category, setCategory] = useState("");
   const [location, setLocation] = useState("");
+  const {apiToken} = useContext(AuthContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const token = localStorage.getItem("authtoken");
+
     const config = {
       headers: {
-        Authorization: "Token " + token,
+        Authorization: "Token " + apiToken,
         "Content-Type": "multipart/form-data",
       },
     };
 
     const form = new FormData();
-    form.append("images", image);
+
+    images.forEach((image) => {
+      form.append("images", image);
+    });
+
     form.append("title", title);
     form.append("description", description);
     form.append("price", price);
     form.append("type", type);
     form.append("category", category);
     form.append("location", location);
-    try {
-      const response = await axios.post("/api/ads/create-ad/", form, config);
 
+    for (let [key, value] of form.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+
+    try {
+      const response = await axios.post("/api/ads/create/", form, config);
       console.log(response.data);
     } catch (error) {
       console.error("Error:", error);
     }
+    navigate('/');
   };
 
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
-    console.log(e.target.files[0]);
+    setImages([...e.target.files]);
+    console.log([...e.target.files]);
   };
+
 
   return (
     <div className="min-h-screen p-6  bg-gray-50 flex items-center justify-center lg:pb-0 pb-24">
@@ -107,9 +123,9 @@ function CreateAdForm() {
                         <option value="" disabled>
                           Select Ad Type
                         </option>
-                        <option value="Items Wanted">Items Wanted</option>
-                        <option value="Items for Sale">Items for Sale</option>
-                        <option value="Academic Services">
+                        <option value="IW">Items Wanted</option>
+                        <option value="IS">Items for Sale</option>
+                        <option value="AS">
                           Academic Services
                         </option>
                       </select>
@@ -214,13 +230,15 @@ function CreateAdForm() {
                             SVG, PNG, JPG
                           </p>
                         </div>
-                        <input
+                      </label>
+                         <input
                           id="dropzone-file"
                           type="file"
+                          multiple // Allow multiple file selections
                           className="hidden"
                           onChange={handleImageChange}
                         />
-                      </label>
+
                     </div>
 
                     <div className="md:col-span-5 pt-4">

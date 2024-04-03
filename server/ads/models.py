@@ -46,14 +46,22 @@ class Ad(models.Model):
         ('OT', 'Other Locations'),
     ]
 
+    STATUS_CHOICES = [
+        ('SO', 'Sold'),
+        ('NS', 'Not Sold'),
+        ('DE', 'Deleted'),
+    ]
+
     title = models.CharField(max_length=200)
     description = models.TextField()
     type = models.CharField(max_length=2, choices=TYPE_CHOICES, default='IW')
     category = models.CharField(max_length=2, choices=CATEGORY_CHOICES, default='OT')
     location = models.CharField(max_length=2, choices=LOCATION_CHOICES, default='TE')
+    status = models.CharField(max_length=2, choices=STATUS_CHOICES, default='NS')
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     owned_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='ads')
+    image = models.ImageField(upload_to='ad_images/', blank=True, null=False)
 
     class Meta:
         ordering = ['-created_at']
