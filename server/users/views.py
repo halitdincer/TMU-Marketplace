@@ -67,12 +67,30 @@ def signup(request):
 @permission_classes([IsAuthenticated])
 def updateUser(request):
     # Get the current user and update the fields with the provided data
-    user = CustomUser.objects.get(username = request.data['username'])
+    user = CustomUser.objects.get(id = request.data['id'])
     serializer = CustomProfileSerializer(user, request.data)
     print(user.password)
     if serializer.is_valid():
         # Save the updated user and return the updated user data
         serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    print(serializer.errors)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def updatePassword(request):
+    # Get the current user and update the fields with the provided data
+    user = CustomUser.objects.get(username = request.data['username'])
+    password = request.data['password']
+    serializer = CustomPasswordSerializer(user, request.data)
+    print(user.password)
+    if serializer.is_valid():
+        serializer.save()
+        # Save the updated password to user object
+        user.set_password(request.data['password'])
+        user.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
     print(serializer.errors)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

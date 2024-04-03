@@ -76,7 +76,6 @@ export const AuthProvider = ({ children }) => {
   // Function to update user profile
   async function updateProfile(updatedUserData) {
     try {
-      
       // Check if apiToken already exist
       if (!apiToken) throw new Error("No API token found");
       const config = {
@@ -102,6 +101,25 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  async function updatePassword(newUserData){
+   
+    try {
+      // Check if apiToken already exist
+      if (!apiToken) throw new Error("No API token found");
+      const config = {
+        headers: { 
+          Authorization: "Token " + apiToken,
+          'Content-Type': 'application/json' },
+        withCredentials: true
+      };
+      const response = await axios.post('/api/users/update-password/', newUserData ,config);
+      if (!response.status) throw new Error("Password update failed");
+
+    } catch (error) {
+      console.error("Password update error:", error);
+    }
+  }
+
   // Function to check if user logged in
   function checkAuth() {
     // Check if the apiToken is present to determine authentication status
@@ -115,7 +133,7 @@ export const AuthProvider = ({ children }) => {
 
   // Providing the authentication context value to the children components
   return (
-    <AuthContext.Provider value={{ apiToken, userData, login, logout, checkAuth, getToken, updateProfile }}>
+    <AuthContext.Provider value={{ apiToken, userData, login, logout, checkAuth, getToken, updateProfile, updatePassword }}>
       {children}
     </AuthContext.Provider>
   );

@@ -8,8 +8,7 @@ import { XMarkIcon } from "@heroicons/react/20/solid";
 import Modal from "react-modal";
 
 function EditProfile() {
-  const { userData, updateProfile  } = useContext(AuthContext);
-  const {apiToken} = useContext(AuthContext);
+  const { userData, updateProfile, apiToken } = useContext(AuthContext);
   // Use state to manage form data
   const [formState, setFormState] = useState({
     //profilePic: userData.profilePic,
@@ -23,43 +22,9 @@ function EditProfile() {
     Modal.setAppElement("#root"); // Assuming '#root' is the ID of your root element
   }, []);
 
-  const [profile_picture, setProfilePic] = useState(userData.profile_picture);
-  const [username, setUsername] = useState(userData.username);
-  const [first_name, setFirstName] = useState(userData.first_name);
-  const [last_name, setLastName] = useState(userData.last_name);
-  const [email, setEmail] = useState(userData.email);
-  const [password, setPassword] = useState(userData.password);
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [passwordMatchError, matchPasswordError] = useState("");
-  const [emailError, setEmailError] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
 
-  const validatePassword = (pwd) => {
-    const regex = new RegExp(
-      "(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()]).{8,}"
-    );
-    if (!regex.test(pwd)) {
-      setPasswordError(
-        "Password must contain at least one number, one uppercase and lowercase letter, 8 or more characters, and at least one special character"
-      );
-      return false;
-    } else {
-      setPasswordError("");
-      return true;
-    }
-  };
-
-  const handleConfirmPassword = (e) => {
-    if (password !== confirmPassword) {
-      matchPasswordError("Passwords do not match.");
-      return false;
-    } else {
-      matchPasswordError("");
-      return true;
-    }
-  };
 
   const handleChange = (event) => {
     setFormState({
@@ -70,14 +35,9 @@ function EditProfile() {
 
   const handleUpdate = async (event) => {
     event.preventDefault();
-    handleConfirmPassword();
-    validatePassword(password);
-
-    const isPasswordValid = validatePassword(password);
-    const isConfirmPasswordValid = handleConfirmPassword();
 
     const form = new FormData();
-
+    form.append('id', userData.id);
     form.append("username", formState.username);
     form.append("email", formState.email);
     form.append("first_name", formState.first_name);
@@ -339,29 +299,22 @@ function EditProfile() {
                           placeholder="Email"
                         />
                       </div>
-                      <div className="md:col-span-5">
-                        <label htmlFor="password">New Password</label>
-                        <input
-                          type="text"
-                          name="password"
-                          id="password"
-                          className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                          value={formState.password}
-                          onChange={(e) =>
-                            setFormState({
-                              ...formState,
-                              password: e.target.value,
-                            })
-                          }
-                          placeholder="Password"
-                        />
-                      </div>
-                      <div className="md:col-span-5 pt-4 text-right">
+                      <div className="md:col-span-5 pt-4 text-right ">
                         <input
                           type="submit"
                           value="Save"
                           className="bg-custom-blue hover:bg-custom-yellow text-white font-bold py-2 px-4 rounded cursor-pointer"
                         />
+                      </div>
+                      <div className="md:col-span-5 pt-4 text-right" >
+                        <Link
+                            to="/change-password"
+                            className="bg-custom-blue hover:bg-custom-yellow text-white font-bold py-2 px-4 rounded cursor-pointer"
+                          >
+                          <h7>
+                            Change Password
+                          </h7>  
+                        </Link>
                       </div>
                     </div>
                   </div>

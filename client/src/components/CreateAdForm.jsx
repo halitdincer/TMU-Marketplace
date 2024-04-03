@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "./AuthProvider";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import Modal from "./Modal";
-//import OpenAI from "openai";
+import OpenAI from "openai";
 
 function CreateAdForm() {
   // Use useState to manage multiple images
@@ -25,10 +25,10 @@ function CreateAdForm() {
     message: "",
   });
 
-  /*const openai = new OpenAI({
+  const openai = new OpenAI({
     apiKey: process.env.REACT_APP_OPENAI_API_KEY,
     dangerouslyAllowBrowser: true,
-  });*/
+  });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -91,7 +91,7 @@ function CreateAdForm() {
     setUploadedFiles(fileNames);
   };
 
-  /*const fetchDescription = async () => {
+  const fetchDescription = async () => {
     try {
       const completion = await openai.chat.completions.create({
         messages: [
@@ -109,7 +109,7 @@ function CreateAdForm() {
     } catch (error) {
       console.error("There was an error fetching the description:", error);
     }
-  };*/
+  };
 
   return (
     <div className="min-h-screen p-6  bg-gray-50 flex items-center justify-center lg:pb-0 pb-24">
