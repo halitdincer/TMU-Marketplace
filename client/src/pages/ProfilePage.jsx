@@ -109,8 +109,8 @@ function ProfilePage() {
                     <StarIcon
                       key={rating}
                       className={classNames(
-                        userData.averageRating > rating
-                          ? "text-gray-900"
+                        reviews.average > rating
+                          ? "text-custom-yellow"
                           : "text-gray-200",
                         "h-5 w-5 flex-shrink-0"
                       )}
@@ -137,10 +137,32 @@ function ProfilePage() {
                 {ads.map(
                   (ad) =>
                     ad.owned_by === userData.username && (
+                      <Link to={`/ad/${ad.id}`}>
+                        <div className="relative">
+                          <AdCard key={ad.id} ad={ad} />
 
-                      <Link to={`/edit/ad/${ad.id}`}>
-
-                        <AdCard key={ad.id} ad={ad} />
+                          <Link to={`/edit/ad/${ad.id}`}>
+                            {/* Pencil Icon */}
+                            <div className="absolute top-4 right-4 transform translate-x-2/3 -translate-y-2/3">
+                              <button className="bg-gray-200 border border-gray-500 rounded-full p-2 hover:bg-gray-200">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth="1.5"
+                                  stroke="currentColor"
+                                  className="w-6 h-6"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                                  />
+                                </svg>
+                              </button>
+                            </div>
+                          </Link>
+                        </div>
                       </Link>
                     )
                 )}
