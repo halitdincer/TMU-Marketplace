@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
       });
       
       // Check if response is OK, indicating logout happened succesfully
-      if (!response.ok) throw new Error("Logout failed");
+      if (!response.ok  && response.status !== 401  && response.status !== 403) throw new Error("Logout failed");
       
       // Remove the token and user data from local storage 
       localStorage.removeItem("apiToken");
