@@ -29,15 +29,17 @@ function AdCard({ ad }) {
   }
   return (
     <article className="max-w-md mx-auto bg-white border border-gray-200 shadow-lg rounded-lg overflow-hidden my-5">
-      <img
-        src={
-          ad.images && ad.images.length > 0
-            ? ad.images[0].image_url
-            : "https://placehold.co/600x400?text=No+Image"
-        }
-        alt={ad.title}
-        className={imageClasses}
-      />
+      <div className="max-h-80 overflow-hidden">
+        <img
+          src={
+            ad.images && ad.images.length > 0
+              ? ad.images[0].image_url
+              : "https://placehold.co/600x400?text=No+Image"
+          }
+          alt={ad.title}
+          className={imageClasses}
+        />
+      </div>
 
       <div className="pt-4 p-6">
         <div className="lg:text-xs flex items-center justify-between text-sm text-gray-600 mb-2">
@@ -45,7 +47,7 @@ function AdCard({ ad }) {
             {formatDate(ad.created_at) || "Unknown date"}
           </time>
           <span className="rounded-full bg-gray-100 px-3 py-1">
-            {ad.category || "No Category"}
+            {ad.type || "No Category"}
           </span>
         </div>
 
