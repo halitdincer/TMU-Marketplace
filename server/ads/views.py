@@ -112,3 +112,15 @@ def editAd(request):
         return Response(adSerializer.data, status=status.HTTP_201_CREATED)
     return Response(adSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
 """
+
+class FlagIncrementView(APIView):
+    def post(self, request, pk):
+        try:
+            ad = Ad.objects.get(pk=pk)
+        except Ad.DoesNotExist:
+            return Response({'error': 'Ad not found.'}, status=status.HTTP_404_NOT_FOUND)
+        
+        ad.flags += 1
+        ad.save()
+
+        return Response(status=status.HTTP_200_OK)
