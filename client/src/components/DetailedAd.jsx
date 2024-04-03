@@ -4,21 +4,12 @@ import {
   ArrowUturnLeftIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
+import { FaMapMarkerAlt } from "react-icons/fa";
+
 import ImageCarousel from "./ImageCarousel";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import useAdDetails from "./useAdDetails";
 import { AuthContext } from "./AuthProvider";
-
-const product = {
-  href: "#",
-
-  highlights: [
-    "Hand cut and sewn locally",
-    "Dyed with our proprietary colors",
-    "Pre-washed & pre-shrunk",
-    "Ultra-soft 100% cotton",
-  ],
-};
 
 const reviews = { href: "#", average: 4, totalCount: 117 };
 
@@ -33,7 +24,6 @@ function DetailedAd() {
   const { apiToken, userData } = useContext(AuthContext);
   const navigate = useNavigate();
 
-
   const sendMessage = async () => {
     // Ensure ad details and apiToken are available
     if (!ad || !apiToken) {
@@ -42,16 +32,16 @@ function DetailedAd() {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/api/messages/send/', {
-        method: 'POST',
+      const response = await fetch("http://localhost:8000/api/messages/send/", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Token ${apiToken}` // Assuming the token is used as a Bearer token
+          "Content-Type": "application/json",
+          Authorization: `Token ${apiToken}`, // Assuming the token is used as a Bearer token
         },
         body: JSON.stringify({
           sender: userData.id,
           receiver: ad.owned_by_id,
-          text: `Interested in: ${ad.title} - ${ad.description}`
+          text: `Interested in: ${ad.title} - ${ad.description}`,
         }),
       });
 
@@ -92,7 +82,6 @@ function DetailedAd() {
             className="flex items-center text-black-600 hover:text-indigo-500"
           >
             <div className="rounded-full bg-gray-200 p-1">
-              {/* <ArrowUturnLeftIcon className="h-4 w-4 " /> */}
               <XMarkIcon className="h-5 w-5 " />
             </div>
           </Link>
@@ -161,11 +150,17 @@ function DetailedAd() {
 
               <div className="mt-4">
                 <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
-                  {product.highlights.map((highlight) => (
-                    <li key={highlight} className="text-gray-400">
-                      <span className="text-gray-600">{highlight}</span>
-                    </li>
-                  ))}
+                  <li key={ad.location} className="text-gray-400 ">
+                    <span className="text-gray-600">{ad.location}</span>
+                  </li>
+                  <li key={ad.type} className="text-gray-400">
+                    {" "}
+                    <span className="text-gray-600">{ad.type}</span>
+                  </li>
+                  <li key={ad.category} className="text-gray-400">
+                    {" "}
+                    <span className="text-gray-600">{ad.category}</span>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -173,7 +168,7 @@ function DetailedAd() {
             <button
               type="button"
               onClick={sendMessage}
-              className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-custom-blue px-8 py-3 text-base font-medium text-white hover:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               Message
             </button>

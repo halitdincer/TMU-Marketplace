@@ -28,20 +28,18 @@ function AdCard({ ad }) {
     imageClasses = "w-full h-75 object-cover object-center";
   }
   return (
-     
-    <div className="max-w-96">
-      <article className="max-w-md mx-auto bg-white border border-gray-200 shadow-lg rounded-lg overflow-hidden my-5">
-        <div className="max-h-80 overflow-hidden">
-          <img
-            src={
-              ad.images && ad.images.length > 0
-                ? ad.images[0].image_url
-                : "https://placehold.co/600x400?text=No+Image"
-            }
-            alt={ad.title}
-            className={imageClasses}
-          />
-        </div>
+
+    <article className="max-w-md mx-auto bg-white border border-gray-200 shadow-lg rounded-lg overflow-hidden my-5">
+      <img
+        src={
+          ad.images && ad.images.length > 0
+            ? ad.images[0].image_url
+            : "https://placehold.co/600x400?text=No+Image"
+        }
+        alt={ad.title}
+        className={imageClasses}
+      />
+    
         <div className="pt-4 p-6">
           <div className="lg:text-xs flex items-center justify-between text-sm text-gray-600 mb-2">
             <time dateTime="2020-03-16">

@@ -18,7 +18,7 @@ function CategoriesPage() {
   return (
     <div className="flex">
       <Sidebar />
-      <div class="flex-1 sm:ml-28">
+      <div className="flex-1 sm:ml-28">
         <div className="bg-white-100">
           <div className="lg:fixed lg:top-0 lg:left-32 lg:w-[90vw]  lg:z-50">
 

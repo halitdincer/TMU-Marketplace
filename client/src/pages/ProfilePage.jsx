@@ -100,7 +100,7 @@ function ProfilePage() {
                 <h5 className="mb-1 text-2xl font-medium text-gray-900 ">
                   @{userData.username}
                 </h5>
-                <p className="text-sm text-gray-500">
+                <p className="text-md text-gray-700">
                   {userData.first_name} {userData.last_name}
                 </p>
                 <p className="text-sm text-gray-500 ">{userData.email}</p>
@@ -130,14 +130,16 @@ function ProfilePage() {
               </div>
             </div>
             <div className="mx-auto max-w-7xl px-6 lg:px-8 ">
-              <h4 className="mt-3 mb-1 text-2xl font-semibold text-gray-900 ">
+              <h4 className="mt-4 mb-1 text-2xl font-semibold text-gray-900 ">
                 Your Listings
               </h4>
-              <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 pt-2 sm:mt-5 sm:pt-5 lg:mx-0 lg:max-w-none lg:grid-cols-4">
+              <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16   lg:mx-0 lg:max-w-none lg:grid-cols-4">
                 {ads.map(
                   (ad) =>
                     ad.owned_by === userData.username && (
+
                       <Link to={`/edit/ad/${ad.id}`}>
+
                         <AdCard key={ad.id} ad={ad} />
                       </Link>
                     )
