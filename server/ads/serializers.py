@@ -31,7 +31,10 @@ class AdSerializer(serializers.ModelSerializer):
         return obj.owned_by.id
     
     def get_owned_by_profile_picture(self, obj):
-        return obj.owned_by.profile_picture.url
+        try:
+            return obj.owned_by.profile_picture.url
+        except ValueError:
+            return None
     
     def get_category(self, obj):
         return dict(Ad.CATEGORY_CHOICES)[obj.category]
