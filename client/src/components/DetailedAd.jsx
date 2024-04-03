@@ -84,6 +84,15 @@ function DetailedAd() {
     if (ad.id) {
       updateRecentlyViewedAds(ad.id);
     }
+    if (ad?.category) {
+      const categoryVisits = JSON.parse(localStorage.getItem('categoryVisits')) || {};
+      const currentCategoryCount = categoryVisits[ad.category] || 0;
+      const updatedCategoryVisits = {
+        ...categoryVisits,
+        [ad.category]: currentCategoryCount + 1,
+      };
+      localStorage.setItem('categoryVisits', JSON.stringify(updatedCategoryVisits));
+    }
   }, [ad]);
 
   const updateRecentlyViewedAds = (newAdId) => {
