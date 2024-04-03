@@ -6,7 +6,6 @@ import { XMarkIcon } from "@heroicons/react/20/solid";
 import Modal from "./Modal";
 import OpenAI from "openai";
 
-
 function CreateAdForm() {
   // Use useState to manage multiple images
   const navigate = useNavigate(); // Hook for navigation
@@ -26,9 +25,10 @@ function CreateAdForm() {
     message: "",
   });
 
-  
-  const openai = new OpenAI({apiKey: process.env.REACT_APP_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
-
+  const openai = new OpenAI({
+    apiKey: process.env.REACT_APP_OPENAI_API_KEY,
+    dangerouslyAllowBrowser: true,
+  });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -83,7 +83,6 @@ function CreateAdForm() {
     setIsModalOpen(false);
   };
 
-
   const handleImageChange = (e) => {
     const files = [...e.target.files];
     setImages(files);
@@ -94,21 +93,23 @@ function CreateAdForm() {
 
   const fetchDescription = async () => {
     try {
-        const completion = await openai.chat.completions.create({
-          messages: [
-            { role: "system", content: 'You are a bot that writes description for for items or services listed on an online marketplace. The user will give you the listing title and you will reply back with realistic listing description under 50 words that is written from the user perspective.' },
-            { role: "user", content: title }
-          ],
-          model: "gpt-3.5-turbo",
-        });
-        console.log(completion.choices[0]);
-        setDescription(completion.choices[0].message.content);
+      const completion = await openai.chat.completions.create({
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are a bot that writes description for for items or services listed on an online marketplace. The user will give you the listing title and you will reply back with realistic listing description under 50 words that is written from the user perspective.",
+          },
+          { role: "user", content: title },
+        ],
+        model: "gpt-3.5-turbo",
+      });
+      console.log(completion.choices[0]);
+      setDescription(completion.choices[0].message.content);
     } catch (error) {
-        console.error('There was an error fetching the description:', error);
+      console.error("There was an error fetching the description:", error);
     }
   };
-
-
 
   return (
     <div className="min-h-screen p-6  bg-gray-50 flex items-center justify-center lg:pb-0 pb-24">
@@ -155,40 +156,50 @@ function CreateAdForm() {
                     />
                   </div>
 
-
-                  
-
-                    <div className="md:col-span-5 relative">
-                      <label htmlFor="description">Description </label>
-                      <textarea
-                          id="description"
-                          rows="7"
-                          className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500"
-                          placeholder="Your description here"
-                          value={description}
-                          onChange={(e) => setDescription(e.target.value)}
-                      />
-                      <button
-                          className="bg-custom-blue hover:bg-custom-yellow text-white font-bold py-2 px-4 rounded cursor-pointer absolute bottom-5 right-5 mt-2 mr-2"
-                          onClick={fetchDescription}
+                  <div className="md:col-span-5 relative">
+                    <label htmlFor="description">Description </label>
+                    <textarea
+                      id="description"
+                      rows="7"
+                      className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500"
+                      placeholder="Your description here"
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                    />
+                    <button
+                      className="bg-emerald-400  hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-2xl cursor-pointer absolute bottom-5 right-5 mt-2 mr-2 flex items-center"
+                      onClick={fetchDescription}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        className="w-6 h-6 mr-1"
                       >
-                          Write with AI
-                      </button>
-                    </div>
-                    <div className="md:col-span-3">
-                      <label htmlFor="price">Price</label>
-                      <input
-                        type="number"
-                        name="price"
-                        id="price"
-                        className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                        placeholder="$99"
-                        required
-                        value={price}
-                        onChange={(e) => setPrice(e.target.value)}
-                      />
-                    </div>
-
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"
+                        />
+                      </svg>
+                      Write with AI
+                    </button>
+                  </div>
+                  <div className="md:col-span-3">
+                    <label htmlFor="price">Price</label>
+                    <input
+                      type="number"
+                      name="price"
+                      id="price"
+                      className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                      placeholder="$99"
+                      required
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                    />
+                  </div>
 
                   <div className="md:col-span-3">
                     <label htmlFor="type">Ad Type</label>
