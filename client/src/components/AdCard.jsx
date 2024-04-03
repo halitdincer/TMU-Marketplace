@@ -28,17 +28,7 @@ function AdCard({ ad }) {
     imageClasses = "w-full h-75 object-cover object-center";
   }
   return (
-    <article className="max-w-md mx-auto bg-white border border-gray-200 shadow-lg rounded-lg overflow-hidden my-5">
-      <img
-        src={
-          ad.image && ad.image.length > 0
-            ? ad.image.image_url
-            : "https://placehold.co/600x400?text=No+Image"
-        }
-        alt={ad.title}
-        className={imageClasses}
-      />
-
+     
     <div className="max-w-96">
       <article className="max-w-md mx-auto bg-white border border-gray-200 shadow-lg rounded-lg overflow-hidden my-5">
         <div className="max-h-80 overflow-hidden">
