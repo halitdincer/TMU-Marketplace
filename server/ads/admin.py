@@ -34,7 +34,7 @@ class AdAdmin(admin.ModelAdmin):
     list_display = ('title', 'category', 'price', 'created_at', 'owned_by')
     list_filter = ('category', 'created_at')
     search_fields = ('title', 'description', 'user__username')
-    inlines = [AdImageInline]
+    #inlines = [AdImageInline]
 
 
     

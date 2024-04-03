@@ -17,7 +17,7 @@ function EditProfile() {
     first_name: userData.first_name,
     last_name: userData.last_name,
     email: userData.email,
-    password: userData.password,
+    password: "",
   });
   useEffect(() => {
     Modal.setAppElement("#root"); // Assuming '#root' is the ID of your root element
@@ -386,7 +386,7 @@ function EditProfile() {
                         />
                       </div>
                       <div className="md:col-span-5">
-                        <label htmlFor="password">Password</label>
+                        <label htmlFor="password">New Password</label>
                         <input
                           type="text"
                           name="password"

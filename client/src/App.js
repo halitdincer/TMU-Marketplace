@@ -12,18 +12,21 @@ import Filters from 'components/Filters'
 import Logout from 'components/Logout';
 import ForgotPasswordPage from 'pages/ForgotPassword';
 import AdDetailsPage from 'pages/AdDetailsPage';
-import CreateAdForm from 'components/CreateAdForm';
 import CreatePage from 'pages/CreatePage';
+import EditPage from 'pages/EditPage';
 import { AuthProvider } from 'components/AuthProvider';
 import { PrivateRoute } from 'components/PrivateRoute';
 import GuestRoute from 'components/GuestRoute';
 import AdsList from 'components/AdsList';
 import Header from './components/Header'; 
+import Category from 'components/Category';
+import AcademicServices from 'pages/AcademicServicesPage';
+import BuyAndSell from 'pages/BuyAndSellPage';
+
 
 function App() {
-
   const [ads, setAds] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Call this function from the Header component when the form is submitted
   const handleSearchSubmit = (query) => {
@@ -36,49 +39,57 @@ function App() {
   };
 
   const [user, setUser] = React.useState({
-    name: '',
-    email: '',
+    name: "",
+    email: "",
     image: null,
   });
 
   return (
     <AuthProvider>
       <Routes>
-
         {/* Public Routes */}
         <Route index element={<HomePage />} />
         <Route path="categories" element={<CategoriesPage />} />
         <Route path="inbox/" element={<InboxPage />} />
         <Route path="inbox/:conversantId" element={<InboxPage />} />
         <Route path="filters" element={<Filters />} />
+
         <Route path="ad/:id" element={<AdDetailsPage />} /> 
         <Route path="ads" element={<AdsList ads={ads} searchQuery={searchQuery} />} />
+        <Route path="category/:category" element={<Category />} />
+        <Route path="academic-services" element={<AcademicServices />} />
+        <Route path="buy-and-sell" element={<BuyAndSell />} />  
         
+
         {/* Private Routes */}
-        <Route path='profile' element={<PrivateRoute/>}>
+        <Route path="profile" element={<PrivateRoute />}>
           <Route index element={<ProfilePage />} />
         </Route>
-        <Route path='edit-profile' element={<PrivateRoute/>}>
+        <Route path="edit-profile" element={<PrivateRoute />}>
           <Route index element={<EditProfile />} />
         </Route>
-        <Route path='create' element={<PrivateRoute/>}>
+        <Route path="create" element={<PrivateRoute />}>
           <Route index element={<CreatePage />} />
         </Route>
+
+        <Route path='edit/ad/:id' element={<PrivateRoute/>}>
+          <Route index element={<EditPage />} />
+        </Route>
         <Route path='logout' element={<PrivateRoute/>}>
+
           <Route index element={<Logout />} />
         </Route>
 
         {/* Guest Routes */}
-        <Route path='login' element={<GuestRoute/>}>
+        <Route path="login" element={<GuestRoute />}>
           <Route index element={<LogInPage />} />
         </Route>
-        <Route path='signup' element={<GuestRoute/>}>
+        <Route path="signup" element={<GuestRoute />}>
           <Route index element={<SignUp />} />
         </Route>
-        <Route path='forgotPassword' element={<GuestRoute/>}>
+        <Route path="forgotPassword" element={<GuestRoute />}>
           <Route index element={<ForgotPasswordPage />} />
         </Route>
-
       </Routes>
     </AuthProvider>
   );

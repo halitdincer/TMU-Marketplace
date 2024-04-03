@@ -101,8 +101,10 @@ function ProfilePage() {
                 <h5 className="mb-1 text-2xl font-medium text-gray-900 ">
                   {userData.first_name} {userData.last_name} 
                 </h5>
-                <p className="text-sm text-gray-500">
-                  {userData.username}
+
+                <p className="text-md text-gray-700">
+                  {userData.first_name} {userData.last_name}
+
                 </p>
                 <p className="text-sm text-gray-500 ">{userData.email}</p>
                 <div className="mt-4 flex items-center">
@@ -111,7 +113,9 @@ function ProfilePage() {
                       key={rating}
                       className={classNames(
                         reviews.average > rating
-                          ? "text-gray-900"
+
+                          ? "text-custom-yellow"
+
                           : "text-gray-200",
                         "h-5 w-5 flex-shrink-0"
                       )}
@@ -131,14 +135,40 @@ function ProfilePage() {
               </div>
             </div>
             <div className="mx-auto max-w-7xl px-6 lg:px-8 ">
-              <h4 className="mt-3 mb-1 text-2xl font-semibold text-gray-900 ">
+              <h4 className="mt-4 mb-1 text-2xl font-semibold text-gray-900 ">
                 Your Listings
               </h4>
-              <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 pt-2 sm:mt-5 sm:pt-5 lg:mx-0 lg:max-w-none lg:grid-cols-4">
+              <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16   lg:mx-0 lg:max-w-none lg:grid-cols-4">
                 {ads.map(
                   (ad) =>
                     ad.owned_by === userData.username && (
-                      <AdCard key={ad.id} ad={ad} />
+                      <Link to={`/ad/${ad.id}`}>
+                        <div className="relative">
+                          <AdCard key={ad.id} ad={ad} />
+
+                          <Link to={`/edit/ad/${ad.id}`}>
+                            {/* Pencil Icon */}
+                            <div className="absolute top-4 right-4 transform translate-x-2/3 -translate-y-2/3">
+                              <button className="bg-gray-200 border border-gray-400 rounded-full p-2 hover:bg-gray-200">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth="1.5"
+                                  stroke="currentColor"
+                                  className="w-6 h-6"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                                  />
+                                </svg>
+                              </button>
+                            </div>
+                          </Link>
+                        </div>
+                      </Link>
                     )
                 )}
               </div>
