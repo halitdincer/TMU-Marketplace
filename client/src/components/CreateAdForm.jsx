@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "./AuthProvider";
 import { XMarkIcon } from "@heroicons/react/20/solid";
+import Modal from "./Modal";
 
 function CreateAdForm() {
   // Use useState to manage multiple images
@@ -15,6 +16,12 @@ function CreateAdForm() {
   const [category, setCategory] = useState("");
   const [location, setLocation] = useState("");
   const { apiToken } = useContext(AuthContext);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState({
+    title: "",
+    message: "",
+  });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -46,20 +53,46 @@ function CreateAdForm() {
     try {
       const response = await axios.post("/api/ads/create/", form, config);
       console.log(response.data);
+      setIsModalOpen(true);
+      setModalContent({
+        title: "Success!",
+        message: "Your ad has been successfully posted!",
+      });
     } catch (error) {
       console.error("Error:", error);
+      setIsModalOpen(true);
+      setModalContent({
+        title: "Error!",
+        message: "An error occurred while posting your ad.Please try again",
+      });
     }
-    navigate("/");
+
+    setTimeout(() => {
+      navigate("/");
+    }, 3000);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   const handleImageChange = (e) => {
-    setImages([...e.target.files]);
-    console.log([...e.target.files]);
+    const files = [...e.target.files];
+    setImages(files);
+
+    const fileNames = files.map((file) => file.name);
+    setUploadedFiles(fileNames);
   };
 
   return (
     <div className="min-h-screen p-6  bg-gray-50 flex items-center justify-center lg:pb-0 pb-24">
       <div className="container max-w-screen-lg mx-auto">
+        <Modal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          title={modalContent.title}
+          message={modalContent.message}
+        />
         <div className="flex justify-between items-center">
           <h2 className="font-semibold text-2xl text-custom-blue pb-3">
             Create Ad
@@ -244,6 +277,15 @@ function CreateAdForm() {
                       className="hidden"
                       onChange={handleImageChange}
                     />
+                    <div className="mt-2">
+                      {uploadedFiles.length > 0 && (
+                        <div className="text-green-600">
+                          {uploadedFiles.map((fileName, index) => (
+                            <div key={index}>{fileName}</div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   <div className="md:col-span-5 pt-4">
