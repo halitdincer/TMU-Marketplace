@@ -184,12 +184,14 @@ function HeaderLoggedIn({ title, onSearchSubmit }) {
                 <button
                   type="button"
                   className="px-4 py-2 bg-custom-blue text-white rounded-md"
+                  onClick={() => window.location.replace("/buy-and-sell")}
                 >
                   Buy & Sell
                 </button>
                 <button
                   type="button"
                   className="px-4 py-2 bg-custom-blue text-white rounded-md"
+                  onClick={() => window.location.replace("/academic-services")}
                 >
                   Academic Services
                 </button>
@@ -261,14 +263,14 @@ function HeaderLoggedIn({ title, onSearchSubmit }) {
                 Favorites
               </a>
               <a
-                href="/"
+                href="/buy-and-sell"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Buy & Sell
               </a>
               <a
-                href="/"
+                href="/academic-services"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                 onClick={() => setIsMenuOpen(false)}
               >
