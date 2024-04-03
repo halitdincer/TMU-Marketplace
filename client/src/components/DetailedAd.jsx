@@ -79,6 +79,29 @@ function DetailedAd() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // Effect for keeping track of recently visited listings
+  useEffect(() => {
+    if (ad.id) {
+      updateRecentlyViewedAds(ad.id);
+    }
+  }, [ad]);
+  
+  const updateRecentlyViewedAds = (newAdId) => {
+      const recentlyViewedAdIds = JSON.parse(localStorage.getItem('recentlyViewedAdIds')) || [];
+      
+      // Remove the ad ID if it already exists to prevent duplicates
+      const filteredAdIds = recentlyViewedAdIds.filter(adId => adId !== newAdId);
+      
+      // Add the new ad ID to the front and trim the array to keep only the 4 most recent
+      const updatedAdIds = [newAdId, ...filteredAdIds].slice(0, 4);
+      
+      localStorage.setItem('recentlyViewedAdIds', JSON.stringify(updatedAdIds));
+  };
+
+
+
+
   function formatDate(timestamp) {
     const date = new Date(timestamp);
     const options = { month: "long", day: "numeric", year: "numeric" };
