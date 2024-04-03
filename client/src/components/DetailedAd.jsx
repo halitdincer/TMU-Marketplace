@@ -25,9 +25,22 @@ function DetailedAd() {
   const navigate = useNavigate();
 
   const sendMessage = async () => {
-    // Ensure ad details and apiToken are available
-    if (!ad || !apiToken) {
-      console.error("Ad details or API token is missing.");
+
+    // Ensure ad details are available
+    if (!ad) {
+      console.error("Ad details are missing.");
+      return;
+    }
+
+    // Ensure the user is logged in
+    if (!apiToken) {
+      console.error("API token is missing.");
+      navigate('/login');
+      return;
+    }
+
+    if(userData.id === ad.owned_by_id){
+      alert("You can't message to yourself");
       return;
     }
 
@@ -110,10 +123,11 @@ function DetailedAd() {
               <div className="flex items-center">
                 <img
                   className=" mr-4 h-8 w-8 rounded-full"
-                  src={userData.profile_picture}
+                  src={ad.owned_by_profile_picture}
                   alt=""
                 />
                 <div className="flex items-center">
+                  
                   {[0, 1, 2, 3, 4].map((rating) => (
                     <StarIcon
                       key={rating}

@@ -33,6 +33,9 @@ function ChatsList({ messages, conversantId, userId }) {
     timestamp: message.timestamp,
   }));
 
+  // Sort chats by timestamp in descending order to show newest conversations first
+  chats.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
   return (
     <div className="lg:w-1/3 w-full h-screen overflow-y-auto p-3 mb-9 pb-20">
       <h1 className="text-2xl font-semibold mb-4">Chats</h1>
