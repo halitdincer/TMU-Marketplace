@@ -3,15 +3,16 @@ from rest_framework.response import Response
 from rest_framework.generics import ListAPIView
 
 from .models import CustomUser
-from .serializers import CustomUserSerializer
+from .serializers import CustomUserSerializer, CustomProfileSerializer, CustomPasswordSerializer
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from .models import CustomUser
 from django.shortcuts import get_object_or_404
 
-from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.decorators import authentication_classes, permission_classes, parser_classes
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import FormParser
 
 class CustomUserListView(ListAPIView):
     queryset = CustomUser.objects.all()
@@ -25,6 +26,7 @@ class CustomUserListView(ListAPIView):
 #     token, created = Token.objects.get_or_create(user = user)
 #     serializer = CustomUserSerializer(instance = user)
 #     return Response({"Authorization": "Token "+token.key, "user": serializer.data})
+    
 @api_view(['POST'])
 def login(request):
     username = request.data.get('username')
@@ -47,7 +49,6 @@ def login(request):
     # Return the token and user data
     return Response({"Authorization": "Token " + token.key, "user": serializer.data})
 
-
 @api_view(['POST'])
 def signup(request):
     serializer = CustomUserSerializer(data=request.data)
@@ -61,6 +62,39 @@ def signup(request):
         return Response({"Authorization": "Token "+token.key, "user": serializer.data})
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['PUT'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def updateUser(request):
+    # Get the current user and update the fields with the provided data
+    user = CustomUser.objects.get(id = request.data['id'])
+    serializer = CustomProfileSerializer(user, request.data)
+    print(user.password)
+    if serializer.is_valid():
+        # Save the updated user and return the updated user data
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    print(serializer.errors)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def updatePassword(request):
+    # Get the current user and update the fields with the provided data
+    user = CustomUser.objects.get(username = request.data['username'])
+    password = request.data['password']
+    serializer = CustomPasswordSerializer(user, request.data)
+    print(user.password)
+    if serializer.is_valid():
+        serializer.save()
+        # Save the updated password to user object
+        user.set_password(request.data['password'])
+        user.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    print(serializer.errors)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 @api_view(["POST"])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])

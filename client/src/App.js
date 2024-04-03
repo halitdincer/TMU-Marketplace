@@ -22,6 +22,7 @@ import Header from './components/Header';
 import Category from 'components/Category';
 import AcademicServices from 'pages/AcademicServicesPage';
 import BuyAndSell from 'pages/BuyAndSellPage';
+import ChangePassword from 'pages/ChangePassword';
 
 
 function App() {
@@ -68,6 +69,9 @@ function App() {
         <Route path="edit-profile" element={<PrivateRoute />}>
           <Route index element={<EditProfile />} />
         </Route>
+        <Route path='change-password' element={<PrivateRoute/>}>
+          <Route index element={<ChangePassword />} />
+        </Route>
         <Route path="create" element={<PrivateRoute />}>
           <Route index element={<CreatePage />} />
         </Route>
@@ -75,6 +79,7 @@ function App() {
         <Route path='edit/ad/:id' element={<PrivateRoute/>}>
           <Route index element={<EditPage />} />
         </Route>
+        
         <Route path='logout' element={<PrivateRoute/>}>
 
           <Route index element={<Logout />} />

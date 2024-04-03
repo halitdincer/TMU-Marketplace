@@ -1,19 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Logo from "../assets/LogoBigNoBg.svg";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { AuthContext } from "components/AuthProvider"; // replace 'path-to-AuthProvider' with the actual path to AuthProvider.jsx
 
-function SignUp() {
-  const [first_name, setFirstName] = useState('');
-  const [last_name, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState('');
+
+function ChangePassword() {
+  const { userData, updatePassword  } = useContext(AuthContext);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [passwordMatchError, matchPasswordError] = useState('');
-  const [fNameError, setFirstNameError] = useState('');
-  const [lNameError, setLastNameError] = useState('');
   const [isMobile, setIsMobile] = useState(false); // State to track if the view is mobile
 
 
@@ -32,8 +29,6 @@ function SignUp() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-
-
   const validatePassword = (pwd) => {
     const regex = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()]).{8,}');
     if (!regex.test(pwd)) {
@@ -41,18 +36,6 @@ function SignUp() {
       return false;
     } else {
       setPasswordError('');
-      return true;
-    }
-  };
-
-
-  const validateEmail = (email) => {
-    const regex = new RegExp('^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$');
-    if (!regex.test(email)) {
-      setEmailError('Please enter a valid email address.');
-      return false;
-    } else {
-      setEmailError('');
       return true;
     }
   };
@@ -69,48 +52,27 @@ function SignUp() {
     }
   }
 
-  const handleSignUp = async (event) => {
+  const handlePasswordChange = async (event) => {
+    event.preventDefault();
     handleConfirmPassword();
     validatePassword(password);
-
-    setFirstNameError(first_name === '' ? 'Please enter your first name.' : '');
-    setLastNameError(last_name === '' ? 'Please enter your last name.' : '');
-    setEmailError(email === '' ? 'Please enter your email.' : !validateEmail(email) ? 'Email must be in the format something@mail.com.' : '');
     setPasswordError(password === '' ? 'Please enter your password.' : '');
     matchPasswordError(confirmPassword === '' ? 'Please confirm your password.' : '');
-
-
     const isPasswordValid = validatePassword(password);
     const isConfirmPasswordValid = handleConfirmPassword();
 
-    event.preventDefault();
-
+    //Send new password to Authprovider to send request
     if (isPasswordValid && isConfirmPasswordValid) {
-      try {
-        const response = await axios.post('/api/users/signup/',
-          JSON.stringify({ username: email, password, first_name, last_name }),
-          {
-            headers: { 'Content-Type': 'application/json' },
-            withCredentials: true
-          }
-        );
-        //Strip and Save token to local cache
-        const token = (response.data.Authorization).split(' ')[1];
-        localStorage.setItem('authtoken', token);
-        navigateToHome();
-      } catch (error) {
-        console.error('Error:', error);
-        setEmailError('An account with this email already exists.');
-      }
+      updatePassword(JSON.stringify({username: userData.username, password}));
+      navigateToProfile();
     }
   };
 
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   // Function to handle navigation to the home page
-  const navigateToHome = () => {
-    navigate('/');
+  const navigateToProfile = () => {
+    navigate('/profile');
   };
-
 
   return (
     <div className={`flex items-center justify-center h-screen bg-gray-100 ${isMobile ? 'px-4 lg:px-20' : ''}`}>
@@ -118,7 +80,7 @@ function SignUp() {
       <div className="w-full max-w-md">
         <form
           className="bg-white shadow-md rounded px-8 pt-6 pb-4 mt-4 mb-4"
-          onSubmit={handleSignUp}
+          onSubmit={handlePasswordChange}
         >
           <div className="flex justify-center">
             <a href="/">
@@ -130,51 +92,8 @@ function SignUp() {
               )}
             </a>
           </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor="first-name">
-              First Name
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="first-name"
-              type="text"
-              placeholder="First Name"
-              value={first_name}
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-            {fNameError && <div className="text-red-500 text-sm">{fNameError}</div>}
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor="last-name">
-              Last Name
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="last-name"
-              type="text"
-              placeholder="Last Name"
-              value={last_name}
-              onChange={(e) => setLastName(e.target.value)}
-            />
-            {lNameError && <div className="text-red-500 text-sm">{lNameError}</div>}
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor="email">
-              Email
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            {emailError && <div className="text-red-500 text-sm">{emailError}</div>}
-
-          </div>
-
+          
+ 
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor="password">
               Password
@@ -207,13 +126,8 @@ function SignUp() {
 
           <div className="flex flex-col items-center justify-between space-y-4">
             <button className="w-full hover:bg-custom-blue hover:text-white bg-custom-yellow text-custom-blue font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-              Create Account
+              Update Password
             </button>
-          </div>
-          <div className="text-center">
-            <a className="font-bold text-sm text-custom-blue hover:text-blue-800" href="/login">
-              Already have an account? Sign In
-            </a>
           </div>
         </form>
       </div>
@@ -221,5 +135,5 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default ChangePassword;
 

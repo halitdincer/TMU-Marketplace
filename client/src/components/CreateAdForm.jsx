@@ -168,7 +168,7 @@ function CreateAdForm() {
                     />
                     <button
                       className="bg-emerald-400  hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-2xl cursor-pointer absolute bottom-5 right-5 mt-2 mr-2 flex items-center"
-                      onClick={fetchDescription}
+                      //onClick={fetchDescription}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
