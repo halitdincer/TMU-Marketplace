@@ -144,7 +144,7 @@ function ProfilePage() {
                           <Link to={`/edit/ad/${ad.id}`}>
                             {/* Pencil Icon */}
                             <div className="absolute top-4 right-4 transform translate-x-2/3 -translate-y-2/3">
-                              <button className="bg-gray-200 border border-gray-500 rounded-full p-2 hover:bg-gray-200">
+                              <button className="bg-gray-200 border border-gray-400 rounded-full p-2 hover:bg-gray-200">
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
                                   fill="none"
