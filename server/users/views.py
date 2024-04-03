@@ -47,7 +47,6 @@ def login(request):
     # Return the token and user data
     return Response({"Authorization": "Token " + token.key, "user": serializer.data})
 
-
 @api_view(['POST'])
 def signup(request):
     serializer = CustomUserSerializer(data=request.data)
@@ -60,6 +59,26 @@ def signup(request):
         token = Token.objects.create(user = user)
         return Response({"Authorization": "Token "+token.key, "user": serializer.data})
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def update(request):
+    username = request.data.get('username')
+    user_data = request.data
+
+    # Get the current user and update the fields with the provided data
+    user = CustomUser.objects.get(username=username)
+    user.first_name = user_data.get('first_name', user.first_name)
+    user.last_name = user_data.get('last_name', user.last_name)
+    user.username = user_data.get('username', user.username)
+    user.email = user_data.get('email', user.email)
+    user.set_password(user_data.get('password', user.password))
+
+    # Save the updated user and return the updated user data
+    user.save()
+    serializer = CustomUserSerializer(instance=user)
+    return Response(serializer.data)
 
 @api_view(["POST"])
 @authentication_classes([SessionAuthentication, TokenAuthentication])

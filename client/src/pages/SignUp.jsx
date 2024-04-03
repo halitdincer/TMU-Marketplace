@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function SignUp() {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
@@ -73,8 +73,8 @@ function SignUp() {
     handleConfirmPassword();
     validatePassword(password);
 
-    setFirstNameError(firstName === '' ? 'Please enter your first name.' : '');
-    setLastNameError(lastName === '' ? 'Please enter your last name.' : '');
+    setFirstNameError(first_name === '' ? 'Please enter your first name.' : '');
+    setLastNameError(last_name === '' ? 'Please enter your last name.' : '');
     setEmailError(email === '' ? 'Please enter your email.' : !validateEmail(email) ? 'Email must be in the format something@mail.com.' : '');
     setPasswordError(password === '' ? 'Please enter your password.' : '');
     matchPasswordError(confirmPassword === '' ? 'Please confirm your password.' : '');
@@ -88,7 +88,7 @@ function SignUp() {
     if (isPasswordValid && isConfirmPasswordValid) {
       try {
         const response = await axios.post('/api/users/signup/',
-          JSON.stringify({ username: email, password, firstName, lastName }),
+          JSON.stringify({ username: email, password, first_name, last_name }),
           {
             headers: { 'Content-Type': 'application/json' },
             withCredentials: true
@@ -139,7 +139,7 @@ function SignUp() {
               id="first-name"
               type="text"
               placeholder="First Name"
-              value={firstName}
+              value={first_name}
               onChange={(e) => setFirstName(e.target.value)}
             />
             {fNameError && <div className="text-red-500 text-sm">{fNameError}</div>}
@@ -154,7 +154,7 @@ function SignUp() {
               id="last-name"
               type="text"
               placeholder="Last Name"
-              value={lastName}
+              value={last_name}
               onChange={(e) => setLastName(e.target.value)}
             />
             {lNameError && <div className="text-red-500 text-sm">{lNameError}</div>}

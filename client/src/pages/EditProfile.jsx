@@ -6,8 +6,9 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import Modal from "react-modal";
+
 function EditProfile() {
-  const { userData, updateProfile } = useContext(AuthContext);
+  const { updateProfile, userData } = useContext(AuthContext);
 
   // Use state to manage form data
   const [formState, setFormState] = useState({
@@ -24,8 +25,8 @@ function EditProfile() {
 
   const [profile_picture, setProfilePic] = useState(userData.profile_picture);
   const [username, setUsername] = useState(userData.username);
-  const [firstName, setFirstName] = useState(userData.first_name);
-  const [lastName, setLastName] = useState(userData.last_name);
+  const [first_name, setFirstName] = useState(userData.first_name);
+  const [last_name, setLastName] = useState(userData.last_name);
   const [email, setEmail] = useState(userData.email);
   const [password, setPassword] = useState(userData.password);
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -34,6 +35,38 @@ function EditProfile() {
   const [emailError, setEmailError] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
+
+  const handleUpdate = async (event) => {
+    event.preventDefault();
+
+    const updatedUserInfo = {
+      // Instead of using the local state data, use the updatedUserInfo directly
+      profilePic: profile_picture,
+      username: username,
+      first_name: first_name,
+      last_name: last_name,
+      email: email,
+      password: password,
+    };
+
+    try {
+      // Send a PUT request to your server with the updated user info
+      const response = await axios.put("/api/users/update/", updatedUserInfo, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
+
+      // Update the AuthContext with the updated user info received from server response.data
+      updateProfile(response.data);
+
+      // Navigate or do something else
+    } catch (error) {
+      console.error("Error:", error);
+      // Handle error
+    }
+  };
+  // Attach this function to your form submission event
+  // <form onSubmit={handleUpdate}>...</form>
 
   const validatePassword = (pwd) => {
     const regex = new RegExp(
@@ -65,36 +98,7 @@ function EditProfile() {
       ...formState,
       [event.target.name]: event.target.value,
     });
-  };
-
-  const handleSignUp = async (event) => {
-    handleConfirmPassword();
-    validatePassword(password);
-
-    const isPasswordValid = validatePassword(password);
-    const isConfirmPasswordValid = handleConfirmPassword();
-
-    event.preventDefault();
-
-    if (isPasswordValid && isConfirmPasswordValid) {
-      try {
-        const response = await axios.post(
-          "/api/users/signup/",
-          JSON.stringify({ username: email, password, firstName, lastName }),
-          {
-            headers: { "Content-Type": "application/json" },
-            withCredentials: true,
-          }
-        );
-        //Strip and Save token to local cache
-        const token = response.data.Authorization.split(" ")[1];
-        localStorage.setItem("authtoken", token);
-      } catch (error) {
-        console.error("Error:", error);
-        setEmailError("An account with this email already exists.");
-      }
-    }
-  };
+};
 
   const handleChangeProfilePic = () => {
     setShowUploadModal(true);
@@ -137,7 +141,7 @@ function EditProfile() {
                 </Link>
               </div>
             </div>
-            <form onSubmit={handleSignUp}>
+            <form onSubmit={handleUpdate}>
               <div className="bg-white rounded-xl shadow-lg p-4 px-4 md:p-8 mb-6">
                 <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
                   <div className="text-gray-600">
@@ -293,11 +297,11 @@ function EditProfile() {
                         />
                       </div>
                       <div className="md:col-span-2">
-                        <label htmlFor="firstName">First Name</label>
+                        <label htmlFor="first_name">First Name</label>
                         <input
                           type="text"
-                          name="firstName"
-                          id="firstName"
+                          name="first_name"
+                          id="first_name"
                           className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                           value={formState.first_name}
                           onChange={(e) =>
@@ -310,11 +314,11 @@ function EditProfile() {
                         />
                       </div>
                       <div className="md:col-span-3">
-                        <label htmlFor="lastName">Last Name</label>
+                        <label htmlFor="last_name">Last Name</label>
                         <input
                           type="text"
-                          name="lastName"
-                          id="lastName"
+                          name="last_name"
+                          id="last_name"
                           className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                           value={formState.last_name}
                           onChange={(e) =>
