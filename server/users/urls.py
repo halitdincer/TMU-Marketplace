@@ -8,6 +8,7 @@ urlpatterns = [
     path('', views.CustomUserListView.as_view(), name='user-list'),
     re_path('login', views.login),
     re_path('signup', views.signup),
+    re_path('update', views.update),
     re_path('test_token', views.test_token),
     re_path('logout', views.logout),
 
