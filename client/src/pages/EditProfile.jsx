@@ -8,7 +8,7 @@ import { XMarkIcon } from "@heroicons/react/20/solid";
 import Modal from "react-modal";
 
 function EditProfile() {
-  const { userData } = useContext(AuthContext);
+  const { userData, updateProfile  } = useContext(AuthContext);
   const {apiToken} = useContext(AuthContext);
   // Use state to manage form data
   const [formState, setFormState] = useState({
@@ -36,7 +36,7 @@ function EditProfile() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
 
-  const handleUpdate = async (event) => {
+  const handleuserUpdate = async (event) => {
     event.preventDefault();
 
     const updatedUserInfo = {
@@ -51,7 +51,7 @@ function EditProfile() {
 
     try {
       // Send a PUT request to your server with the updated user info
-      const response = await axios.put("/api/users/update/", updatedUserInfo, {
+      const response = await axios.put("/api/users/update-user/", updatedUserInfo, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
@@ -100,14 +100,25 @@ function EditProfile() {
     });
   };
 
- /* const handleUpdate = async (event) => {
+ const handleUpdate = async (event) => {
+  event.preventDefault();
+
+    const updatedUserInfo = {
+      // Instead of using the local state data, use the updatedUserInfo directly
+      profilePic: profile_picture,
+      username: username,
+      first_name: first_name,
+      last_name: last_name,
+      email: email,
+      password: password,
+    };
+
     handleConfirmPassword();
     validatePassword(password);
 
     const isPasswordValid = validatePassword(password);
     const isConfirmPasswordValid = handleConfirmPassword();
 
-    event.preventDefault();
     const config = {
       headers: { 
         Authorization: "Token " + apiToken,
@@ -127,14 +138,16 @@ function EditProfile() {
     
     //if (isPasswordValid && isConfirmPasswordValid) {
     try {     
-      const response = await axios.put("/api/users/updateUser/", form, config);
+      const response = await axios.put("/api/users/update-user/", form, config);
       console.log(response?.data);
+      // Update the AuthContext with the updated user info received from server response.data
+      updateProfile(response.data);
     } catch (error) {
       console.error("Error:", error);
       setEmailError("An account with this email already exists.");
     }
     
-   };*/
+   };
   // Attach this function to your form submission event
   // <form onSubmit={handleUpdate}>...</form>
 
