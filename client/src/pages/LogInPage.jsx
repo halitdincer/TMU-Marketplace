@@ -35,7 +35,7 @@ function LoginPage() {
     event.preventDefault();
 
     try {
-      setPasswordError('Login failed: Please check your credentials and try again.');
+      setPasswordError('');
 
       await login(email, password);
       // After the login attempt, get the token to verify if login was successful.
