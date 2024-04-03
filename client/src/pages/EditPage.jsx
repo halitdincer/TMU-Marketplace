@@ -9,7 +9,7 @@ function EditPage({ onAdSubmit }) {
       <div className="fixed left-0 top-0 h-full">
         <Sidebar />
       </div>
-      <div className="flex-1 overflow-y-auto lg:ml-20 ml-0">
+      <div className="flex-1 overflow-y-auto lg:ml-28 ml-0">
         <EditAdForm />
       </div>
     </div>
