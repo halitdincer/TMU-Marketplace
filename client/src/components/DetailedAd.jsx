@@ -25,7 +25,6 @@ function DetailedAd() {
   const navigate = useNavigate();
 
   const sendMessage = async () => {
-
     // Ensure ad details are available
     if (!ad) {
       console.error("Ad details are missing.");
@@ -35,11 +34,11 @@ function DetailedAd() {
     // Ensure the user is logged in
     if (!apiToken) {
       console.error("API token is missing.");
-      navigate('/login');
+      navigate("/login");
       return;
     }
 
-    if(userData.id === ad.owned_by_id){
+    if (userData.id === ad.owned_by_id) {
       alert("You can't message to yourself");
       return;
     }
@@ -86,21 +85,21 @@ function DetailedAd() {
       updateRecentlyViewedAds(ad.id);
     }
   }, [ad]);
-  
+
   const updateRecentlyViewedAds = (newAdId) => {
-      const recentlyViewedAdIds = JSON.parse(localStorage.getItem('recentlyViewedAdIds')) || [];
-      
-      // Remove the ad ID if it already exists to prevent duplicates
-      const filteredAdIds = recentlyViewedAdIds.filter(adId => adId !== newAdId);
-      
-      // Add the new ad ID to the front and trim the array to keep only the 4 most recent
-      const updatedAdIds = [newAdId, ...filteredAdIds].slice(0, 4);
-      
-      localStorage.setItem('recentlyViewedAdIds', JSON.stringify(updatedAdIds));
+    const recentlyViewedAdIds =
+      JSON.parse(localStorage.getItem("recentlyViewedAdIds")) || [];
+
+    // Remove the ad ID if it already exists to prevent duplicates
+    const filteredAdIds = recentlyViewedAdIds.filter(
+      (adId) => adId !== newAdId
+    );
+
+    // Add the new ad ID to the front and trim the array to keep only the 4 most recent
+    const updatedAdIds = [newAdId, ...filteredAdIds].slice(0, 4);
+
+    localStorage.setItem("recentlyViewedAdIds", JSON.stringify(updatedAdIds));
   };
-
-
-
 
   function formatDate(timestamp) {
     const date = new Date(timestamp);
@@ -146,11 +145,14 @@ function DetailedAd() {
               <div className="flex items-center">
                 <img
                   className=" mr-4 h-8 w-8 rounded-full"
-                  src={ad.owned_by_profile_picture}
+                  src={
+                    ad.owned_by_profile_picture
+                      ? ad.owned_by_profile_picture
+                      : `https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato`
+                  }
                   alt=""
                 />
                 <div className="flex items-center">
-                  
                   {[0, 1, 2, 3, 4].map((rating) => (
                     <StarIcon
                       key={rating}
