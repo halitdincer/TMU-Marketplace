@@ -145,7 +145,7 @@ function EditAdForm() {
     }
     setTimeout(() => {
       navigate("/profile");
-    }, 5000);
+    }, 3000);
   };
 
   const closeModal = () => {
