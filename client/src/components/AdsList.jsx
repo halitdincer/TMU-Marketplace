@@ -78,7 +78,7 @@ function AdsList({ searchQuery }) {
   
     // Calculate how many ads to select for each category based on its percentage of total visits
     const adsPerCategory = Object.keys(categoryVisits).reduce((acc, category) => {
-      const countForCategory = Math.round((categoryVisits[category] / totalVisits) * 12); // Calculate proportion out of 12
+      const countForCategory = Math.round((categoryVisits[category] / totalVisits) * 8); // Calculate proportion out of 12
       acc[category] = countForCategory;
       return acc;
     }, {});
@@ -93,13 +93,13 @@ function AdsList({ searchQuery }) {
   
     // If the total recommended ads are less than 12, fill the remaining slots with random ads from other categories
     // Note: This step ensures that there are always 12 recommended ads, even if the selected categories don't have enough listings
-    if (recommendedAds.length < 12) {
-      const additionalAdsNeeded = 12 - recommendedAds.length;
+    if (recommendedAds.length < 8) {
+      const additionalAdsNeeded = 8 - recommendedAds.length;
       const additionalAds = ads.filter(ad => !recommendedAds.includes(ad)).slice(0, additionalAdsNeeded);
       recommendedAds = [...recommendedAds, ...additionalAds];
     }
   
-    return recommendedAds.slice(0, 12); // Ensure that no more than 12 ads are recommended
+    return recommendedAds.slice(0, 8); // Ensure that no more than 12 ads are recommended
   }, [ads]);
 
   // Conditional rendering based on the state
@@ -109,23 +109,13 @@ function AdsList({ searchQuery }) {
   return (
     <>
       <div className="bg-white py-6 sm:py-6 pb-24">
-        <div className="mx-auto px-6 lg:px-8">
-
-          {/* Recently Visited Section */}
-          <h2 className="font-semibold text-lg mb-4">Recommended</h2>
-          <div className="grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 pt-2 sm:mt-5 sm:pt-5 lg:mx-0 lg:max-w-none lg:grid-cols-6">
-            {getRecommendedAds.map((ad) => (
-              <Link to={`/ad/${ad.id}`} key={ad.id}>
-                <AdCard ad={ad} />
-              </Link>
-            ))}
-          </div>
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
 
           {/* Recently Visited Section */}
           {recentlyViewedAds.length > 0 && (
             <div>
               <h2 className="font-semibold text-lg mb-4">Recently Visited</h2>
-              <div className="grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 pt-2 sm:mt-5 sm:pt-5 lg:mx-0 lg:max-w-none lg:grid-cols-6">
+              <div className="grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 pt-2 sm:mt-5 sm:pt-5 lg:mx-0 lg:max-w-none lg:grid-cols-4">
                 {recentlyViewedAds.map((ad) => (
                   <Link to={`/ad/${ad.id}`} key={ad.id}>
                     <AdCard ad={ad} />
@@ -136,9 +126,19 @@ function AdsList({ searchQuery }) {
           )}
 
           {/* Browse Section */}
+          <h2 className="font-semibold text-lg mb-4">Recommended</h2>
+          <div className="grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 pt-2 sm:mt-5 sm:pt-5 lg:mx-0 lg:max-w-none lg:grid-cols-4">
+            {getRecommendedAds.map((ad) => (
+              <Link to={`/ad/${ad.id}`} key={ad.id}>
+                <AdCard ad={ad} />
+              </Link>
+            ))}
+          </div>
+
+          {/* Browse Section */}
           <div>
             <h2 className="font-semibold text-lg mb-4">Browse</h2>
-            <div className="grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 pt-2 sm:mt-5 sm:pt-5 lg:mx-0 lg:max-w-none lg:grid-cols-6">
+            <div className="grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 pt-2 sm:mt-5 sm:pt-5 lg:mx-0 lg:max-w-none lg:grid-cols-4">
               {otherAds.length > 0 ? (
                 otherAds.map((ad) => (
                   <Link to={`/ad/${ad.id}`} key={ad.id}>
