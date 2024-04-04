@@ -7,14 +7,76 @@ import Tutoring from "../assets/tutoring.svg";
 import LostAndFound from "../assets/lost_and_found.svg";
 import Research from "../assets/research.svg";
 import Others from "../assets/other.svg";
+import Beauty from "../assets/beauty.svg";
+import Clothing from "../assets/clothes.svg";
+import Electronics from "../assets/electronics.svg";
+import Gaming from "../assets/gaming.svg";
+import Garden from "../assets/garden.svg";
+import Home from "../assets/home.svg";
+import Music from "../assets/music.svg";
+import Sports from "../assets/sports.svg";
+
 
 
 const callouts = [
   {
+    name: "Beauty & Personal Care",
+    imageSrc: Beauty, // Direct assignment of the imported image variable
+    imageAlt: "Beauty & Personal Care",
+    short: "BE",
+  },
+  {
+    name: "Clothing",
+    imageSrc: Clothing,
+    imageAlt: "Clothing",
+    short: "CL",
+  },
+  {
+    name: "Electronics",
+    imageSrc: Electronics,
+    imageAlt: "Electronics",
+    short: "EL",
+  },
+  {
+    name: "Games & Hobbies",
+    imageSrc: Gaming,
+    imageAlt: "Games & Hobbies",
+    short: "GH",
+  },
+  {
+    name: "Garden",
+    imageSrc: Garden,
+    imageAlt: "Garden",
+    short: "GA",
+  },
+  {
+    name: "Furniture & Appliances",
+    imageSrc: Home,
+    imageAlt: "Furniture & Appliances",
+    short: "FA",
+  },
+  {
+    name: "Lost and Found",
+    imageSrc: LostAndFound,
+    imageAlt: "Lost and Found",
+    short: "LO",
+  },
+  {
+    name: "Music & Instruments",
+    imageSrc: Music,
+    imageAlt: "Music Instruments and Gear",
+    short: "MU",
+  },
+  {
+    name: "Sports & Outdoors",
+    imageSrc: Sports,
+    imageAlt: "Sports Equipment",
+    short: "SP",
+  },
+  {
     name: "Research & Surveys",
     imageSrc: Research,
     imageAlt: "Research & Surveys",
-    href: "/?category=RS",
     short: "RS",
   },
 
@@ -22,40 +84,27 @@ const callouts = [
     name: "Study Groups",
     imageSrc: StudyGroups,
     imageAlt: "Study Groups",
-    href: "/?category=SG",
     short: "SG",
   },
   {
     name: "Textbooks",
     imageSrc: Textbooks,
     imageAlt: "Academic Textbooks",
-    href: "/?category=TB",
     short: "TB",
   },
   {
     name: "Tutoring",
     imageSrc: Tutoring,
     imageAlt: "Tutoring Services",
-    href: "/?category=TU",
     short: "TU",
-  },
-  {
-    name: "Lost and Found",
-    imageSrc: LostAndFound,
-    imageAlt: "Lost and Found",
-    href: "/?category=LO",
-    short: "LO",
   },
   {
     name: "Others",
     imageSrc: Others,
     imageAlt: "Other Items",
-    href: "/?category=OT",
     short: "OT",
   },
 ];
-
-
 
 
 const CategoryGrid = () => {
@@ -63,7 +112,7 @@ const CategoryGrid = () => {
 
 
   const handleCategoryClick = (categoryShortCode) => {
-    navigate(`/category/${categoryShortCode}`); // Navigate to the category route
+    navigate(`/category/${categoryShortCode}`); 
   };
 
 
@@ -82,7 +131,7 @@ const CategoryGrid = () => {
                     src={callout.imageSrc}
                     alt={callout.imageAlt}
                     className="h-full w-full object-cover object-center"
-                    onClick={() => handleCategoryClick(callout.short)} // Adding click handler
+                    onClick={() => handleCategoryClick(callout.short)}
 
                   />
                 </div>

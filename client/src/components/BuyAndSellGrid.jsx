@@ -17,72 +17,62 @@ import Sports from "../assets/sports.svg";
 const callouts = [
   {
     name: "Beauty & Personal Care",
-    imageSrc: Beauty, // Direct assignment of the imported image variable
+    imageSrc: Beauty,
     imageAlt: "Beauty & Personal Care",
-    href: "/?category=BE",
     short: "BE",
   },
   {
     name: "Clothing",
     imageSrc: Clothing,
     imageAlt: "Clothing",
-    href: "/?category=CL",
     short: "CL",
   },
   {
     name: "Electronics",
     imageSrc: Electronics,
     imageAlt: "Electronics",
-    href: "/?category=EL",
     short: "EL",
   },
   {
     name: "Games & Hobbies",
     imageSrc: Gaming,
     imageAlt: "Games & Hobbies",
-    href: "/?category=GH",
     short: "GH",
   },
   {
     name: "Garden",
     imageSrc: Garden,
     imageAlt: "Garden",
-    href: "/?category=GA",
     short: "GA",
   },
   {
     name: "Furniture & Appliances",
     imageSrc: Home,
     imageAlt: "Furniture & Appliances",
-    href: "/?category=FA",
     short: "FA",
   },
   {
     name: "Lost and Found",
     imageSrc: LostAndFound,
     imageAlt: "Lost and Found",
-    href: "/?category=LO",
     short: "LO",
   },
   {
     name: "Music & Instruments",
     imageSrc: Music,
     imageAlt: "Music Instruments and Gear",
-    href: "/?category=MU",
     short: "MU",
   },
   {
     name: "Sports & Outdoors",
     imageSrc: Sports,
     imageAlt: "Sports Equipment",
-    href: "/?category=SP",
     short: "SP",
   },
   {
     name: "Others",
     imageSrc: Others,
     imageAlt: "Other Items",
-    href: "/?category=OT",
     short: "OT",
   },
 ];
@@ -95,7 +85,7 @@ const BuyAndSell = () => {
 
 
   const handleCategoryClick = (categoryShortCode) => {
-    navigate(`/category/${categoryShortCode}`); // Navigate to the category route
+    navigate(`/category/${categoryShortCode}`); 
   };
 
 
@@ -114,7 +104,7 @@ const BuyAndSell = () => {
                     src={callout.imageSrc}
                     alt={callout.imageAlt}
                     className="h-full w-full object-cover object-center"
-                    onClick={() => handleCategoryClick(callout.short)} // Adding click handler
+                    onClick={() => handleCategoryClick(callout.short)} 
 
                   />
                 </div>
