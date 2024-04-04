@@ -169,9 +169,11 @@ function EditAdForm() {
     try {
       const response = await axios.post("/api/ads/delete/", form, config);
       console.log(response?.data);
+      navigate("/profile");
     } catch (error) {
       console.error("Error:", error);
     }
+    
   };
 
   //Conditional render based on if the selected ad is owned by the current logged in user
