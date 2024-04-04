@@ -14,7 +14,6 @@ const callouts = [
     name: "Research & Surveys",
     imageSrc: Research,
     imageAlt: "Research & Surveys",
-    href: "/?category=RS",
     short: "RS",
   },
 
@@ -22,35 +21,30 @@ const callouts = [
     name: "Study Groups",
     imageSrc: StudyGroups,
     imageAlt: "Study Groups",
-    href: "/?category=SG",
     short: "SG",
   },
   {
     name: "Textbooks",
     imageSrc: Textbooks,
     imageAlt: "Academic Textbooks",
-    href: "/?category=TB",
     short: "TB",
   },
   {
     name: "Tutoring",
     imageSrc: Tutoring,
     imageAlt: "Tutoring Services",
-    href: "/?category=TU",
     short: "TU",
   },
   {
     name: "Lost and Found",
     imageSrc: LostAndFound,
     imageAlt: "Lost and Found",
-    href: "/?category=LO",
     short: "LO",
   },
   {
     name: "Others",
     imageSrc: Others,
     imageAlt: "Other Items",
-    href: "/?category=OT",
     short: "OT",
   },
 ];
@@ -63,7 +57,7 @@ const AcademicServiceGrid = () => {
 
 
   const handleCategoryClick = (categoryShortCode) => {
-    navigate(`/category/${categoryShortCode}`); // Navigate to the category route
+    navigate(`/category/${categoryShortCode}`); 
   };
 
 
@@ -82,7 +76,7 @@ const AcademicServiceGrid = () => {
                     src={callout.imageSrc}
                     alt={callout.imageAlt}
                     className="h-full w-full object-cover object-center"
-                    onClick={() => handleCategoryClick(callout.short)} // Adding click handler
+                    onClick={() => handleCategoryClick(callout.short)} 
 
                   />
                 </div>
