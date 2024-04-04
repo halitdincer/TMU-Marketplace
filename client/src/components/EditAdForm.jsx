@@ -54,7 +54,7 @@ function EditAdForm() {
     const categoryMapping = {
       Electronics: "EL",
       Clothing: "CL",
-      "Home & Garden": "HM",
+      "Garden": "GA",
       "Sports & Outdoors": "SP",
       "Games & Hobbies": "GH",
       "Music & Instruments": "MU",
@@ -315,7 +315,7 @@ function EditAdForm() {
                         <optgroup label="Items">
                           <option value="EL">Electronics</option>
                           <option value="CL">Clothing</option>
-                          <option value="HM">Home & Garden</option>
+                          <option value="GA">Garden</option>
                           <option value="SP">Sports & Outdoors</option>
                           <option value="GH">Games & Hobbies</option>
                           <option value="MU">Music & Instruments</option>

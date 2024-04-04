@@ -233,9 +233,9 @@ function CreateAdForm() {
                       <optgroup label="Items">
                         <option value="EL">Electronics</option>
                         <option value="CL">Clothing</option>
-                        <option value="HM">Home & Garden</option>
+                        <option value="GA">Garden</option>
                         <option value="SP">Sports & Outdoors</option>
-                        <option value="GA">Games & Hobbies</option>
+                        <option value="GH">Games & Hobbies</option>
                         <option value="MU">Music & Instruments</option>
                         <option value="FA">Furniture & Appliances</option>
                         <option value="BE">Beauty & Personal Care</option>
