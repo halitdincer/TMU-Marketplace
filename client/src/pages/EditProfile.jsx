@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import Sidebar from "components/Sidebar";
-import Header from "components/Header";
-import { AuthContext } from "components/AuthProvider"; // replace 'path-to-AuthProvider' with the actual path to AuthProvider.jsx
+import { AuthContext } from "components/AuthProvider";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { XMarkIcon } from "@heroicons/react/20/solid";
@@ -25,7 +24,6 @@ function EditProfile() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
 
-
   const handleChange = (event) => {
     setFormState({
       ...formState,
@@ -37,7 +35,7 @@ function EditProfile() {
     event.preventDefault();
 
     const form = new FormData();
-    form.append('id', userData.id);
+    form.append("id", userData.id);
     form.append("username", formState.username);
     form.append("email", formState.email);
     form.append("first_name", formState.first_name);
@@ -48,9 +46,7 @@ function EditProfile() {
       console.log(`${key}: ${value}`);
     }
     updateProfile(form);
-    };
-  // Attach this function to your form submission event
-  // <form onSubmit={handleUpdate}>...</form>
+  };
 
   const handleChangeProfilePic = () => {
     setShowUploadModal(true);
@@ -68,8 +64,8 @@ function EditProfile() {
 
   const handleDeleteProfilePic = () => {
     console.log("Deleting profile picture...");
-    // Implement your logic for deleting profile picture here
-    setShowDropdown(false); // Close dropdown after action
+    // Close dropdown after action
+    setShowDropdown(false);
   };
 
   return (
@@ -299,22 +295,20 @@ function EditProfile() {
                           placeholder="Email"
                         />
                       </div>
-                      <div className="md:col-span-5 pt-4 text-right ">
+                      <div className="md:col-span-2 pt-4 ">
+                        <Link
+                          to="/change-password"
+                          className=" hover:text-indigo-600 underline text-custom-blue font-bold py-2  rounded cursor-pointer"
+                        >
+                          <h7>Change Password</h7>
+                        </Link>
+                      </div>
+                      <div className="md:col-span-3 pt-4 text-right ">
                         <input
                           type="submit"
                           value="Save"
                           className="bg-custom-blue hover:bg-custom-yellow text-white font-bold py-2 px-4 rounded cursor-pointer"
                         />
-                      </div>
-                      <div className="md:col-span-5 pt-4 text-right" >
-                        <Link
-                            to="/change-password"
-                            className="bg-custom-blue hover:bg-custom-yellow text-white font-bold py-2 px-4 rounded cursor-pointer"
-                          >
-                          <h7>
-                            Change Password
-                          </h7>  
-                        </Link>
                       </div>
                     </div>
                   </div>
