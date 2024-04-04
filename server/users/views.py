@@ -50,16 +50,30 @@ def login(request):
 
 @api_view(['POST'])
 def signup(request):
+    # Check for uniqueness first
+    username = request.data.get('username')
+    if CustomUser.objects.filter(username=username).exists():
+        return Response({"detail": "Username already exists."}, status=status.HTTP_400_BAD_REQUEST)
+    
+    email = request.data.get('email')
+    if CustomUser.objects.filter(email=email).exists():
+        return Response({"detail": "Email already exists."}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Now attempt to create a new user
     serializer = CustomUserSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save()
-        user = CustomUser.objects.get(username = request.data['username'])
+        user = serializer.save()  # This will call create() on the serializer
         user.set_password(request.data['password'])
         user.save()
-        #create auth token 
-        token = Token.objects.create(user = user)
-        return Response({"Authorization": "Token "+token.key, "user": serializer.data})
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # Create auth token
+        token = Token.objects.create(user=user)
+        return Response({
+            "Authorization": "Token " + token.key,
+            "user": serializer.data
+        }, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["POST"])
 @authentication_classes([SessionAuthentication, TokenAuthentication])

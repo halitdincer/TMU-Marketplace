@@ -4,10 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function SignUp() {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
+  const [username, setUsername] = useState('');
+  const [usernameError, setUsernameError] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
@@ -15,6 +17,7 @@ function SignUp() {
   const [fNameError, setFirstNameError] = useState('');
   const [lNameError, setLastNameError] = useState('');
   const [isMobile, setIsMobile] = useState(false); // State to track if the view is mobile
+  const [generalError, setGeneralError] = useState('');
 
 
   useEffect(() => {
@@ -73,8 +76,8 @@ function SignUp() {
     handleConfirmPassword();
     validatePassword(password);
 
-    setFirstNameError(firstName === '' ? 'Please enter your first name.' : '');
-    setLastNameError(lastName === '' ? 'Please enter your last name.' : '');
+    setFirstNameError(first_name === '' ? 'Please enter your first name.' : '');
+    setLastNameError(last_name === '' ? 'Please enter your last name.' : '');
     setEmailError(email === '' ? 'Please enter your email.' : !validateEmail(email) ? 'Email must be in the format something@mail.com.' : '');
     setPasswordError(password === '' ? 'Please enter your password.' : '');
     matchPasswordError(confirmPassword === '' ? 'Please confirm your password.' : '');
@@ -88,19 +91,39 @@ function SignUp() {
     if (isPasswordValid && isConfirmPasswordValid) {
       try {
         const response = await axios.post('/api/users/signup/',
-          JSON.stringify({ username: email, password, firstName, lastName }),
+          JSON.stringify({ username: username, email: email, password, first_name: first_name, last_name: last_name }),
           {
             headers: { 'Content-Type': 'application/json' },
             withCredentials: true
           }
         );
-        //Strip and Save token to local cache
-        const token = (response.data.Authorization).split(' ')[1];
+        // Strip and Save token to local cache
+        const token = response.data.Authorization.split(' ')[1];
         localStorage.setItem('authtoken', token);
+        
         navigateToHome();
       } catch (error) {
         console.error('Error:', error);
-        setEmailError('An account with this email already exists.');
+    
+        // Check if the error response has data and detail property
+        if (error.response && error.response.data && error.response.data.detail) {
+          // Set the error based on the detail message from the server
+          const detailMessage = error.response.data.detail;
+          if (detailMessage.includes('Username already exists')) {
+            // Handle username error
+            setUsernameError('An account with this username already exists.');
+          } else if (detailMessage.includes('Email already exists')) {
+            // Handle email error
+            setUsernameError('');
+            setEmailError('An account with this email already exists.');
+          } else {
+            // Handle other kinds of errors
+            setGeneralError('An error occurred while signing up.');
+          }
+        } else {
+          // Fallback error message
+          setGeneralError('An error occurred. Please try again.');
+        }
       }
     }
   };
@@ -110,6 +133,9 @@ function SignUp() {
   const navigateToHome = () => {
     navigate('/');
   };
+
+
+
 
 
   return (
@@ -139,7 +165,7 @@ function SignUp() {
               id="first-name"
               type="text"
               placeholder="First Name"
-              value={firstName}
+              value={first_name}
               onChange={(e) => setFirstName(e.target.value)}
             />
             {fNameError && <div className="text-red-500 text-sm">{fNameError}</div>}
@@ -154,10 +180,25 @@ function SignUp() {
               id="last-name"
               type="text"
               placeholder="Last Name"
-              value={lastName}
+              value={last_name}
               onChange={(e) => setLastName(e.target.value)}
             />
             {lNameError && <div className="text-red-500 text-sm">{lNameError}</div>}
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor="username">
+              Username
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="username"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            {usernameError && <div className="text-red-500 text-sm">{usernameError}</div>}
+
           </div>
 
           <div className="mb-4">
