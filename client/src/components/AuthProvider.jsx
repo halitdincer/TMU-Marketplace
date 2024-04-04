@@ -1,4 +1,5 @@
 import React, { createContext, useState } from "react";
+import axios from "axios";
 
 // Context for authentication-related data, preventing prop-drilling
 export const AuthContext = createContext();
@@ -77,29 +78,45 @@ export const AuthProvider = ({ children }) => {
     try {
       // Check if apiToken already exist
       if (!apiToken) throw new Error("No API token found");
-
+      const config = {
+        headers: { 
+          Authorization: "Token " + apiToken,
+          'Content-Type': 'application/json' },
+        withCredentials: true
+      };
       // Fetch API for updating user profile with the token and updated user data
-      const response = await fetch("http://127.0.0.1:8000/api/users/update", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Token ${apiToken}`,
-        },
-        body: JSON.stringify(updatedUserData),
-      });
-
+      const response = await axios.put("/api/users/update-user/", updatedUserData, config);
+      console.log(response)
       // Check if response is OK, indicating update happened successfully
-      if (!response.ok) throw new Error("Update failed");
+      if (!response.status) throw new Error("Update failed");
 
       // Retrieve the data from the response to update the state and local storage item
-      const responseData = await response.json();
-      const user = responseData.user;
-
+      //const responseData = await response.json();
+      const user = response.data;
       localStorage.setItem("userData", JSON.stringify(user));
       setUserData(user);
 
     } catch (error) {
       console.error("Update error:", error);
+    }
+  }
+
+  async function updatePassword(newUserData){
+   
+    try {
+      // Check if apiToken already exist
+      if (!apiToken) throw new Error("No API token found");
+      const config = {
+        headers: { 
+          Authorization: "Token " + apiToken,
+          'Content-Type': 'application/json' },
+        withCredentials: true
+      };
+      const response = await axios.post('/api/users/update-password/', newUserData ,config);
+      if (!response.status) throw new Error("Password update failed");
+
+    } catch (error) {
+      console.error("Password update error:", error);
     }
   }
 
@@ -116,7 +133,7 @@ export const AuthProvider = ({ children }) => {
 
   // Providing the authentication context value to the children components
   return (
-    <AuthContext.Provider value={{ apiToken, userData, login, logout, checkAuth, getToken, updateProfile }}>
+    <AuthContext.Provider value={{ apiToken, userData, login, logout, checkAuth, getToken, updateProfile, updatePassword }}>
       {children}
     </AuthContext.Provider>
   );

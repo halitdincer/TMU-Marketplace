@@ -6,12 +6,14 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import Modal from "react-modal";
-function EditProfile() {
-  const { userData, updateProfile } = useContext(AuthContext);
 
+function EditProfile() {
+  const { userData, updateProfile, apiToken } = useContext(AuthContext);
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   // Use state to manage form data
   const [formState, setFormState] = useState({
-    profilePic: userData.profilePic,
+    //profilePic: userData.profilePic,
     username: userData.username,
     first_name: userData.first_name,
     last_name: userData.last_name,
@@ -22,44 +24,19 @@ function EditProfile() {
     Modal.setAppElement("#root"); // Assuming '#root' is the ID of your root element
   }, []);
 
-  const [profile_picture, setProfilePic] = useState(userData.profile_picture);
-  const [username, setUsername] = useState(userData.username);
-  const [firstName, setFirstName] = useState(userData.first_name);
-  const [lastName, setLastName] = useState(userData.last_name);
-  const [email, setEmail] = useState(userData.email);
-  const [password, setPassword] = useState(userData.password);
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [passwordMatchError, matchPasswordError] = useState("");
-  const [emailError, setEmailError] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
 
-  const validatePassword = (pwd) => {
-    const regex = new RegExp(
-      "(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()]).{8,}"
-    );
-    if (!regex.test(pwd)) {
-      setPasswordError(
-        "Password must contain at least one number, one uppercase and lowercase letter, 8 or more characters, and at least one special character"
-      );
+  const validateEmail = (email) => {
+    const regex = new RegExp('^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$');
+    if (!regex.test(email)) {
+      setEmailError('Please enter a valid email address.');
       return false;
     } else {
-      setPasswordError("");
+      setEmailError('');
       return true;
     }
   };
-
-  const handleConfirmPassword = (e) => {
-    if (password !== confirmPassword) {
-      matchPasswordError("Passwords do not match.");
-      return false;
-    } else {
-      matchPasswordError("");
-      return true;
-    }
-  };
-
   const handleChange = (event) => {
     setFormState({
       ...formState,
@@ -67,34 +44,30 @@ function EditProfile() {
     });
   };
 
-  const handleSignUp = async (event) => {
-    handleConfirmPassword();
-    validatePassword(password);
-
-    const isPasswordValid = validatePassword(password);
-    const isConfirmPasswordValid = handleConfirmPassword();
-
+  const handleUpdate = async (event) => {
     event.preventDefault();
+    setEmailError(email === '' ? 'Please enter your email.' : !validateEmail(email) ? 'Email must be in the format something@mail.com.' : '');
 
-    if (isPasswordValid && isConfirmPasswordValid) {
-      try {
-        const response = await axios.post(
-          "/api/users/signup/",
-          JSON.stringify({ username: email, password, firstName, lastName }),
-          {
-            headers: { "Content-Type": "application/json" },
-            withCredentials: true,
-          }
-        );
-        //Strip and Save token to local cache
-        const token = response.data.Authorization.split(" ")[1];
-        localStorage.setItem("authtoken", token);
-      } catch (error) {
-        console.error("Error:", error);
-        setEmailError("An account with this email already exists.");
-      }
+    const form = new FormData();
+    form.append('id', userData.id);
+    form.append("username", formState.username);
+    form.append("email", formState.email);
+    form.append("first_name", formState.first_name);
+    form.append("last_name", formState.last_name);
+    form.append("password", userData.password);
+    //check form values
+    for (let [key, value] of form.entries()) {
+      console.log(`${key}: ${value}`);
     }
-  };
+    try{
+       updateProfile(form);
+    }
+    catch(error){
+      
+    }
+    };
+  // Attach this function to your form submission event
+  // <form onSubmit={handleUpdate}>...</form>
 
   const handleChangeProfilePic = () => {
     setShowUploadModal(true);
@@ -137,7 +110,7 @@ function EditProfile() {
                 </Link>
               </div>
             </div>
-            <form onSubmit={handleSignUp}>
+            <form onSubmit={handleUpdate}>
               <div className="bg-white rounded-xl shadow-lg p-4 px-4 md:p-8 mb-6">
                 <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
                   <div className="text-gray-600">
@@ -293,11 +266,11 @@ function EditProfile() {
                         />
                       </div>
                       <div className="md:col-span-2">
-                        <label htmlFor="firstName">First Name</label>
+                        <label htmlFor="first_name">First Name</label>
                         <input
                           type="text"
-                          name="firstName"
-                          id="firstName"
+                          name="first_name"
+                          id="first_name"
                           className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                           value={formState.first_name}
                           onChange={(e) =>
@@ -310,11 +283,11 @@ function EditProfile() {
                         />
                       </div>
                       <div className="md:col-span-3">
-                        <label htmlFor="lastName">Last Name</label>
+                        <label htmlFor="last_name">Last Name</label>
                         <input
                           type="text"
-                          name="lastName"
-                          id="lastName"
+                          name="last_name"
+                          id="last_name"
                           className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                           value={formState.last_name}
                           onChange={(e) =>
@@ -343,29 +316,22 @@ function EditProfile() {
                           placeholder="Email"
                         />
                       </div>
-                      <div className="md:col-span-5">
-                        <label htmlFor="password">New Password</label>
-                        <input
-                          type="text"
-                          name="password"
-                          id="password"
-                          className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                          value={formState.password}
-                          onChange={(e) =>
-                            setFormState({
-                              ...formState,
-                              password: e.target.value,
-                            })
-                          }
-                          placeholder="Password"
-                        />
-                      </div>
-                      <div className="md:col-span-5 pt-4 text-right">
+                      <div className="md:col-span-5 pt-4 text-right ">
                         <input
                           type="submit"
                           value="Save"
                           className="bg-custom-blue hover:bg-custom-yellow text-white font-bold py-2 px-4 rounded cursor-pointer"
                         />
+                      </div>
+                      <div className="md:col-span-5 pt-4 text-right" >
+                        <Link
+                            to="/change-password"
+                            className="bg-custom-blue hover:bg-custom-yellow text-white font-bold py-2 px-4 rounded cursor-pointer"
+                          >
+                          <h7>
+                            Change Password
+                          </h7>  
+                        </Link>
                       </div>
                     </div>
                   </div>

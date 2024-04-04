@@ -42,6 +42,7 @@ function ProfilePage() {
       date: "April 1, 2024",
     },
   ];
+
   useEffect(() => {
     const fetchAds = async () => {
       try {
@@ -100,8 +101,10 @@ function ProfilePage() {
                 <h5 className="mb-1 text-2xl font-medium text-gray-900 ">
                   @{userData.username}
                 </h5>
+
                 <p className="text-md text-gray-700">
                   {userData.first_name} {userData.last_name}
+
                 </p>
                 <p className="text-sm text-gray-500 ">{userData.email}</p>
                 <div className="mt-4 flex items-center">
@@ -110,7 +113,9 @@ function ProfilePage() {
                       key={rating}
                       className={classNames(
                         reviews.average > rating
+
                           ? "text-custom-yellow"
+
                           : "text-gray-200",
                         "h-5 w-5 flex-shrink-0"
                       )}

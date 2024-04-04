@@ -8,12 +8,13 @@ class AdImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AdImage
-        fields = ['image_url', 'uploaded_at']
+        fields = ['id', 'image_url', 'uploaded_at']
 
 class AdSerializer(serializers.ModelSerializer):
     owned_by = serializers.SerializerMethodField()
     owned_by_id = serializers.SerializerMethodField()
-    #category = serializers.SerializerMethodField()
+    owned_by_profile_picture = serializers.SerializerMethodField()
+    category = serializers.SerializerMethodField()
     images = serializers.SerializerMethodField()
     type = serializers.SerializerMethodField()
     location = serializers.SerializerMethodField()
@@ -21,13 +22,19 @@ class AdSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ad
-        fields = ['id', 'title', 'description', 'category', 'type', 'location', 'price', 'created_at', 'owned_by', 'owned_by_id', 'images', 'status']
+        fields = ['id', 'title', 'description', 'category', 'type', 'location', 'price', 'created_at', 'owned_by', 'owned_by_id', 'owned_by_profile_picture', 'images', 'status']
 
     def get_owned_by(self, obj):
         return obj.owned_by.username
     
     def get_owned_by_id(self, obj):
         return obj.owned_by.id
+    
+    def get_owned_by_profile_picture(self, obj):
+        try:
+            return obj.owned_by.profile_picture.url
+        except ValueError:
+            return None
     
     def get_category(self, obj):
         return dict(Ad.CATEGORY_CHOICES)[obj.category]
@@ -67,4 +74,35 @@ class AdFormSerializer(serializers.ModelSerializer):
             AdImage.objects.create(ad=ad, image=image_file)
 
         return ad
+    
+    def update(self, instance, validated_data):
+
+        # Debug: Print validated data
+        print("Validated data:", validated_data)
+
+        # Debug: Print raw request data
+        print("Raw request data:", self.context['request'].data)
+
+        # Update basic ad fields
+        instance.title = validated_data.get('title', instance.title)
+        instance.description = validated_data.get('description', instance.description)
+        instance.price = validated_data.get('price', instance.price)
+        instance.type = validated_data.get('type', instance.price)
+        instance.category = validated_data.get('category', instance.price)
+        instance.location = validated_data.get('location', instance.price)
+        # etc. for other fields
+        instance.save()
+
+        # Image handling
+        images_data = validated_data.pop('images', [])
+        images_to_keep = self.context['request'].data.getlist('images_to_keep', [])
+        
+        # Delete images not in images_to_keep_ids
+        instance.images.exclude(id__in=images_to_keep).delete()
+
+        # Add new images
+        for image_file in images_data:
+            AdImage.objects.create(ad=instance, image=image_file)
+
+        return instance
 

@@ -25,9 +25,21 @@ function DetailedAd() {
   const navigate = useNavigate();
 
   const sendMessage = async () => {
-    // Ensure ad details and apiToken are available
-    if (!ad || !apiToken) {
-      console.error("Ad details or API token is missing.");
+    // Ensure ad details are available
+    if (!ad) {
+      console.error("Ad details are missing.");
+      return;
+    }
+
+    // Ensure the user is logged in
+    if (!apiToken) {
+      console.error("API token is missing.");
+      navigate("/login");
+      return;
+    }
+
+    if (userData.id === ad.owned_by_id) {
+      alert("You can't message to yourself");
       return;
     }
 
@@ -66,6 +78,29 @@ function DetailedAd() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // Effect for keeping track of recently visited listings
+  useEffect(() => {
+    if (ad.id) {
+      updateRecentlyViewedAds(ad.id);
+    }
+  }, [ad]);
+
+  const updateRecentlyViewedAds = (newAdId) => {
+    const recentlyViewedAdIds =
+      JSON.parse(localStorage.getItem("recentlyViewedAdIds")) || [];
+
+    // Remove the ad ID if it already exists to prevent duplicates
+    const filteredAdIds = recentlyViewedAdIds.filter(
+      (adId) => adId !== newAdId
+    );
+
+    // Add the new ad ID to the front and trim the array to keep only the 4 most recent
+    const updatedAdIds = [newAdId, ...filteredAdIds].slice(0, 4);
+
+    localStorage.setItem("recentlyViewedAdIds", JSON.stringify(updatedAdIds));
+  };
+
   function formatDate(timestamp) {
     const date = new Date(timestamp);
     const options = { month: "long", day: "numeric", year: "numeric" };
@@ -110,7 +145,11 @@ function DetailedAd() {
               <div className="flex items-center">
                 <img
                   className=" mr-4 h-8 w-8 rounded-full"
-                  src={userData.profile_picture}
+                  src={
+                    ad.owned_by_profile_picture
+                      ? ad.owned_by_profile_picture
+                      : `https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato`
+                  }
                   alt=""
                 />
                 <div className="flex items-center">
