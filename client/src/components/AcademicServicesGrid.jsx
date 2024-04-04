@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from 'react-router-dom'; // Import Link
 
-import StudyGroups from "../images/study_groups.jpg";
-import Textbooks from "../images/textbooks.jpg";
-import Tutoring from "../images/tutoring.jpg";
-import LostAndFound from "../images/lost_and_found.jpg";
-import Research from "../images/research.jpg";
-import Others from "../images/other.jpg";
+import StudyGroups from "../assets/study_groups.svg";
+import Textbooks from "../assets/textbooks.svg";
+import Tutoring from "../assets/tutoring.svg";
+import LostAndFound from "../assets/lost_and_found.svg";
+import Research from "../assets/research.svg";
+import Others from "../assets/other.svg";
 
 
 const callouts = [
@@ -58,7 +58,7 @@ const callouts = [
 
 
 
-const CategoryGrid = () => {
+const AcademicServiceGrid = () => {
   const navigate = useNavigate();
 
 
@@ -101,4 +101,4 @@ const CategoryGrid = () => {
 }
 
 
-export default CategoryGrid;
+export default AcademicServiceGrid;

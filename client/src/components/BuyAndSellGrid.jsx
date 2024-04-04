@@ -2,20 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from 'react-router-dom'; // Import Link
 
 
-import Beauty from "../images/beauty.jpg";
-import Clothing from "../images/clothes.jpg";
-import Electronics from "../images/electronics.jpg";
-import Gaming from "../images/gaming.jpg";
-import Garden from "../images/garden.jpg";
-import Home from "../images/home.jpg";
-import LostAndFound from "../images/lost_and_found.jpg";
-import Music from "../images/music.jpg";
-import Others from "../images/other.jpg";
-import Research from "../images/research.jpg";
-import Sports from "../images/sports.jpg";
-import StudyGroups from "../images/study_groups.jpg";
-import Textbooks from "../images/textbooks.jpg";
-import Tutoring from "../images/tutoring.jpg";
+import Beauty from "../assets/beauty.svg";
+import Clothing from "../assets/clothes.svg";
+import Electronics from "../assets/electronics.svg";
+import Gaming from "../assets/gaming.svg";
+import Garden from "../assets/garden.svg";
+import Home from "../assets/home.svg";
+import LostAndFound from "../assets/lost_and_found.svg";
+import Music from "../assets/music.svg";
+import Others from "../assets/other.svg";
+import Sports from "../assets/sports.svg";
 
 
 const callouts = [
@@ -94,7 +90,7 @@ const callouts = [
 
 
 
-const CategoryGrid = () => {
+const BuyAndSell = () => {
   const navigate = useNavigate();
 
 
@@ -137,4 +133,4 @@ const CategoryGrid = () => {
 }
 
 
-export default CategoryGrid;
+export default BuyAndSell;
