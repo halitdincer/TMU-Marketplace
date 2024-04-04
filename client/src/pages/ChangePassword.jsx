@@ -1,18 +1,22 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from "react";
 import Logo from "../assets/LogoBigNoBg.svg";
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { AuthContext } from "components/AuthProvider"; // replace 'path-to-AuthProvider' with the actual path to AuthProvider.jsx
-
+import Modal from "components/Modal";
 
 function ChangePassword() {
-  const { userData, updatePassword  } = useContext(AuthContext);
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [passwordMatchError, matchPasswordError] = useState('');
+  const { userData, updatePassword } = useContext(AuthContext);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordMatchError, matchPasswordError] = useState("");
   const [isMobile, setIsMobile] = useState(false); // State to track if the view is mobile
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState({
+    title: "",
+    message: "",
+  });
 
   useEffect(() => {
     const handleResize = () => {
@@ -30,61 +34,85 @@ function ChangePassword() {
   }, []);
 
   const validatePassword = (pwd) => {
-    const regex = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()]).{8,}');
+    const regex = new RegExp(
+      "(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()]).{8,}"
+    );
     if (!regex.test(pwd)) {
-      setPasswordError("Password must be 8+ characters with a mix of uppercase, lowercase, numbers, and symbols.");
+      setPasswordError(
+        "Password must be 8+ characters with a mix of uppercase, lowercase, numbers, and symbols."
+      );
       return false;
     } else {
-      setPasswordError('');
+      setPasswordError("");
       return true;
     }
   };
 
   const handleConfirmPassword = (e) => {
-    if (confirmPassword === '') {
-      matchPasswordError('Please confirm your password.');
+    if (confirmPassword === "") {
+      matchPasswordError("Please confirm your password.");
     } else if (password !== confirmPassword) {
-      matchPasswordError('Passwords do not match.');
+      matchPasswordError("Passwords do not match.");
       return false;
     } else {
-      matchPasswordError('');
+      matchPasswordError("");
       return true;
     }
-  }
+  };
 
   const handlePasswordChange = async (event) => {
     event.preventDefault();
     handleConfirmPassword();
     validatePassword(password);
-    setPasswordError(password === '' ? 'Please enter your password.' : '');
-    matchPasswordError(confirmPassword === '' ? 'Please confirm your password.' : '');
+    setPasswordError(password === "" ? "Please enter your password." : "");
+    matchPasswordError(
+      confirmPassword === "" ? "Please confirm your password." : ""
+    );
     const isPasswordValid = validatePassword(password);
     const isConfirmPasswordValid = handleConfirmPassword();
 
     //Send new password to Authprovider to send request
     if (isPasswordValid && isConfirmPasswordValid) {
-      updatePassword(JSON.stringify({username: userData.username, password}));
-      navigateToProfile();
+      updatePassword(JSON.stringify({ username: userData.username, password }));
+      setIsModalOpen(true);
+      setModalContent({
+        title: "Success!",
+        message: "Your password have been successfully changed!",
+      });
+      setTimeout(() => {
+        navigateToProfile();
+      }, 3000);
     }
   };
 
   const navigate = useNavigate();
   // Function to handle navigation to the home page
   const navigateToProfile = () => {
-    navigate('/profile');
+    navigate("/profile");
   };
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   return (
-    <div className={`flex items-center justify-center h-screen bg-gray-100 ${isMobile ? 'px-4 lg:px-20' : ''}`}>
-
+    <div
+      className={`flex items-center justify-center h-screen bg-gray-100 ${
+        isMobile ? "px-4 lg:px-20" : ""
+      }`}
+    >
       <div className="w-full max-w-md">
+        <Modal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          title={modalContent.title}
+          message={modalContent.message}
+        />
         <form
           className="bg-white shadow-md rounded px-8 pt-6 pb-4 mt-4 mb-4"
           onSubmit={handlePasswordChange}
         >
           <div className="flex justify-center">
             <a href="/">
-
               {isMobile ? (
                 <img src={Logo} alt="Logo" className="w-auto h-32 " />
               ) : (
@@ -92,10 +120,12 @@ function ChangePassword() {
               )}
             </a>
           </div>
-          
- 
+
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor="password">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-1"
+              htmlFor="password"
+            >
               Password
             </label>
             <input
@@ -106,11 +136,16 @@ function ChangePassword() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            {passwordError && <div className="text-red-500 text-sm">{passwordError}</div>}
+            {passwordError && (
+              <div className="text-red-500 text-sm">{passwordError}</div>
+            )}
           </div>
 
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor="confirm-password">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-1"
+              htmlFor="confirm-password"
+            >
               Confirm Password
             </label>
             <input
@@ -121,11 +156,16 @@ function ChangePassword() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
-            {passwordMatchError && <div className="text-red-500 text-sm">{passwordMatchError}</div>}
+            {passwordMatchError && (
+              <div className="text-red-500 text-sm">{passwordMatchError}</div>
+            )}
           </div>
 
           <div className="flex flex-col items-center justify-between space-y-4">
-            <button className="w-full hover:bg-custom-blue hover:text-white bg-custom-yellow text-custom-blue font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+            <button
+              className="w-full hover:bg-custom-blue hover:text-white bg-custom-yellow text-custom-blue font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline"
+              type="submit"
+            >
               Update Password
             </button>
           </div>
@@ -136,4 +176,3 @@ function ChangePassword() {
 }
 
 export default ChangePassword;
-
