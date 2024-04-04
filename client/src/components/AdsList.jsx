@@ -60,14 +60,18 @@ function AdsList({ searchQuery }) {
 
   // Function to retrieve recently viewed ad IDs from local storage
   const getRecentlyViewedAdIds = () => {
-    return JSON.parse(localStorage.getItem('recentlyViewedAdIds')) || [];
+    return JSON.parse(localStorage.getItem("recentlyViewedAdIds")) || [];
   };
 
   // Separate ads into recently viewed and others
   const { recentlyViewedAds, otherAds } = useMemo(() => {
     const recentlyViewedIds = getRecentlyViewedAdIds();
-    const recentlyViewed = filteredAds.filter(ad => recentlyViewedIds.includes(ad.id));
-    const others = filteredAds.filter(ad => !recentlyViewedIds.includes(ad.id));
+    const recentlyViewed = filteredAds.filter((ad) =>
+      recentlyViewedIds.includes(ad.id)
+    );
+    const others = filteredAds.filter(
+      (ad) => !recentlyViewedIds.includes(ad.id)
+    );
     return { recentlyViewedAds: recentlyViewed, otherAds: others };
   }, [filteredAds]);
 
@@ -82,8 +86,10 @@ function AdsList({ searchQuery }) {
           {/* Recently Visited Section */}
           {recentlyViewedAds.length > 0 && (
             <div>
-              <h2 className="font-semibold text-lg mb-4">Recently Visited</h2>
-              <div className="grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 pt-2 sm:mt-5 sm:pt-5 lg:mx-0 lg:max-w-none lg:grid-cols-4">
+              <h2 className="font-semibold text-2xl mb-1 mt-5">
+                Recently Visited
+              </h2>
+              <div className="grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 pt-1 sm:mt-3 sm:pt-3 lg:mx-0 lg:max-w-none lg:grid-cols-4">
                 {recentlyViewedAds.map((ad) => (
                   <Link to={`/ad/${ad.id}`} key={ad.id}>
                     <AdCard ad={ad} />
@@ -95,8 +101,8 @@ function AdsList({ searchQuery }) {
 
           {/* Browse Section */}
           <div>
-            <h2 className="font-semibold text-lg mb-4">Browse</h2>
-            <div className="grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 pt-2 sm:mt-5 sm:pt-5 lg:mx-0 lg:max-w-none lg:grid-cols-4">
+            <h2 className="font-semibold text-2xl mt-14">Browse</h2>
+            <div className="grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 pt-2 sm:mt-3 sm:pt-3 lg:mx-0 lg:max-w-none lg:grid-cols-4">
               {otherAds.length > 0 ? (
                 otherAds.map((ad) => (
                   <Link to={`/ad/${ad.id}`} key={ad.id}>
