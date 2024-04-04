@@ -78,7 +78,7 @@ function EditProfile() {
       setIsModalOpen(true);
       setModalContent({
         title: "Success!",
-        message: "Ad details have been successfully changed!",
+        message: "Profile details have been successfully changed!",
       });
     } catch (error) {
       setIsModalOpen(true);
