@@ -5,14 +5,12 @@ import axios from 'axios';
 import Logo from "../assets/LogoBigNoBg.svg";
 
 function LoginPage() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isMobile, setIsMobile] = useState(false); // State to track if the view is mobile
   const { login, getToken } = useContext(AuthContext);
-  const [emailError, setEmailError] = useState('');
+  const [usernameError, setUsernameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-
-
 
   let navigate = useNavigate();
 
@@ -33,29 +31,47 @@ function LoginPage() {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-
+  
     try {
       setPasswordError('');
-
-      await login(email, password);
+      setUsernameError('');
+  
+      // HTTP request to your Django backend login view
+      const response = await axios.post('/api/users/login', {
+        username: username,
+        password: password
+      });
       // After the login attempt, get the token to verify if login was successful.
       // This assumes `getToken` is a function that retrieves the stored token,
       // and it will return `undefined` or `null` if no token is stored.
+      await login(username, password);
       const apiToken = getToken();
-
+  
       // Only navigate to "/" if `apiToken` is successfully retrieved, 
       // indicating the login was successful.
+      console.log('Before apiToken');
       if (apiToken) {
-        navigate("/");
+        navigateToHome();
       }
-
     } catch (error) {
-      setPasswordError('Login failed: Please check your credentials and try again.');
+      if (error.response) {
+        // If a response was received with a status code
+        if (error.response.status === 404) {
+          // Handle 404 Not Found error - wrong password
+          setPasswordError('Incorrect password. Please try again.');
+        } else if (error.response.status === 401) {
+          // Handle 401 Unauthorized error - wrong username
+          setUsernameError('An account with that username does not exist.');
+        } else {
+          // Handle other status codes
+          setPasswordError('Login failed: An unexpected error occurred. Please try again.');
+        }
+      } else {
+        // No response was received
+        setPasswordError('Login failed: The server is not responding. Please try again later.');
+      }
     }
-
   };
-
-
   const navigateToHome = () => {
     navigate('/');
   };
@@ -90,19 +106,19 @@ function LoginPage() {
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="email"
+                htmlFor="username"
               >
-                Email
+                Username
               </label>
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="email"
+                id="username"
                 type="text"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
-              {emailError && <div className="text-red-500">{emailError}</div>}
+              {usernameError && <div className="text-red-500">{usernameError}</div>}
 
             </div>
             <div className="mb-6">

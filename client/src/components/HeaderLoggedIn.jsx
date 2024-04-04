@@ -258,6 +258,7 @@ function HeaderLoggedIn({ title, onSearchSubmit }) {
               <a
                 href="/"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                role="menuitem"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Favorites
@@ -265,6 +266,7 @@ function HeaderLoggedIn({ title, onSearchSubmit }) {
               <a
                 href="/buy-and-sell"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                role="menuitem"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Buy & Sell
@@ -272,16 +274,17 @@ function HeaderLoggedIn({ title, onSearchSubmit }) {
               <a
                 href="/academic-services"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                role="menuitem"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Academic Services
               </a>
               <a
-                href="/login"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                onClick={() => setIsMenuOpen(false)}
+                href="/logout"
+                className="block px-4 py-2 text-sm text-gray-700"
+                role="menuitem"
               >
-                Sign Out
+                Sign out
               </a>
             </div>
           )}
