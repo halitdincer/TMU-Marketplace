@@ -120,7 +120,7 @@ const CategoryGrid = () => {
     <div className="bg-white-100">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 ">
         <div className="mx-auto max-w-2xl py-10 sm:py-24 lg:max-w-none lg:py-12 ">
-          <h2 className="text-2xl font-bold text-gray-900">Academic Services</h2>
+          <h2 className="text-2xl font-bold text-gray-900">Categories</h2>
 
 
           <div className="mt-6 space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:space-y-0 lg:grid-rows-2 lg:gap-y-6 sm:pb-30">

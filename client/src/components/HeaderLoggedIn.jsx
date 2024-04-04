@@ -256,14 +256,6 @@ function HeaderLoggedIn({ title, onSearchSubmit }) {
                 My Profile
               </a>
               <a
-                href="/"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                role="menuitem"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Favorites
-              </a>
-              <a
                 href="/buy-and-sell"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                 role="menuitem"
