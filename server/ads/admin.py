@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Ad, AdImage
+from .models import Ad, AdImage, AdReport
 from django.contrib.admin.widgets import AdminFileWidget
 from django.utils.safestring import mark_safe
 from django.db import models
@@ -29,16 +29,33 @@ class AdImageInline(admin.TabularInline):
     formfield_overrides = {
         models.ImageField: {'widget': AdminImageWidget}
     }
+    
+class AdReportInline(admin.TabularInline):
+    model = AdReport
+    extra = 0  # No empty forms
+    readonly_fields = ['reported_by', 'report_reason', 'other_details', 'reported_at']
+    fields = ['reported_by', 'report_reason', 'other_details', 'reported_at']
 
 class AdAdmin(admin.ModelAdmin):
-    list_display = ('title', 'type', 'category', 'price', 'created_at', 'owned_by')
+    list_display = ('title', 'type', 'category', 'price', 'created_at', 'owned_by', 'report_count')
     list_filter = ('category', 'created_at')
     search_fields = ('title', 'description', 'user__username')
-    inlines = [AdImageInline]
+    inlines = [AdImageInline, AdReportInline]
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        queryset = queryset.annotate(report_count=models.Count('reports'))
+        return queryset
+    def report_count(self, obj):
+        return obj.report_count
+    report_count.admin_order_field = 'report_count'  # Allows column to be sorted
+    report_count.short_description = 'Report Count'
 
+class AdReportAdmin(admin.ModelAdmin):
+    list_display = ['ad', 'report_reason', 'reported_by', 'reported_at']
+    list_filter = ['report_reason', 'reported_at']
+    search_fields = ['ad__title', 'reported_by__username', 'other_details']
+    readonly_fields = ['ad', 'reported_by', 'report_reason', 'other_details', 'reported_at']
 
-    
-
+admin.site.register(AdReport, AdReportAdmin)
 admin.site.register(Ad, AdAdmin)
-
 admin.site.register(AdImage)

@@ -63,6 +63,7 @@ function App() {
         <Route path="category/:category" element={<Category />} />
         <Route path="academic-services" element={<AcademicServices />} />
         <Route path="buy-and-sell" element={<BuyAndSell />} />
+        <Route path="report/:id" element={<ReportPage />} />
 
         {/* Private Routes */}
         <Route path="profile" element={<PrivateRoute />}>
@@ -84,9 +85,6 @@ function App() {
 
         <Route path="logout" element={<PrivateRoute />}>
           <Route index element={<Logout />} />
-        </Route>
-        <Route path="report" element={<PrivateRoute />}>
-          <Route index element={<ReportPage />} />
         </Route>
 
         {/* Guest Routes */}

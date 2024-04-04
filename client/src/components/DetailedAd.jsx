@@ -237,7 +237,7 @@ function DetailedAd() {
               </svg>
               <p className="ml-2 text-xs text-gray-500">Concerns?</p>
               <Link
-                to="/report"
+                to={`/report/${ad.id}`}
                 className="flex items-center underline ml-1 text-xs text-gray-500 hover:text-indigo-500"
               >
                 {" "}

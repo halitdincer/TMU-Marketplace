@@ -5,12 +5,13 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from .models import Ad
-from .serializers import AdSerializer, AdImageSerializer, AdFormSerializer, AdDeleteSerializer
+from .serializers import AdSerializer, AdImageSerializer, AdFormSerializer, AdDeleteSerializer, AdReportSerializer
 from users.models import CustomUser
 from rest_framework.decorators import authentication_classes, permission_classes, parser_classes
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+from django.shortcuts import get_object_or_404
 
 class AdListView(ListAPIView):
     serializer_class = AdSerializer
@@ -85,6 +86,32 @@ class DeleteAdView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class CreateAdReportView(APIView):
+    parser_classes = [JSONParser]
+
+    def post(self, request, *args, **kwargs):
+        # Extract the ad ID from the URL parameters
+        ad_id = kwargs.get('pk')
+
+        # Retrieve the ad instance associated with the provided ID or return a 404 error if not found
+        ad = get_object_or_404(Ad, pk=ad_id)
+
+        # Update the request data with the ad instance
+        request.data.update({'ad': ad.pk})
+
+        # Initialize the serializer with the request data
+        serializer = AdReportSerializer(data=request.data)
+
+        if serializer.is_valid():
+            # Save the report, associating it with the retrieved ad and the authenticated user (if any)
+            if request.user.is_authenticated:
+                serializer.save(reported_by=request.user, ad=ad)
+            else:
+                serializer.save(ad=ad)
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 """
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
