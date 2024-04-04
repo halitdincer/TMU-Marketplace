@@ -5,6 +5,7 @@ import { AuthContext } from "./AuthProvider";
 import useAdDetails from "./useAdDetails";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import Modal from "./Modal";
+import OpenAI from "openai";
 
 function EditAdForm() {
   const navigate = useNavigate(); // Hook for navigation
@@ -30,6 +31,11 @@ function EditAdForm() {
   const [modalContent, setModalContent] = useState({
     title: "",
     message: "",
+  });
+
+  const openai = new OpenAI({
+    apiKey: process.env.REACT_APP_OPENAI_API_KEY,
+    dangerouslyAllowBrowser: true,
   });
 
   //Init default Form values from "ad"
@@ -87,16 +93,30 @@ function EditAdForm() {
     };
     setLocation(locationMapping[ad.location]);
   }, [ad.location]);
+  
   useEffect(() => {
     if (ad.images) {
       const initialImages = ad.images.map((image) => ({
         ...image,
         existing: true, // Mark as existing image
       }));
-      setExistingImages(initialImages);
-      setImagePreviews(initialImages.concat(imagePreviews));
+      // Ensure we're not adding images that are already in state
+      const nonDuplicateImages = initialImages.filter(newImage => 
+        !existingImages.some(existingImage => existingImage.id === newImage.id)
+      );
+      setExistingImages([...existingImages, ...nonDuplicateImages]);
+      // Update image previews in a similar manner to avoid duplication
+      setImagePreviews(prevPreviews => {
+        const newPreviews = nonDuplicateImages.filter(newImage => 
+          !prevPreviews.some(preview => preview.id === newImage.id)
+        );
+        return [...prevPreviews, ...newPreviews];
+      });
     }
   }, [ad.images]);
+
+
+
 
   //handle form submission
   const handleSubmit = async (event) => {
@@ -198,6 +218,26 @@ function EditAdForm() {
     
   };
 
+  const fetchDescription = async () => {
+    try {
+      const completion = await openai.chat.completions.create({
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are a bot that writes description for for items or services listed on an online marketplace. The user will give you the listing title and you will reply back with realistic listing description under 50 words that is written from the user perspective.",
+          },
+          { role: "user", content: title },
+        ],
+        model: "gpt-3.5-turbo",
+      });
+      console.log(completion.choices[0]);
+      setDescription(completion.choices[0].message.content);
+    } catch (error) {
+      console.error("There was an error fetching the description:", error);
+    }
+  };
+
   //Conditional render based on if the selected ad is owned by the current logged in user
   const owner = userData.username == ad.owned_by;
   if (!owner) {
@@ -258,7 +298,7 @@ function EditAdForm() {
                       />
                     </div>
 
-                    <div className="md:col-span-5">
+                    <div className="md:col-span-5 relative">
                       <label htmlFor="description">Description </label>
                       <textarea
                         id="description"
@@ -268,6 +308,27 @@ function EditAdForm() {
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                       />
+                      <button
+                      type="button"
+                      className="bg-emerald-400  hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-2xl cursor-pointer absolute bottom-5 right-5 mt-2 mr-2 flex items-center"
+                      onClick={fetchDescription}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        className="w-6 h-6 mr-1"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"
+                        />
+                      </svg>
+                      Write with AI
+                    </button>
                     </div>
 
                     <div className="md:col-span-3">
