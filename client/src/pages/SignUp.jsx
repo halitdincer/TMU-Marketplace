@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Logo from "../assets/LogoBigNoBg.svg";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { AuthContext } from 'components/AuthProvider';
 
 function SignUp() {
+  const {login} = useContext(AuthContext);
   const [first_name, setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -73,6 +75,7 @@ function SignUp() {
   }
 
   const handleSignUp = async (event) => {
+    
     handleConfirmPassword();
     validatePassword(password);
 
@@ -99,8 +102,7 @@ function SignUp() {
         );
         // Strip and Save token to local cache
         const token = response.data.Authorization.split(' ')[1];
-        localStorage.setItem('authtoken', token);
-        
+        login(username, password);
         navigateToHome();
       } catch (error) {
         console.error('Error:', error);
