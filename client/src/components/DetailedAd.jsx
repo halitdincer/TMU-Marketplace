@@ -207,10 +207,34 @@ function DetailedAd() {
             <button
               type="button"
               onClick={sendMessage}
-              className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-custom-blue px-8 py-3 text-base font-medium text-white hover:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-custom-blue px-8 py-3 text-base font-medium text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               Message
             </button>
+            <div className="ml-24 flex items-center text-gray-500 mt-3">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                class="w-4 h-4"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"
+                />
+              </svg>
+              <p className="ml-2 text-xs text-gray-500">Concerns?</p>
+              <Link
+                to="/report"
+                className="flex items-center underline ml-1 text-xs text-gray-500 hover:text-indigo-500"
+              >
+                {" "}
+                Report this ad!
+              </Link>
+            </div>
           </div>
 
           {!isMobile && ad.images && ad.images.length > 0 && (

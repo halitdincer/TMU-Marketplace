@@ -42,7 +42,7 @@ function ChatsList({ messages, conversantId, userId }) {
       {chats.map((chat, index) => (
         <Link key={index} to={`/inbox/${chat.id}`}>
           <div
-            className={`flex items-center mb-1 border-b border-t border-gray-300 cursor-pointer p-2 rounded-md ${
+            className={`flex items-center mb-1 border-t border-b border-gray-300 cursor-pointer p-2  ${
               chat.id === conversantId ? "bg-gray-100" : "hover:bg-gray-100"
             }`}
           >
@@ -57,9 +57,13 @@ function ChatsList({ messages, conversantId, userId }) {
                 className="w-12 h-12 rounded-full"
               />
             </div>
-            <div className="flex-1">
+            <div className="flex-1 h-20">
               <h2 className="text-lg font-semibold">{chat.name}</h2>
-              <p className="text-gray-600">{chat.last_message}</p>
+              <p className="text-gray-600">
+                {chat.last_message.length > 50
+                  ? chat.last_message.slice(0, 50) + "..."
+                  : chat.last_message}
+              </p>
             </div>
           </div>
         </Link>

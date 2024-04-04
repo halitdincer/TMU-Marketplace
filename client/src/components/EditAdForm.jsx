@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "./AuthProvider";
 import useAdDetails from "./useAdDetails";
 import { XMarkIcon } from "@heroicons/react/20/solid";
+import Modal from "./Modal";
 
 function EditAdForm() {
   const navigate = useNavigate(); // Hook for navigation
@@ -25,6 +26,11 @@ function EditAdForm() {
 
   const { userData } = useContext(AuthContext);
   const { apiToken } = useContext(AuthContext);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState({
+    title: "",
+    message: "",
+  });
 
   //Init default Form values from "ad"
   useEffect(() => {
@@ -126,10 +132,26 @@ function EditAdForm() {
     try {
       const response = await axios.put("/api/ads/edit/", form, config);
       console.log(response.data);
+      setIsModalOpen(true);
+      setModalContent({
+        title: "Success!",
+        message: "Ad details have been successfully changed!",
+      });
     } catch (error) {
       console.error("Error:", error);
+      setIsModalOpen(true);
+      setModalContent({
+        title: "Error!",
+        message: "An error occurred while editing your ad. Please try again",
+      });
     }
-    navigate("/profile");
+    setTimeout(() => {
+      navigate("/profile");
+    }, 3000);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   const handleImageChange = (e) => {
@@ -174,6 +196,12 @@ function EditAdForm() {
     return (
       <div className="min-h-screen p-6  bg-gray-50 flex items-center justify-center lg:pb-0 pb-24">
         <div className="container max-w-screen-lg mx-auto">
+          <Modal
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            title={modalContent.title}
+            message={modalContent.message}
+          />
           <div className="flex justify-between items-center">
             <h2 className="font-semibold text-2xl text-custom-blue pb-3">
               Edit Ad

@@ -41,7 +41,7 @@ function AdCard({ ad }) {
         />
       </div>
 
-      <div className="pt-4 p-6">
+      <div className="pt-4 p-6 ">
         <div className="lg:text-xs flex items-center justify-between text-sm text-gray-600 mb-2">
           <time dateTime="2020-03-16">
             {formatDate(ad.created_at) || "Unknown date"}
@@ -60,15 +60,15 @@ function AdCard({ ad }) {
         <h3 className="lg:text-xl text-2xl mt-3  font-bold text-custom-blue  transition-colors duration-200">
           ${ad.price}
         </h3>
-        <h3 className="lg:text-md text-lg mt-1  font-semibold text-gray-800 hover:text-gray-600 transition-colors duration-200">
+        <h3 className="lg:text-md text-lg mt-1  font-semibold text-gray-800 hover:text-gray-600 transition-colors duration-200 pb-2">
           <a href="#" className="stretched-link">
             {ad.title || "No Title"}
           </a>
         </h3>
 
-        <div className="h-20 overflow-hidden">
+        {/* <div className="h-20 overflow-hidden">
           <p className="text-base text-gray-600 mt-3">{shortDescription}</p>
-        </div>
+        </div> */}
       </div>
     </article>
   );
