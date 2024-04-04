@@ -37,7 +37,7 @@ class AdReportInline(admin.TabularInline):
     fields = ['reported_by', 'report_reason', 'other_details', 'reported_at']
 
 class AdAdmin(admin.ModelAdmin):
-    list_display = ('title', 'type', 'category', 'price', 'created_at', 'owned_by', 'report_count')
+    list_display = ('title', 'status', 'type', 'category', 'price', 'created_at', 'owned_by', 'report_count')
     list_filter = ('category', 'created_at')
     search_fields = ('title', 'description', 'user__username')
     inlines = [AdImageInline, AdReportInline]

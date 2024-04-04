@@ -17,7 +17,7 @@ function CreateAdForm() {
   const [category, setCategory] = useState("");
   const [location, setLocation] = useState("");
 
-  const { apiToken } = useContext(AuthContext);
+  const { apiToken } = useContext(AuthContext); //  Token context based on logged in user
   const [imagePreviews, setImagePreviews] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,6 +26,7 @@ function CreateAdForm() {
     message: "",
   });
 
+  //Create Openai instance 
   const openai = new OpenAI({
     apiKey: process.env.REACT_APP_OPENAI_API_KEY,
     dangerouslyAllowBrowser: true,
@@ -33,7 +34,7 @@ function CreateAdForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    //Form header configuration
     const config = {
       headers: {
         Authorization: "Token " + apiToken,
@@ -42,11 +43,9 @@ function CreateAdForm() {
     };
 
     const form = new FormData();
-
     images.forEach((image) => {
       form.append("images", image);
     });
-
     form.append("title", title);
     form.append("description", description);
     form.append("price", price);
@@ -54,11 +53,12 @@ function CreateAdForm() {
     form.append("category", category);
     form.append("location", location);
 
+    //Console log form for debugging
     for (let [key, value] of form.entries()) {
       console.log(`${key}: ${value}`);
     }
 
-    try {
+    try { // Call create ad api
       const response = await axios.post("/api/ads/create/", form, config);
       console.log(response.data);
       setIsModalOpen(true);
@@ -84,13 +84,6 @@ function CreateAdForm() {
     setIsModalOpen(false);
   };
 
-  // const handleImageChange = (e) => {
-  //   const files = [...e.target.files];
-  //   setImages(files);
-
-  //   const fileNames = files.map((file) => file.name);
-  //   setUploadedFiles(fileNames);
-  // };
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     setImages(files);
@@ -109,7 +102,7 @@ function CreateAdForm() {
     setImagePreviews(imagePreviews.filter((image) => image.image_url !== image_url));
   };
 
-  const fetchDescription = async () => {
+  const fetchDescription = async () => {  // Openai api call for description generation
     try {
       const completion = await openai.chat.completions.create({
         messages: [

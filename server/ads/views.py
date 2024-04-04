@@ -39,6 +39,7 @@ class AdListView(ListAPIView):
         if max_price is not None:
             queryset = queryset.filter(price__lte=max_price)
 
+        #exclude 'deleted' datasets in final queryset
         return queryset.exclude(status='DE')
 
 class AdDetailView(RetrieveAPIView):
@@ -112,30 +113,3 @@ class CreateAdReportView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-"""
-@api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
-@parser_classes([MultiPartParser, FormParser])
-def createAd(request):
-    ad = Ad(owned_by=request.user) #from permission/auth classes
-    adSerializer = AdSerializer(ad, data=request.data)
-    if adSerializer.is_valid():
-        #print(adSerializer)
-        adSerializer.save()
-        return Response(adSerializer.data, status=status.HTTP_201_CREATED)
-    return Response(adSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['PUT'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
-@parser_classes([MultiPartParser, FormParser])
-def editAd(request):
-    user = request.user  #from permission/auth classes
-    ad = Ad.objects.get(pk = request.data["id"])   
-    adSerializer = AdSerializer(ad, data=request.data)
-    if adSerializer.is_valid():
-        adSerializer.save()
-        return Response(adSerializer.data, status=status.HTTP_201_CREATED)
-    return Response(adSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
-"""

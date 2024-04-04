@@ -37,9 +37,8 @@ function SignUp() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-
-
   const validatePassword = (pwd) => {
+    //validates password string to include specified chars and length
     const regex = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()]).{8,}');
     if (!regex.test(pwd)) {
       setPasswordError("Password must be 8+ characters with a mix of uppercase, lowercase, numbers, and symbols.");
@@ -52,6 +51,7 @@ function SignUp() {
 
 
   const validateEmail = (email) => {
+    //validates password string to include correct email string formatting
     const regex = new RegExp('^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$');
     if (!regex.test(email)) {
       setEmailError('Please enter a valid email address.');
@@ -63,6 +63,7 @@ function SignUp() {
   };
 
   const handleConfirmPassword = (e) => {
+    //Ensure both passwords are the same
     if (confirmPassword === '') {
       matchPasswordError('Please confirm your password.');
     } else if (password !== confirmPassword) {
@@ -75,22 +76,22 @@ function SignUp() {
   }
 
   const handleSignUp = async (event) => {
-    
+    //handle passwords validation 
     handleConfirmPassword();
     validatePassword(password);
-
+    //set email and password error
     setFirstNameError(first_name === '' ? 'Please enter your first name.' : '');
     setLastNameError(last_name === '' ? 'Please enter your last name.' : '');
     setEmailError(email === '' ? 'Please enter your email.' : !validateEmail(email) ? 'Email must be in the format something@mail.com.' : '');
     setPasswordError(password === '' ? 'Please enter your password.' : '');
     matchPasswordError(confirmPassword === '' ? 'Please confirm your password.' : '');
 
-
     const isPasswordValid = validatePassword(password);
     const isConfirmPasswordValid = handleConfirmPassword();
 
     event.preventDefault();
 
+    //if passwords are valid, call signup api with user credentials
     if (isPasswordValid && isConfirmPasswordValid) {
       try {
         const response = await axios.post('/api/users/signup/',
@@ -102,7 +103,9 @@ function SignUp() {
         );
         // Strip and Save token to local cache
         const token = response.data.Authorization.split(' ')[1];
+        //call authcontext login function with credentials
         login(username, password);
+        //navigate to home page
         navigateToHome();
       } catch (error) {
         console.error('Error:', error);
@@ -135,11 +138,7 @@ function SignUp() {
   const navigateToHome = () => {
     navigate('/');
   };
-
-
-
-
-
+  
   return (
     <div className={`flex items-center justify-center h-screen bg-gray-100 ${isMobile ? 'px-4 lg:px-20' : ''}`}>
 

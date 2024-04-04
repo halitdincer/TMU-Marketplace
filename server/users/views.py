@@ -17,15 +17,6 @@ from rest_framework.parsers import FormParser
 class CustomUserListView(ListAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
-
-# @api_view(['POST'])
-# def login(request):
-#     user = get_object_or_404(CustomUser, username = request.data['username'])
-#     if not user.check_password(request.data['password']):
-#         return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
-#     token, created = Token.objects.get_or_create(user = user)
-#     serializer = CustomUserSerializer(instance = user)
-#     return Response({"Authorization": "Token "+token.key, "user": serializer.data})
     
 @api_view(['POST'])
 def login(request):
@@ -114,6 +105,7 @@ def updatePassword(request):
 @permission_classes([IsAuthenticated])
 def logout(request):
     if request.method == "POST":
+        #delete request user's auth token
         request.user.auth_token.delete()
         return Response({"Message": "Logged out"}, status=status.HTTP_200_OK)
 
@@ -121,4 +113,5 @@ def logout(request):
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def test_token(request):
+    #authentication test case
     return Response("passed!")
