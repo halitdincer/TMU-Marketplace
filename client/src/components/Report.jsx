@@ -1,10 +1,11 @@
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import React, { useContext, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { AuthContext } from "./AuthProvider";
 import Modal from "./Modal";
 
 function Report() {
+  const { id: adId } = useParams();
   const { apiToken } = useContext(AuthContext);
   const [reportReason, setReportReason] = useState("");
   const [details, setDetails] = useState("");
@@ -14,28 +15,42 @@ function Report() {
     title: "",
     message: "",
   });
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    try {
-      console.log({ reportReason, details });
+    let headers = {'Content-Type': 'application/json'};
+    if (apiToken) {headers['Authorization'] = `Token ${apiToken}`;}
+    fetch(`http://127.0.0.1:8000/api/ads/report/${adId}/`, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({
+        'report_reason': reportReason,
+        'other_details' :details,
+      }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
       setIsModalOpen(true);
       setModalContent({
         title: "Success!",
-        message:
-          "Thank you for your input. We will take the appropriate measures!",
+        message: "Thank you for your input. We will take the appropriate measures!",
       });
-    } catch (error) {
-      console.error("Error:", error);
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
       setIsModalOpen(true);
       setModalContent({
         title: "Error!",
         message: "An error occurred while reporting. Please try again",
       });
-    }
-
-    setTimeout(() => {
-      navigate("/");
-    }, 2000);
+      setTimeout(() => {
+        setIsModalOpen(false);
+      }, 2000);
+    });
   };
 
   const closeModal = () => {
@@ -84,9 +99,9 @@ function Report() {
                         type="radio"
                         id="spam"
                         name="report_reason"
-                        value="spam"
+                        value="SPAM"
                         onChange={(e) => setReportReason(e.target.value)}
-                        checked={reportReason === "spam"}
+                        checked={reportReason === "SPAM"}
                         className="mb-2"
                       />
                       <label htmlFor="spam" className="ml-2 text-lg">
@@ -99,9 +114,9 @@ function Report() {
                         type="radio"
                         id="inappropriate"
                         name="report_reason"
-                        value="inappropriate"
+                        value="INAPPROPRIATE_CONTENT"
                         onChange={(e) => setReportReason(e.target.value)}
-                        checked={reportReason === "inappropriate"}
+                        checked={reportReason === "INAPPROPRIATE_CONTENT"}
                         className="mb-2"
                       />
                       <label htmlFor="inappropriate" className="ml-2 text-lg">
@@ -114,9 +129,9 @@ function Report() {
                         type="radio"
                         id="misinformation"
                         name="report_reason"
-                        value="misinformation"
+                        value="MISINFORMATION"
                         onChange={(e) => setReportReason(e.target.value)}
-                        checked={reportReason === "misinformation"}
+                        checked={reportReason === "MISINFORMATION"}
                         className="mb-2"
                       />
                       <label htmlFor="misinformation" className="ml-2 text-lg ">
@@ -129,9 +144,9 @@ function Report() {
                         type="radio"
                         id="other"
                         name="report_reason"
-                        value="other"
+                        value="OTHER"
                         onChange={(e) => setReportReason(e.target.value)}
-                        checked={reportReason === "other"}
+                        checked={reportReason === "OTHER"}
                         className="mb-2"
                       />
                       <label htmlFor="other" className="ml-2 text-lg">

@@ -78,3 +78,32 @@ class AdImage(models.Model):
 
     def __str__(self):
         return f"Ad Image for {self.ad.title} uploaded at {self.uploaded_at}"
+
+class AdReport(models.Model):
+    # Ad Details
+    ad = models.ForeignKey(Ad, on_delete=models.CASCADE, related_name='reports')
+    reported_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True)
+
+    REASONS = [
+        ('SPAM', 'Spam'),
+        ('INAPPROPRIATE_CONTENT', 'Inappropriate Content'),
+        ('MISINFORMATION', 'Misinformation'),
+        ('OTHER', 'Other'),
+    ]
+    report_reason = models.CharField(
+        max_length=25,
+        choices=REASONS,
+        default='OTHER',
+        help_text='The reason for the report'
+    )
+    
+    other_details = models.TextField(blank=True, help_text='Additional details for the report if "Other" is selected')
+    reported_at = models.DateTimeField(auto_now_add=True, help_text='The date and time the report was submitted')
+
+    class Meta:
+        verbose_name = 'Ad Report'
+        verbose_name_plural = 'Ad Reports'
+
+    def __str__(self):
+        reported_by_str = self.reported_by.username if self.reported_by else 'Anonymous'
+        return f"{self.get_report_reason_display()} - {reported_by_str} - {self.reported_at.strftime('%Y-%m-%d %H:%M:%S')}"

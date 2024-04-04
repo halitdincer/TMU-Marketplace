@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.fields import ListField
-from .models import Ad, AdImage
+from .models import Ad, AdImage, AdReport
 
 
 class AdImageSerializer(serializers.ModelSerializer):
@@ -111,3 +111,14 @@ class AdDeleteSerializer(serializers.ModelSerializer):
         model = Ad
         fields = ['id', 'status']
 
+class AdReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdReport
+        fields = ['id', 'ad', 'reported_by', 'report_reason', 'other_details', 'reported_at']
+        read_only_fields = ['reported_by', 'reported_at']
+
+    def create(self, validated_data):
+        if 'other_details' not in validated_data:
+            validated_data['other_details'] = ''
+        ad_report = AdReport.objects.create(**validated_data)
+        return ad_report
