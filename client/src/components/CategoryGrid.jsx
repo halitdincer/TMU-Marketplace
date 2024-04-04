@@ -118,7 +118,7 @@ const CategoryGrid = () => {
 
   return (
     <div className="bg-white-100">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 ">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 pb-24 lg:pb-0 lg:px-8 ">
         <div className="mx-auto max-w-2xl py-10 sm:py-24 lg:max-w-none lg:py-12 ">
           <h2 className="text-2xl font-bold text-gray-900">Categories</h2>
 

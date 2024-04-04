@@ -68,7 +68,7 @@ const AcademicServiceGrid = () => {
           <h2 className="text-2xl font-bold text-gray-900">Academic Services</h2>
 
 
-          <div className="mt-6 space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:space-y-0 lg:grid-rows-2 lg:gap-y-6 sm:pb-30">
+          <div className="mt-6 space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:space-y-0 lg:grid-rows-2 pb-24 lg:pb-0 lg:gap-y-6 sm:pb-30">
             {callouts.map((callout) => (
               <div key={callout.name} onClick={() => handleCategoryClick(callout.short)}>
                 <div className="relative h-80 w-full overflow-hidden rounded-lg bg-white sm:aspect-w-1 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-64">

@@ -85,7 +85,7 @@ const Category = () => {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="flex-1 sm:ml-28">
+      <div className="flex-1 sm:ml-28 pb-24 lg:pb-0">
         {/* Display the appropriate header based on user authentication status */}
         {userData ? (
           <HeaderLoggedIn onSearchSubmit={handleSearchSubmit} />
