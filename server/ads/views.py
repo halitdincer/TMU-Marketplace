@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from .models import Ad
-from .serializers import AdSerializer, AdImageSerializer, AdFormSerializer
+from .serializers import AdSerializer, AdImageSerializer, AdFormSerializer, AdDeleteSerializer
 from users.models import CustomUser
 from rest_framework.decorators import authentication_classes, permission_classes, parser_classes
 from rest_framework.authentication import TokenAuthentication
@@ -70,6 +70,20 @@ class EditAdView(APIView):
             adSerializer.save()
             return Response(adSerializer.data, status=status.HTTP_201_CREATED)
         return Response(adSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class DeleteAdView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        #user = request.user  #from permission/auth classes
+        ad = Ad.objects.get(pk = request.data["pk"])   
+        serializer = AdDeleteSerializer(ad, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 """
 @api_view(['POST'])
