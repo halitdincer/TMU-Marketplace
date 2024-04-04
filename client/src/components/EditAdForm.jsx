@@ -156,6 +156,24 @@ function EditAdForm() {
     );
   };
 
+  const handleDelete = async (event) => {
+    const form = new FormData();
+    form.append("pk", ad.id);
+    form.append('status', 'DE');
+    const config = {
+      headers: { 
+        Authorization: "Token " + apiToken,
+        "Content-Type": "multipart/form-data",
+      }
+    };
+    try {
+      const response = await axios.post("/api/ads/delete/", form, config);
+      console.log(response?.data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   //Conditional render based on if the selected ad is owned by the current logged in user
   const owner = userData.username == ad.owned_by;
   if (!owner) {
@@ -396,7 +414,12 @@ function EditAdForm() {
                       />
                     </div>
                     <div className="md:col-span-2 text-right pt-4">
-                      <button className=" bg-red-500 text-white font-bold py-2 px-4 rounded cursor-pointer">
+                      <button className=" bg-red-500 text-white font-bold py-2 px-4 rounded cursor-pointer"
+                      type="button"
+                      onClick={() =>
+                        handleDelete()
+                      }
+                      >
                         Delete Ad
                       </button>
                     </div>

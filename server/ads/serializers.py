@@ -106,3 +106,8 @@ class AdFormSerializer(serializers.ModelSerializer):
 
         return instance
 
+class AdDeleteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ad
+        fields = ['id', 'status']
+
