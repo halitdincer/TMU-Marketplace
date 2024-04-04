@@ -35,12 +35,6 @@ function LoginPage() {
     try {
       setPasswordError('');
       setUsernameError('');
-  
-      // HTTP request to your Django backend login view
-      const response = await axios.post('/api/users/login', {
-        username: username,
-        password: password
-      });
       // After the login attempt, get the token to verify if login was successful.
       // This assumes `getToken` is a function that retrieves the stored token,
       // and it will return `undefined` or `null` if no token is stored.
