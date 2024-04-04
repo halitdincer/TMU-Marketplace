@@ -98,11 +98,10 @@ function ProfilePage() {
                   src={userData.profile_picture}
                   alt={userData.username}
                 />
-               
-                <p className="text-md text-gray-700">
 
+                <p className="text-md  font-semibold text-gray-700">
                   {userData.first_name} {userData.last_name}
-                </h5>
+                </p>
 
                 <p className="text-md text-gray-700"> @{userData.username}</p>
                 <p className="text-sm text-gray-500 ">{userData.email}</p>
