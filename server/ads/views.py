@@ -39,7 +39,7 @@ class AdListView(ListAPIView):
         if max_price is not None:
             queryset = queryset.filter(price__lte=max_price)
 
-        return queryset
+        return queryset.exclude(status='DE')
 
 class AdDetailView(RetrieveAPIView):
     queryset = Ad.objects.all()
