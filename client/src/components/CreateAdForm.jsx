@@ -18,6 +18,7 @@ function CreateAdForm() {
   const [location, setLocation] = useState("");
 
   const { apiToken } = useContext(AuthContext);
+  const [imagePreviews, setImagePreviews] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState({
@@ -83,12 +84,29 @@ function CreateAdForm() {
     setIsModalOpen(false);
   };
 
-  const handleImageChange = (e) => {
-    const files = [...e.target.files];
-    setImages(files);
+  // const handleImageChange = (e) => {
+  //   const files = [...e.target.files];
+  //   setImages(files);
 
-    const fileNames = files.map((file) => file.name);
-    setUploadedFiles(fileNames);
+  //   const fileNames = files.map((file) => file.name);
+  //   setUploadedFiles(fileNames);
+  // };
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    setImages(files);
+    const mappedPreviews = files.map((image) => ({
+      name: image.name,
+      image_url: URL.createObjectURL(image),
+      existing: false, // Mark as new image
+    }));
+    setImagePreviews(imagePreviews.concat(mappedPreviews));
+  };
+  const removeImage = (image_url, isExisting) => {
+    const imageToRemove = imagePreviews.find(image => image.image_url === image_url);
+    if (!imageToRemove) return; // If no image found, simply return
+
+    setImages(images.filter(image => image.name !== imageToRemove.name));
+    setImagePreviews(imagePreviews.filter((image) => image.image_url !== image_url));
   };
 
   const fetchDescription = async () => {
@@ -288,6 +306,32 @@ function CreateAdForm() {
                     >
                       Upload Photos
                     </label>
+                    {/* Thumbnails of uploaded images */}
+                    <div className="grid grid-cols-2 sm:grid-cols-6 gap-2 mb-2">
+                        {imagePreviews.map((image, index) => (
+                          <div
+                            key={index}
+                            className="relative"
+                            style={{ width: "100px", height: "100px" }}
+                          >
+                            <img
+                              src={image.image_url}
+                              alt={image.name}
+                              className="w-full h-auto border rounded"
+                              style={{ width: "100px", height: "100px" }}
+                            />
+                            <button
+                              type="button"
+                              className="absolute top-0 right-0 bg-red-600 text-white rounded-full p-1 m-1"
+                              onClick={() =>
+                                removeImage(image.image_url, image.existing)
+                              }
+                            >
+                              <XMarkIcon className="h-4 w-4" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
                     <label
                       htmlFor="dropzone-file"
                       className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 "

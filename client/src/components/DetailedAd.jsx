@@ -153,7 +153,7 @@ function DetailedAd() {
               <h3 className="sr-only">Reviews</h3>
               <div className="flex items-center">
                 <img
-                  className=" mr-4 h-8 w-8 rounded-full"
+                  className=" mr-2 h-8 w-8 rounded-full"
                   src={
                     ad.owned_by_profile_picture
                       ? ad.owned_by_profile_picture
@@ -161,7 +161,8 @@ function DetailedAd() {
                   }
                   alt=""
                 />
-                <div className="flex items-center">
+                <p className="text-base font-medium">{ad.owned_by}</p>
+                {/* <div className="flex items-center">
                   {[0, 1, 2, 3, 4].map((rating) => (
                     <StarIcon
                       key={rating}
@@ -181,7 +182,7 @@ function DetailedAd() {
                   className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500"
                 >
                   {reviews.totalCount} reviews
-                </a>
+                </a> */}
               </div>
             </div>
 

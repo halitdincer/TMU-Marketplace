@@ -105,7 +105,7 @@ function ProfilePage() {
 
                 <p className="text-md text-gray-700"> @{userData.username}</p>
                 <p className="text-sm text-gray-500 ">{userData.email}</p>
-                <div className="mt-4 flex items-center">
+                {/* <div className="mt-4 flex items-center">
                   {[0, 1, 2, 3, 4].map((rating) => (
                     <StarIcon
                       key={rating}
@@ -127,7 +127,7 @@ function ProfilePage() {
                   >
                     {reviews.totalCount} reviews
                   </a>
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="mx-auto max-w-7xl px-6 lg:px-8 ">
@@ -169,7 +169,7 @@ function ProfilePage() {
                 )}
               </div>
             </div>
-            <div className="mx-auto max-w-7xl px-6 lg:px-8 ">
+            {/* <div className="mx-auto max-w-7xl px-6 lg:px-8 ">
               <h4 className="mt-3 mb-1 text-2xl font-semibold text-gray-900 ">
                 Your Reviews
               </h4>
@@ -185,7 +185,7 @@ function ProfilePage() {
                   />
                 ))}
               </div>
-            </div>
+            </div> */}
           </>
         ) : (
           <>
