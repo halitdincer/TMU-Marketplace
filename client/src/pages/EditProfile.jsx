@@ -2,14 +2,15 @@ import React, { useContext, useState, useEffect } from "react";
 import Sidebar from "components/Sidebar";
 import { AuthContext } from "components/AuthProvider";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import Modal from "react-modal";
+import Modall from "components/Modal";
 
 function EditProfile() {
   const { userData, updateProfile, apiToken } = useContext(AuthContext);
-  const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState('');
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
   // Use state to manage form data
   const [formState, setFormState] = useState({
     //profilePic: userData.profilePic,
@@ -23,17 +24,22 @@ function EditProfile() {
     Modal.setAppElement("#root"); // Assuming '#root' is the ID of your root element
   }, []);
 
+  const navigate = useNavigate(); // Hook for navigation
   const [showDropdown, setShowDropdown] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState({
+    title: "",
+    message: "",
+  });
 
   const validateEmail = (email) => {
-    const regex = new RegExp('^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$');
+    const regex = new RegExp("^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$");
     if (!regex.test(email)) {
-      setEmailError('Please enter a valid email address.');
+      setEmailError("Please enter a valid email address.");
       return false;
     } else {
-      setEmailError('');
+      setEmailError("");
       return true;
     }
   };
@@ -47,7 +53,13 @@ function EditProfile() {
 
   const handleUpdate = async (event) => {
     event.preventDefault();
-    setEmailError(email === '' ? 'Please enter your email.' : !validateEmail(email) ? 'Email must be in the format something@mail.com.' : '');
+    setEmailError(
+      email === ""
+        ? "Please enter your email."
+        : !validateEmail(email)
+        ? "Email must be in the format something@mail.com."
+        : ""
+    );
 
     const form = new FormData();
     form.append("id", userData.id);
@@ -61,14 +73,24 @@ function EditProfile() {
       console.log(`${key}: ${value}`);
     }
 
-    try{
-       updateProfile(form);
+    try {
+      updateProfile(form);
+      setIsModalOpen(true);
+      setModalContent({
+        title: "Success!",
+        message: "Ad details have been successfully changed!",
+      });
+    } catch (error) {
+      setIsModalOpen(true);
+      setModalContent({
+        title: "Error!",
+        message: "An error occurred while deleting your ad. Please try again",
+      });
     }
-    catch(error){
-      
-    }
-    };
- 
+    setTimeout(() => {
+      navigate("/profile");
+    }, 3000);
+  };
 
   const handleChangeProfilePic = () => {
     setShowUploadModal(true);
@@ -90,12 +112,21 @@ function EditProfile() {
     setShowDropdown(false);
   };
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   return (
     <div className="flex">
       <Sidebar />
       <div className="flex-1 lg:ml-28">
         <div className="min-h-screen p-6  bg-gray-50 flex items-center justify-center lg:pb-0 pb-24">
           <div className="container max-w-screen-lg mx-auto">
+            <Modall
+              isOpen={isModalOpen}
+              onClose={closeModal}
+              title={modalContent.title}
+              message={modalContent.message}
+            />
             <div className="flex justify-between items-center">
               <h2 className="font-semibold text-2xl text-custom-blue pb-3">
                 Edit Profile

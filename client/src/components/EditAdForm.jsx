@@ -60,7 +60,7 @@ function EditAdForm() {
     const categoryMapping = {
       Electronics: "EL",
       Clothing: "CL",
-      "Garden": "GA",
+      Garden: "GA",
       "Sports & Outdoors": "SP",
       "Games & Hobbies": "GH",
       "Music & Instruments": "MU",
@@ -93,7 +93,7 @@ function EditAdForm() {
     };
     setLocation(locationMapping[ad.location]);
   }, [ad.location]);
-  
+
   useEffect(() => {
     if (ad.images) {
       const initialImages = ad.images.map((image) => ({
@@ -101,22 +101,23 @@ function EditAdForm() {
         existing: true, // Mark as existing image
       }));
       // Ensure we're not adding images that are already in state
-      const nonDuplicateImages = initialImages.filter(newImage => 
-        !existingImages.some(existingImage => existingImage.id === newImage.id)
+      const nonDuplicateImages = initialImages.filter(
+        (newImage) =>
+          !existingImages.some(
+            (existingImage) => existingImage.id === newImage.id
+          )
       );
       setExistingImages([...existingImages, ...nonDuplicateImages]);
       // Update image previews in a similar manner to avoid duplication
-      setImagePreviews(prevPreviews => {
-        const newPreviews = nonDuplicateImages.filter(newImage => 
-          !prevPreviews.some(preview => preview.id === newImage.id)
+      setImagePreviews((prevPreviews) => {
+        const newPreviews = nonDuplicateImages.filter(
+          (newImage) =>
+            !prevPreviews.some((preview) => preview.id === newImage.id)
         );
         return [...prevPreviews, ...newPreviews];
       });
     }
   }, [ad.images]);
-
-
-
 
   //handle form submission
   const handleSubmit = async (event) => {
@@ -201,21 +202,27 @@ function EditAdForm() {
   const handleDelete = async (event) => {
     const form = new FormData();
     form.append("pk", ad.id);
-    form.append('status', 'DE');
+    form.append("status", "DE");
     const config = {
-      headers: { 
+      headers: {
         Authorization: "Token " + apiToken,
         "Content-Type": "multipart/form-data",
-      }
+      },
     };
     try {
       const response = await axios.post("/api/ads/delete/", form, config);
       console.log(response?.data);
-      navigate("/profile");
+      setIsModalOpen(true);
+      setModalContent({
+        title: "Success!",
+        message: "Ad have been successfully deleted!",
+      });
+      setTimeout(() => {
+        navigate("/profile");
+      }, 2000);
     } catch (error) {
       console.error("Error:", error);
     }
-    
   };
 
   const fetchDescription = async () => {
@@ -309,26 +316,26 @@ function EditAdForm() {
                         onChange={(e) => setDescription(e.target.value)}
                       />
                       <button
-                      type="button"
-                      className="bg-emerald-400  hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-2xl cursor-pointer absolute bottom-5 right-5 mt-2 mr-2 flex items-center"
-                      onClick={fetchDescription}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        className="w-6 h-6 mr-1"
+                        type="button"
+                        className="bg-emerald-400  hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-2xl cursor-pointer absolute bottom-5 right-5 mt-2 mr-2 flex items-center"
+                        onClick={fetchDescription}
                       >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"
-                        />
-                      </svg>
-                      Write with AI
-                    </button>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          className="w-6 h-6 mr-1"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"
+                          />
+                        </svg>
+                        Write with AI
+                      </button>
                     </div>
 
                     <div className="md:col-span-3">
@@ -505,11 +512,10 @@ function EditAdForm() {
                       />
                     </div>
                     <div className="md:col-span-2 text-right pt-4">
-                      <button className=" bg-red-500 text-white font-bold py-2 px-4 rounded cursor-pointer"
-                      type="button"
-                      onClick={() =>
-                        handleDelete()
-                      }
+                      <button
+                        className=" bg-red-500 text-white font-bold py-2 px-4 rounded cursor-pointer"
+                        type="button"
+                        onClick={() => handleDelete()}
                       >
                         Delete Ad
                       </button>
