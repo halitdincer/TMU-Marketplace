@@ -56,7 +56,7 @@ function EditAdForm() {
       Clothing: "CL",
       "Home & Garden": "HM",
       "Sports & Outdoors": "SP",
-      "Games & Hobbies": "GA",
+      "Games & Hobbies": "GH",
       "Music & Instruments": "MU",
       "Furniture & Appliances": "FA",
       "Beauty & Personal Care": "BE",
@@ -126,7 +126,9 @@ function EditAdForm() {
     form.append("type", type);
     form.append("category", category);
     form.append("location", location);
-
+    for (let [key, value] of form.entries()) {
+      console.log(`${key}: ${value}`);
+    }
     try {
       const response = await axios.put("/api/ads/edit/", form, config);
       console.log(response.data);
@@ -295,7 +297,7 @@ function EditAdForm() {
                           <option value="CL">Clothing</option>
                           <option value="HM">Home & Garden</option>
                           <option value="SP">Sports & Outdoors</option>
-                          <option value="GA">Games & Hobbies</option>
+                          <option value="GH">Games & Hobbies</option>
                           <option value="MU">Music & Instruments</option>
                           <option value="FA">Furniture & Appliances</option>
                           <option value="BE">Beauty & Personal Care</option>

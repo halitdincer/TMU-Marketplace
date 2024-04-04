@@ -98,7 +98,9 @@ function ProfilePage() {
                   src={userData.profile_picture}
                   alt={userData.username}
                 />
-                <h5 className="mb-1 text-2xl font-medium text-gray-900 ">
+               
+                <p className="text-md text-gray-700">
+
                   {userData.first_name} {userData.last_name}
                 </h5>
 
