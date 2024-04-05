@@ -1,3 +1,4 @@
+
 import React, { useContext, useState, useEffect } from "react";
 import Sidebar from "components/Sidebar";
 import { AuthContext } from "components/AuthProvider";
@@ -7,10 +8,12 @@ import { XMarkIcon } from "@heroicons/react/20/solid";
 import Modal from "react-modal";
 import Modall from "components/Modal";
 
+// EditProfile component for editing user profile details.
 function EditProfile() {
   const { userData, updateProfile, apiToken } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
+
   // Use state to manage form data
   const [formState, setFormState] = useState({
     //profilePic: userData.profilePic,
@@ -20,6 +23,7 @@ function EditProfile() {
     email: userData.email,
     password: "",
   });
+
   useEffect(() => {
     Modal.setAppElement("#root"); // Assuming '#root' is the ID of your root element
   }, []);
@@ -33,6 +37,11 @@ function EditProfile() {
     message: "",
   });
 
+  /**
+   * Validates the email format.
+   * @param {string} email - The email to be validated.
+   * @returns {boolean} - Returns true if the email is valid, false otherwise.
+   */
   const validateEmail = (email) => {
     const regex = new RegExp("^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$");
     if (!regex.test(email)) {
@@ -44,6 +53,10 @@ function EditProfile() {
     }
   };
 
+  /**
+   * Handles the change event for form inputs.
+   * @param {object} event - The change event object.
+   */
   const handleChange = (event) => {
     setFormState({
       ...formState,
@@ -51,6 +64,10 @@ function EditProfile() {
     });
   };
 
+  /**
+   * Handles the update profile event.
+   * @param {object} event - The submit event object.
+   */
   const handleUpdate = async (event) => {
     event.preventDefault();
     setEmailError(
@@ -92,29 +109,43 @@ function EditProfile() {
     }, 3000);
   };
 
+  // Handles the change profile picture event.
+
   const handleChangeProfilePic = () => {
     setShowUploadModal(true);
     setShowDropdown(false); // Close dropdown when opening modal
   };
 
+  // Handles the close modal event.
   const handleCloseModal = () => {
     setShowUploadModal(false);
   };
 
+  /**
+   * Handles the upload profile picture event.
+   * @param {object} e - The file input event object.
+   */
   const handleUploadProfilePic = (e) => {
     console.log("Uploading profile picture...", e.target.files[0]);
     setShowUploadModal(false);
   };
 
+  /**
+   * Handles the delete profile picture event.
+   */
   const handleDeleteProfilePic = () => {
     console.log("Deleting profile picture...");
     // Close dropdown after action
     setShowDropdown(false);
   };
 
+  /**
+   * Closes the modal.
+   */
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
   return (
     <div className="flex">
       <Sidebar />
@@ -353,6 +384,7 @@ function EditProfile() {
                           to="/change-password"
                           className=" hover:text-indigo-600 underline text-custom-blue font-bold py-2  rounded cursor-pointer"
                         >
+                          {/* Leads user to  change password page */}
                           <h7>Change Password</h7>
                         </Link>
                       </div>

@@ -1,3 +1,4 @@
+// Importing Libraries, Frameworks and React Components
 import React, { useState, useEffect, useContext, useRef } from "react";
 import Sidebar from "components/Sidebar";
 import ChatsList from "components/ChatsList";
@@ -5,21 +6,30 @@ import { useParams, Link } from "react-router-dom";
 import ChatWindow from "components/ChatWindow";
 import { AuthContext } from "components/AuthProvider";
 
+/**
+ * Inbox page component.
+ * Displays the user's inbox with chats and messages.
+ */
 function InboxPage() {
-
+  // Get the conversantId from the URL params
   let { conversantId } = useParams();
+
+  // State variables
   const [messages, setMessages] = useState([]);
-  const { userData, apiToken } = useContext(AuthContext); 
+  const { userData, apiToken } = useContext(AuthContext);
   const [isMobile, setIsMobile] = useState(false);
 
   // Initialize a ref for the WebSocket connection
-  const ws = useRef(null);  
+  const ws = useRef(null);
 
-  // Effect for WebSocket connection
+  /**
+   * Effect for WebSocket connection.
+   * Establishes a WebSocket connection and handles incoming messages.
+   */
   useEffect(() => {
     // WebSocket connection setup
     ws.current = new WebSocket(`ws://localhost:8000/chat/?token=${apiToken}`);
-  
+
     ws.current.onopen = () => console.log('WebSocket Connected');
     ws.current.onmessage = (event) => {
       const messageData = JSON.parse(event.data);
@@ -29,17 +39,20 @@ function InboxPage() {
     };
     ws.current.onerror = (error) => console.error('WebSocket Error: ', error);
     ws.current.onclose = () => console.log('WebSocket Disconnected');
-  
+
     const handleClose = () => ws.current.close();
     window.addEventListener('beforeunload', handleClose);
-  
+
     return () => {
       ws.current.close();
       window.removeEventListener('beforeunload', handleClose);
     };
   }, [apiToken]); // Add dependencies as needed
-  
-  // Effect to resize on mobile
+
+  /**
+   * Effect to resize on mobile.
+   * Updates the isMobile state based on the window width.
+   */
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 640);
@@ -56,7 +69,10 @@ function InboxPage() {
     };
   }, []);
 
-  // Effect to fetch all messages
+  /**
+   * Effect to fetch all messages.
+   * Fetches all messages from the server and updates the messages state.
+   */
   useEffect(() => {
     const fetchMessages = async () => {
       try {
@@ -65,25 +81,28 @@ function InboxPage() {
             'Authorization': `Token ${apiToken}`,
           },
         });
-  
+
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-  
+
         const messages = await response.json();
-  
+
         // Set the fetched messages to the state
         setMessages(messages);
-  
+
       } catch (error) {
         console.error("There was a problem with the fetch operation:", error);
       }
     };
-  
+
     fetchMessages();
   }, [apiToken]); // Depend on apiToken to re-fetch messages if it changes
-  
 
+  /**
+   * Sends a message via WebSocket.
+   * @param {string} messageContent - The content of the message to send.
+   */
   const sendMessage = (messageContent) => {
     if (ws.current && ws.current.readyState === WebSocket.OPEN) {
       const messageData = {
@@ -91,12 +110,13 @@ function InboxPage() {
         message: messageContent,
       };
       ws.current.send(JSON.stringify(messageData));
-      console.log(` Sent Message: ${JSON.stringify(messageData)}`) ;
+      console.log(` Sent Message: ${JSON.stringify(messageData)}`);
     } else {
       console.error('WebSocket is not connected.');
     }
   };
 
+  // Filter messages based on the selected conversantId
   const filteredMessages = messages.filter((m) =>
     String(m.sender) === String(conversantId) || String(m.receiver) === String(conversantId)
   );

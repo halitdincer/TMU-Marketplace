@@ -1,9 +1,14 @@
+// Importing Libraries, Frameworks and React Components
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "components/AuthProvider";
 import axios from 'axios';
 import Logo from "../assets/LogoBigNoBg.svg";
 
+/**
+ * Login page component.
+ * Allows users to log in with their username and password.
+ */
 function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -15,6 +20,10 @@ function LoginPage() {
   let navigate = useNavigate();
 
   useEffect(() => {
+    /**
+     * Event handler for window resize event.
+     * Updates the isMobile state based on the window width.
+     */
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1024); // Adjust this value based on your mobile breakpoint
     };
@@ -29,6 +38,13 @@ function LoginPage() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  /**
+   * Handles the login form submission.
+   * Attempts to log in with the provided username and password.
+   * If successful, navigates to the home page.
+   * If unsuccessful, displays an error message.
+   * @param {Event} event - The form submission event.
+   */
   const handleLogin = async (event) => {
     event.preventDefault();
   
@@ -66,17 +82,18 @@ function LoginPage() {
       }
     }
   };
-  const navigateToHome = () => {
+
+  const navigateToHome = () => { // Navigates to the home page.
     navigate('/');
   };
 
-  const navigateToSignUp = () => {
+  const navigateToSignUp = () => { // Navigates to the sign up page.
     navigate("/signup");
   };
 
   return (
     <>
-      {/* Mobile-specific layout and components  added in next line*/}
+      {/* Mobile-specific layout and components */}
       <div className={`flex items-center justify-center h-screen bg-gray-100 ${isMobile ? 'px-4 lg:px-20' : ''}`}>
 
         <div className="w-full max-w-md">
@@ -86,7 +103,6 @@ function LoginPage() {
           >
             {/* Logo */}
             <div className="flex justify-center">
-              {/* Mobile-specific layout and components  added in next line*/}
               <a href="/">
                 {isMobile ? (
                   <img src={Logo} alt="Logo" className="w-auto h-32" />
@@ -96,7 +112,7 @@ function LoginPage() {
               </a>
             </div>
 
-
+            {/* Form fields */}
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"

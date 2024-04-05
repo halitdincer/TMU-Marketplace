@@ -1,9 +1,18 @@
+// Importint the necessary modules and the logo image
 import React, { useState } from 'react';
 import logo from '../images/logo.jpg';
 
+/**
+ * Renders the Forgot Password page.
+ * Allows users to request a password reset by entering their email address.
+ */
 function ForgotPasswordPage() {
   const [email, setemail] = useState('');
 
+  /**
+   * Handles the password reset request.
+   * @param {Event} event - The form submit event.
+   */
   const handleResetRequest = (event) => {
     event.preventDefault();
     // Handle the password reset logic here
@@ -31,7 +40,7 @@ function ForgotPasswordPage() {
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
               E-mail address
             </label>
-            <input
+ s            <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="email"
               type="text"
