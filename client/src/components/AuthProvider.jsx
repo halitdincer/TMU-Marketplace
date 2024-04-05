@@ -10,11 +10,12 @@ export const AuthProvider = ({ children }) => {
   const [apiToken, setApiToken] = useState(localStorage.getItem("apiToken"));
   const [userData, setUserData] = useState(JSON.parse(localStorage.getItem("userData")));
 
+
   // Function to handle login
   async function login(username, password) {
     try {
       // Fetch API for login with username and password
-      const response = await fetch("http://127.0.0.1:8000/api/users/login", {
+      const response = await fetch("/api/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -48,7 +49,7 @@ export const AuthProvider = ({ children }) => {
       if (!apiToken) throw new Error("No API token found");
 
       // Fetch API for logout with the token
-      const response = await fetch("http://127.0.0.1:8000/api/users/logout", {
+      const response = await fetch("/api/users/logout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

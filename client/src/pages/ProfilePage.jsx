@@ -46,7 +46,7 @@ function ProfilePage() {
   useEffect(() => {
     const fetchAds = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/ads/", {
+        const response = await axios.get("/api/ads/", {
           params: {
             owned_by: userData.username,
           },

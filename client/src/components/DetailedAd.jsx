@@ -44,7 +44,7 @@ function DetailedAd() {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/api/messages/send/", {
+      const response = await fetch("/api/messages/send/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
