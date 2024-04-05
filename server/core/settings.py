@@ -157,7 +157,7 @@ REACT_APP_STATIC_PATH = os.path.abspath(os.path.join(BASE_DIR, '..', 'client', '
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = REACT_APP_STATIC_PATH
 
 # Media files (CSS, JavaScript, Images)
 MEDIA_URL = '/media/'

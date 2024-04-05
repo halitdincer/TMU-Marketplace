@@ -14,6 +14,6 @@ from chat.consumers import ChatConsumer
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
     "websocket": URLRouter([
-        path("chat/", ChatConsumer.as_asgi()),
+        path("api/chat/", ChatConsumer.as_asgi()),
     ])
 })
