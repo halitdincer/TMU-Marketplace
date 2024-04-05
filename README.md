@@ -44,9 +44,9 @@ Welcome to TMU Marketplace - a advertisements platform tailored specifically for
 
 Before running the server, you need to make sure the database schema is up to date. This is done through migrations.
    
-1. **Navigate to the src Directory**
+1. **Navigate to the server Directory**
    ```bash
-   cd src
+   cd server
    ```
 
 2. **Create Migrations**
