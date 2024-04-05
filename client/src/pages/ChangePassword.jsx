@@ -1,3 +1,4 @@
+// Importing necessary components, modules and libraries
 import React, { useState, useEffect, useContext } from "react";
 import Logo from "../assets/LogoBigNoBg.svg";
 import { useNavigate } from "react-router-dom";
@@ -5,6 +6,7 @@ import axios from "axios";
 import { AuthContext } from "components/AuthProvider"; // replace 'path-to-AuthProvider' with the actual path to AuthProvider.jsx
 import Modal from "components/Modal";
 
+// Component for changing the user's password.
 function ChangePassword() {
   const { userData, updatePassword } = useContext(AuthContext);
   const [password, setPassword] = useState("");
@@ -18,6 +20,10 @@ function ChangePassword() {
     message: "",
   });
 
+  /**
+   * Hook that runs on component mount and handles window resize event.
+   * Sets the isMobile state based on the window width.
+   */
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1024); // Adjust this value based on your mobile breakpoint
@@ -33,6 +39,11 @@ function ChangePassword() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  /**
+   * Validates the password based on the given criteria.
+   * @param {string} pwd - The password to validate.
+   * @returns {boolean} - True if the password is valid, false otherwise.
+   */
   const validatePassword = (pwd) => {
     const regex = new RegExp(
       "(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()]).{8,}"
@@ -48,6 +59,11 @@ function ChangePassword() {
     }
   };
 
+  /**
+   * Handles the confirmation of the password.
+   * @param {object} e - The event object.
+   * @returns {boolean} - True if the password is confirmed, false otherwise.
+   */
   const handleConfirmPassword = (e) => {
     if (confirmPassword === "") {
       matchPasswordError("Please confirm your password.");
@@ -60,6 +76,10 @@ function ChangePassword() {
     }
   };
 
+  /**
+   * Handles the password change form submission.
+   * @param {object} event - The form submission event.
+   */
   const handlePasswordChange = async (event) => {
     event.preventDefault();
     handleConfirmPassword();
@@ -71,13 +91,13 @@ function ChangePassword() {
     const isPasswordValid = validatePassword(password);
     const isConfirmPasswordValid = handleConfirmPassword();
 
-    //Send new password to Authprovider to send request
+    // Send new password to Authprovider to send request
     if (isPasswordValid && isConfirmPasswordValid) {
       updatePassword(JSON.stringify({ username: userData.username, password }));
       setIsModalOpen(true);
       setModalContent({
         title: "Success!",
-        message: "Your password have been successfully changed!",
+        message: "Your password has been successfully changed!",
       });
       setTimeout(() => {
         navigateToProfile();
@@ -86,14 +106,17 @@ function ChangePassword() {
   };
 
   const navigate = useNavigate();
-  // Function to handle navigation to the home page
+
+  // Function to handle navigation to the profile page.
   const navigateToProfile = () => {
     navigate("/profile");
   };
 
+  // Closes the modal.
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
   return (
     <div
       className={`flex items-center justify-center h-screen bg-gray-100 ${

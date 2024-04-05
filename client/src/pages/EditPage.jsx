@@ -1,3 +1,10 @@
+/**
+ * EditPage component represents the page for editing an advertisement.
+ * @param {function} onAdSubmit - The function to be called when the ad is submitted.
+ * @returns {JSX.Element} The JSX element representing the EditPage component.
+ */
+
+// Importing necessary components
 import React from "react";
 import Sidebar from "components/Sidebar";
 import Header from "components/Header";

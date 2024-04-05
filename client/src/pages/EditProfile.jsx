@@ -1,4 +1,9 @@
+/**
+ * EditProfile component represents the page for editing profile/user information of the user logged in.
+ * @returns {JSX.Element} The JSX element representing the EditProfile component.
+*/
 
+// Importing necessary components and libraries
 import React, { useContext, useState, useEffect } from "react";
 import Sidebar from "components/Sidebar";
 import { AuthContext } from "components/AuthProvider";
