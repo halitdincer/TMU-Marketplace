@@ -3,14 +3,15 @@ from rest_framework.fields import ListField
 from .models import Ad, AdImage, AdReport
 
 
-class AdImageSerializer(serializers.ModelSerializer):
+class AdImageSerializer(serializers.ModelSerializer): # Serializer for the AdImage model.
     image_url = serializers.ImageField(source='image', read_only=True)
 
     class Meta:
         model = AdImage
         fields = ['id', 'image_url', 'uploaded_at']
 
-class AdSerializer(serializers.ModelSerializer):
+
+class AdSerializer(serializers.ModelSerializer): # Serializer for the Ad model.
     owned_by = serializers.SerializerMethodField()
     owned_by_id = serializers.SerializerMethodField()
     owned_by_profile_picture = serializers.SerializerMethodField()
@@ -24,35 +25,37 @@ class AdSerializer(serializers.ModelSerializer):
         model = Ad
         fields = ['id', 'title', 'description', 'category', 'type', 'location', 'price', 'created_at', 'owned_by', 'owned_by_id', 'owned_by_profile_picture', 'images', 'status']
 
-    def get_owned_by(self, obj):
+    def get_owned_by(self, obj): # Get the username of the owner of the ad.
+
         return obj.owned_by.username
     
-    def get_owned_by_id(self, obj):
+    def get_owned_by_id(self, obj): # Get the ID of the owner of the ad.
         return obj.owned_by.id
     
-    def get_owned_by_profile_picture(self, obj):
+    def get_owned_by_profile_picture(self, obj): # Get the profile picture URL of the owner of the ad.
         try:
             return obj.owned_by.profile_picture.url
         except ValueError:
             return None
     
-    def get_category(self, obj):
+    def get_category(self, obj): # Get the display value of the category field.
         return dict(Ad.CATEGORY_CHOICES)[obj.category]
     
-    def get_type(self, obj):
+    def get_type(self, obj): # Get the display value of the type field.
         return dict(Ad.TYPE_CHOICES)[obj.type]
     
-    def get_location(self, obj):
+    def get_location(self, obj): # Get the display value of the location field.
         return dict(Ad.LOCATION_CHOICES)[obj.location]
     
-    def get_status(self, obj):
+    def get_status(self, obj): # Get the display value of the status field.
         return dict(Ad.STATUS_CHOICES)[obj.status]
     
-    def get_images(self, obj):
+    def get_images(self, obj): # Get the serialized data of the ad images.
         images = obj.images.all()
         return AdImageSerializer(images, many=True, context=self.context).data
 
-class AdFormSerializer(serializers.ModelSerializer):
+
+class AdFormSerializer(serializers.ModelSerializer): # Serializer for the Ad model used in form submissions.
     images = ListField(
         child=serializers.FileField(),
         required=False,
@@ -66,7 +69,7 @@ class AdFormSerializer(serializers.ModelSerializer):
             'images': {'required': False},
         }
 
-    def create(self, validated_data):
+    def create(self, validated_data): # Create a new ad instance with the provided validated data.
         images_data = validated_data.pop('images', [])
         ad = Ad.objects.create(**validated_data)
 
@@ -75,8 +78,7 @@ class AdFormSerializer(serializers.ModelSerializer):
 
         return ad
     
-    def update(self, instance, validated_data):
-
+    def update(self, instance, validated_data): # Update an existing ad instance with the provided validated data.
         # Debug: Print validated data
         print("Validated data:", validated_data)
 
@@ -106,18 +108,20 @@ class AdFormSerializer(serializers.ModelSerializer):
 
         return instance
 
-class AdDeleteSerializer(serializers.ModelSerializer):
+
+class AdDeleteSerializer(serializers.ModelSerializer): # Serializer for deleting an ad.
     class Meta:
         model = Ad
         fields = ['id', 'status']
 
-class AdReportSerializer(serializers.ModelSerializer):
+
+class AdReportSerializer(serializers.ModelSerializer): # Serializer for the AdReport model.
     class Meta:
         model = AdReport
         fields = ['id', 'ad', 'reported_by', 'report_reason', 'other_details', 'reported_at']
         read_only_fields = ['reported_by', 'reported_at']
 
-    def create(self, validated_data):
+    def create(self, validated_data): # Create a new ad report instance with the provided validated data.
         if 'other_details' not in validated_data:
             validated_data['other_details'] = ''
         ad_report = AdReport.objects.create(**validated_data)

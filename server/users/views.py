@@ -14,12 +14,12 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import FormParser
 
-class CustomUserListView(ListAPIView):
+class CustomUserListView(ListAPIView): 
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     
 @api_view(['POST'])
-def login(request):
+def login(request): # Login view to authenticate users and return auth token
     username = request.data.get('username')
     password = request.data.get('password')
     try:
@@ -41,7 +41,7 @@ def login(request):
     return Response({"Authorization": "Token " + token.key, "user": serializer.data})
 
 @api_view(['POST'])
-def signup(request):
+def signup(request): # Signup view to create a new user and return auth token
     # Check for uniqueness first
     username = request.data.get('username')
     if CustomUser.objects.filter(username=username).exists():
@@ -70,7 +70,7 @@ def signup(request):
 @api_view(['PUT'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def updateUser(request):
+def updateUser(request): # Update user profile view
     # Get the current user and update the fields with the provided data
     user = CustomUser.objects.get(id = request.data['id'])
     serializer = CustomProfileSerializer(user, request.data)
@@ -85,7 +85,8 @@ def updateUser(request):
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def updatePassword(request):
+def updatePassword(request): # Update user password view
+    # Check that the old password is correct
     # Get the current user and update the fields with the provided data
     user = CustomUser.objects.get(username = request.data['username'])
     password = request.data['password']
@@ -103,7 +104,7 @@ def updatePassword(request):
 @api_view(["POST"])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def logout(request):
+def logout(request): # Logout view to delete the user's auth token
     if request.method == "POST":
         #delete request user's auth token
         request.user.auth_token.delete()
@@ -112,6 +113,6 @@ def logout(request):
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def test_token(request):
+def test_token(request): # Authentication test case for checking if a valid token is present in header
     #authentication test case
     return Response("passed!")

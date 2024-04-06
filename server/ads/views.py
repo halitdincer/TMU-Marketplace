@@ -14,9 +14,11 @@ from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from django.shortcuts import get_object_or_404
 
 class AdListView(ListAPIView):
+    # API view for retrieving a list of ads based on filters.
     serializer_class = AdSerializer
 
     def get_queryset(self):
+        # Get the queryset of ads based on the provided filters.
         queryset = Ad.objects.all()
         category = self.request.query_params.get('category')
         location = self.request.query_params.get('location')
@@ -39,19 +41,22 @@ class AdListView(ListAPIView):
         if max_price is not None:
             queryset = queryset.filter(price__lte=max_price)
 
-        #exclude 'deleted' datasets in final queryset
+        # Exclude 'deleted' datasets in the final queryset
         return queryset.exclude(status='DE')
 
 class AdDetailView(RetrieveAPIView):
+    # API view for retrieving a single ad.
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
 
 class CreateAdView(APIView):
+    # API view for creating a new ad.
     parser_classes = (MultiPartParser, FormParser)
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
+        # Create a new ad based on the provided form data.
         serializer = AdFormSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             ad = serializer.save(owned_by=request.user)
@@ -60,13 +65,14 @@ class CreateAdView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class EditAdView(APIView):
+    # API view for editing an existing ad.
     parser_classes = (MultiPartParser, FormParser)
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def put(self, request, *args, **kwargs):
-        #user = request.user  #from permission/auth classes
-        ad = Ad.objects.get(pk = request.data["pk"])   
+        # Update an existing ad based on the provided form data.
+        ad = Ad.objects.get(pk=request.data["pk"])   
         adSerializer = AdFormSerializer(ad, data=request.data, context={'request': request})
         if adSerializer.is_valid():
             adSerializer.save()
@@ -74,13 +80,14 @@ class EditAdView(APIView):
         return Response(adSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class DeleteAdView(APIView):
+    # API view for deleting an ad.
     parser_classes = (MultiPartParser, FormParser)
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        #user = request.user  #from permission/auth classes
-        ad = Ad.objects.get(pk = request.data["pk"])   
+        # Delete an ad based on the provided ad ID.
+        ad = Ad.objects.get(pk=request.data["pk"])   
         serializer = AdDeleteSerializer(ad, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -88,9 +95,11 @@ class DeleteAdView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class CreateAdReportView(APIView):
+    # API view for creating a report for an ad.
     parser_classes = [JSONParser]
 
     def post(self, request, *args, **kwargs):
+        # Create a report for an ad based on the provided data.
         # Extract the ad ID from the URL parameters
         ad_id = kwargs.get('pk')
 
