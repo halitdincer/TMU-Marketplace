@@ -2,6 +2,21 @@ from django.db import models
 from users.models import CustomUser
 
 class Ad(models.Model):
+    """
+    Represents an advertisement.
+
+    Attributes:
+        title (str): The title of the advertisement.
+        description (str): The description of the advertisement.
+        type (str): The type of the advertisement. Choices are 'IW' (Items Wanted), 'IS' (Items for Sale), 'AS' (Academic Services).
+        category (str): The category of the advertisement.
+        location (str): The location of the advertisement.
+        status (str): The status of the advertisement. Choices are 'SO' (Sold), 'NS' (Not Sold), 'DE' (Deleted).
+        price (Decimal): The price of the advertisement.
+        created_at (datetime): The date and time when the advertisement was created.
+        owned_by (CustomUser): The user who owns the advertisement.
+    """
+
     TYPE_CHOICES = [
         ('IW', 'Items Wanted'),
         ('IS', 'Items for Sale'),
@@ -65,7 +80,7 @@ class Ad(models.Model):
     class Meta:
         ordering = ['-created_at']
 
-    def __str__(self):
+    def __str__(self): # Returns a string representation of the advertisement.
         return self.title
     
 class AdImage(models.Model):
