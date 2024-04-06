@@ -28,10 +28,7 @@ DEBUG = True
 
 ASGI_APPLICATION = 'core.asgi.application'
 
-ALLOWED_HOSTS = [
-    '127.0.0.1', 
-    'localhost'
-]
+ALLOWED_HOSTS = ['*']
 
 if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
@@ -160,10 +157,7 @@ REACT_APP_STATIC_PATH = os.path.abspath(os.path.join(BASE_DIR, '..', 'client', '
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
-
-STATICFILES_DIRS = [
-    REACT_APP_STATIC_PATH,
-]
+STATIC_ROOT = REACT_APP_STATIC_PATH
 
 # Media files (CSS, JavaScript, Images)
 MEDIA_URL = '/media/'

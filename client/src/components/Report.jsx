@@ -28,7 +28,7 @@ function Report() {
     event.preventDefault();
     let headers = {'Content-Type': 'application/json'};
     if (apiToken) {headers['Authorization'] = `Token ${apiToken}`;}
-    fetch(`http://127.0.0.1:8000/api/ads/report/${adId}/`, {
+    fetch(`/api/ads/report/${adId}/`, {
       method: 'POST',
       headers: headers,
       body: JSON.stringify({

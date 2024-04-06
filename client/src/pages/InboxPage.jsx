@@ -19,6 +19,8 @@ function InboxPage() {
   const { userData, apiToken } = useContext(AuthContext);
   const [isMobile, setIsMobile] = useState(false);
 
+  const WS_URL = process.env.REACT_APP_WS_URL;
+
   // Initialize a ref for the WebSocket connection
   const ws = useRef(null);
 
@@ -28,8 +30,9 @@ function InboxPage() {
    */
   useEffect(() => {
     // WebSocket connection setup
-    ws.current = new WebSocket(`ws://localhost:8000/chat/?token=${apiToken}`);
 
+    ws.current = new WebSocket(`${WS_URL}/chat/?token=${apiToken}`);
+    
     ws.current.onopen = () => console.log('WebSocket Connected');
     ws.current.onmessage = (event) => {
       const messageData = JSON.parse(event.data);
@@ -76,7 +79,7 @@ function InboxPage() {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/messages/`, {
+        const response = await fetch(`/api/messages/`, {
           headers: {
             'Authorization': `Token ${apiToken}`,
           },
