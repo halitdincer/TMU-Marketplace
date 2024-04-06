@@ -4,7 +4,12 @@ import axios from "axios";
 // Context for authentication-related data, preventing prop-drilling
 export const AuthContext = createContext();
 
-// Component responsible for managing authentication state and providing authentication-related functions to its children
+/**
+ * Authentication Provider component responsible for managing authentication state and providing authentication-related functions to its children
+ * @param {Object} props - The component props
+ * @param {React.ReactNode} props.children - The child components to be wrapped by the AuthProvider
+ * @returns {React.ReactNode} The wrapped child components
+ */
 export const AuthProvider = ({ children }) => {
 
   const [apiToken, setApiToken] = useState(localStorage.getItem("apiToken"));

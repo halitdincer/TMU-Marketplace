@@ -6,6 +6,10 @@ import { XMarkIcon } from "@heroicons/react/20/solid";
 import Modal from "./Modal";
 import OpenAI from "openai";
 
+/**
+ * Component for creating an ad form.
+ * @returns {JSX.Element} CreateAdForm component.
+ */
 function CreateAdForm() {
   // Use useState to manage multiple images
   const navigate = useNavigate(); // Hook for navigation
@@ -17,7 +21,7 @@ function CreateAdForm() {
   const [category, setCategory] = useState("");
   const [location, setLocation] = useState("");
 
-  const { apiToken } = useContext(AuthContext); //  Token context based on logged in user
+  const { apiToken } = useContext(AuthContext); // Token context based on logged in user
   const [imagePreviews, setImagePreviews] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,15 +30,19 @@ function CreateAdForm() {
     message: "",
   });
 
-  //Create Openai instance 
+  // Create Openai instance
   const openai = new OpenAI({
     apiKey: process.env.REACT_APP_OPENAI_API_KEY,
     dangerouslyAllowBrowser: true,
   });
 
+  /**
+   * Handles the form submission.
+   * @param {Event} event - The form submit event.
+   */
   const handleSubmit = async (event) => {
     event.preventDefault();
-    //Form header configuration
+    // Form header configuration
     const config = {
       headers: {
         Authorization: "Token " + apiToken,
@@ -71,7 +79,7 @@ function CreateAdForm() {
       setIsModalOpen(true);
       setModalContent({
         title: "Error!",
-        message: "An error occurred while posting your ad.Please try again",
+        message: "An error occurred while posting your ad. Please try again",
       });
     }
 
@@ -80,10 +88,15 @@ function CreateAdForm() {
     }, 3000);
   };
 
+  // Closes the modal.
   const closeModal = () => {
     setIsModalOpen(false);
   };
 
+  /**
+   * Handles the image change event.
+   * @param {Event} e - The image change event.
+   */
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     setImages(files);
@@ -94,15 +107,26 @@ function CreateAdForm() {
     }));
     setImagePreviews(imagePreviews.concat(mappedPreviews));
   };
+
+  /**
+   * Removes an image from the image previews.
+   * @param {string} image_url - The URL of the image to remove.
+   * @param {boolean} isExisting - Indicates if the image is an existing image.
+   */
   const removeImage = (image_url, isExisting) => {
-    const imageToRemove = imagePreviews.find(image => image.image_url === image_url);
+    const imageToRemove = imagePreviews.find(
+      (image) => image.image_url === image_url
+    );
     if (!imageToRemove) return; // If no image found, simply return
 
-    setImages(images.filter(image => image.name !== imageToRemove.name));
-    setImagePreviews(imagePreviews.filter((image) => image.image_url !== image_url));
+    setImages(images.filter((image) => image.name !== imageToRemove.name));
+    setImagePreviews(
+      imagePreviews.filter((image) => image.image_url !== image_url)
+    );
   };
 
-  const fetchDescription = async () => {  // Openai api call for description generation
+  // Fetches the description using the OpenAI API.
+  const fetchDescription = async () => {
     try {
       const completion = await openai.chat.completions.create({
         messages: [

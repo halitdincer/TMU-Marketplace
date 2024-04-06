@@ -1,10 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+/**
+ * Renders a list of chats with their latest messages.
+ * @param {Object[]} messages - The array of messages.
+ * @param {number} conversantId - The ID of the conversant.
+ * @param {number} userId - The ID of the user.
+ * @returns {JSX.Element} The ChatsList component.
+ */
 function ChatsList({ messages, conversantId, userId }) {
   conversantId = parseInt(conversantId);
 
-  // Group messages by conversation and find the latest message in each
+  /**
+   * Groups messages by conversation and finds the latest message in each.
+   * @type {Object}
+   */
   const latestMessages = messages.reduce((acc, message) => {
     // Determine the other party in the conversation
     const key = message.sender === userId ? message.receiver : message.sender;
@@ -20,6 +30,10 @@ function ChatsList({ messages, conversantId, userId }) {
     return acc;
   }, {});
 
+  /**
+   * Maps the latest messages to chat objects.
+   * @type {Object[]}
+   */
   const chats = Object.values(latestMessages).map((message) => ({
     id: message.sender === userId ? message.receiver : message.sender,
     name:

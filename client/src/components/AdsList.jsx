@@ -3,6 +3,12 @@ import AdCard from "./AdCard";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
+/**
+ * Component to display a list of ads.
+ * @param {Object} props - The component props.
+ * @param {string} props.searchQuery - The search query for filtering ads.
+ * @returns {JSX.Element} The AdsList component.
+ */
 function AdsList({ searchQuery }) {
   // State to store the ads
   const [ads, setAds] = useState([]);
@@ -15,12 +21,20 @@ function AdsList({ searchQuery }) {
 
   const location = useLocation();
 
+  /**
+   * Get the query string from the current search parameters.
+   * @returns {string} The query string.
+   */
   const getQueryStringFromSearchParams = () => {
     const searchParams = new URLSearchParams(location.search);
     return searchParams.toString();
   };
-  let categoryQuery = getQueryStringFromSearchParams() ;
+  let categoryQuery = getQueryStringFromSearchParams();
 
+  /**
+   * Filter the ads based on the search query.
+   * @type {Array} The filtered ads.
+   */
   const filteredAds = useMemo(
     () =>
       ads.filter((ad) => {
@@ -62,7 +76,10 @@ function AdsList({ searchQuery }) {
     fetchAds(); // Call the fetch function
   }, [location]); // Empty dependency array means this effect runs once on mount
 
-  // Function to retrieve recently viewed ad IDs from local storage
+  /**
+   * Get the recently viewed ad IDs from local storage.
+   * @returns {Array} The recently viewed ad IDs.
+   */
   const getRecentlyViewedAdIds = () => {
     return JSON.parse(localStorage.getItem("recentlyViewedAdIds")) || [];
   };
@@ -79,34 +96,51 @@ function AdsList({ searchQuery }) {
     return { recentlyViewedAds: recentlyViewed, otherAds: others };
   }, [filteredAds]);
 
+  /**
+   * Get the recommended ads based on category visits.
+   * @returns {Array} The recommended ads.
+   */
   const getRecommendedAds = useMemo(() => {
     // Assuming categoryVisits is an object with categories as keys and visit counts as values
-    const categoryVisits = JSON.parse(localStorage.getItem('categoryVisits')) || {};
-    const totalVisits = Object.values(categoryVisits).reduce((acc, curr) => acc + curr, 0);
-  
+    const categoryVisits =
+      JSON.parse(localStorage.getItem("categoryVisits")) || {};
+    const totalVisits = Object.values(categoryVisits).reduce(
+      (acc, curr) => acc + curr,
+      0
+    );
+
     // Calculate how many ads to select for each category based on its percentage of total visits
-    const adsPerCategory = Object.keys(categoryVisits).reduce((acc, category) => {
-      const countForCategory = Math.round((categoryVisits[category] / totalVisits) * 8); // Calculate proportion out of 12
-      acc[category] = countForCategory;
-      return acc;
-    }, {});
-  
+    const adsPerCategory = Object.keys(categoryVisits).reduce(
+      (acc, category) => {
+        const countForCategory = Math.round(
+          (categoryVisits[category] / totalVisits) * 8
+        ); // Calculate proportion out of 12
+        acc[category] = countForCategory;
+        return acc;
+      },
+      {}
+    );
+
     let recommendedAds = [];
-  
+
     // Iterate over each category and select the corresponding number of ads
-    Object.keys(adsPerCategory).forEach(category => {
-      const adsForCategory = ads.filter(ad => ad.category === category).slice(0, adsPerCategory[category]);
+    Object.keys(adsPerCategory).forEach((category) => {
+      const adsForCategory = ads
+        .filter((ad) => ad.category === category)
+        .slice(0, adsPerCategory[category]);
       recommendedAds = [...recommendedAds, ...adsForCategory];
     });
-  
+
     // If the total recommended ads are less than 12, fill the remaining slots with random ads from other categories
     // Note: This step ensures that there are always 12 recommended ads, even if the selected categories don't have enough listings
     if (recommendedAds.length < 8) {
       const additionalAdsNeeded = 8 - recommendedAds.length;
-      const additionalAds = ads.filter(ad => !recommendedAds.includes(ad)).slice(0, additionalAdsNeeded);
+      const additionalAds = ads
+        .filter((ad) => !recommendedAds.includes(ad))
+        .slice(0, additionalAdsNeeded);
       recommendedAds = [...recommendedAds, ...additionalAds];
     }
-  
+
     return recommendedAds.slice(0, 8); // Ensure that no more than 12 ads are recommended
   }, [ads]);
 
@@ -118,8 +152,6 @@ function AdsList({ searchQuery }) {
     <>
       <div className="bg-white py-6 sm:py-6 pb-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-
-
           {/* Recently Visited Section */}
           {!categoryQuery && searchQuery && recentlyViewedAds.length > 0 && (
             <div>
@@ -152,25 +184,20 @@ function AdsList({ searchQuery }) {
             </div>
           )}
 
-
           {/* Recommended Section */}
-          {!categoryQuery && !searchQuery &&(
+          {!categoryQuery && !searchQuery && (
             <>
-            <h2 className="font-semibold text-2xl mb-1 mt-5">
-              Recommended
-            </h2>
-            <div className="grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 pt-2 sm:mt-5 sm:pt-5 lg:mx-0 lg:max-w-none lg:grid-cols-4">
-              {getRecommendedAds.map((ad) => (
-                <Link to={`/ad/${ad.id}`} key={ad.id}>
-                  <AdCard ad={ad} />
-                </Link>
-              ))}
-            </div>
+              <h2 className="font-semibold text-2xl mb-1 mt-5">Recommended</h2>
+              <div className="grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 pt-2 sm:mt-5 sm:pt-5 lg:mx-0 lg:max-w-none lg:grid-cols-4">
+                {getRecommendedAds.map((ad) => (
+                  <Link to={`/ad/${ad.id}`} key={ad.id}>
+                    <AdCard ad={ad} />
+                  </Link>
+                ))}
+              </div>
             </>
           )}
 
-
-          
           {/* Browse Section */}
           <div>
             <h2 className="font-semibold text-2xl mt-14">Browse</h2>

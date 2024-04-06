@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from "react";
 import LogoSmall from "../assets/LogoSmall.svg";
 
+/**
+ * Header component that displays the navigation bar.
+ * @param {Object} props - The component props.
+ * @param {string} props.title - The title of the header.
+ * @param {Function} props.onSearchSubmit - The function to handle search submission.
+ * @returns {JSX.Element} The rendered Header component.
+ */
 function Header({ title, onSearchSubmit }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    /**
+     * Event handler for window resize event.
+     * Updates the isMobile state based on the window width.
+     */
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1024); // Adjust this value based on your mobile breakpoint
     };
@@ -15,12 +26,17 @@ function Header({ title, onSearchSubmit }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  /**
+   * Event handler for search form submission.
+   * @param {Object} event - The form submission event.
+   */
   const handleSearchSubmit = (event) => {
     event.preventDefault();
     const searchValue = event.target.elements.search.value;
     onSearchSubmit(searchValue);
   };
 
+  // Toggles the menu open/close state.
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };

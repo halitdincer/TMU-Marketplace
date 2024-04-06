@@ -1,8 +1,3 @@
-/**
- * EditProfile component represents the page for editing profile/user information of the user logged in.
- * @returns {JSX.Element} The JSX element representing the EditProfile component.
-*/
-
 // Importing necessary components and libraries
 import React, { useContext, useState, useEffect } from "react";
 import Sidebar from "components/Sidebar";
@@ -13,7 +8,10 @@ import { XMarkIcon } from "@heroicons/react/20/solid";
 import Modal from "react-modal";
 import Modall from "components/Modal";
 
-// EditProfile component for editing user profile details.
+/**
+ * EditProfile component represents the page for editing profile/user information of the user logged in.
+ * @returns {JSX.Element} The JSX element representing the EditProfile component.
+*/
 function EditProfile() {
   const { userData, updateProfile, apiToken } = useContext(AuthContext);
   const [email, setEmail] = useState("");
@@ -90,7 +88,7 @@ function EditProfile() {
     form.append("first_name", formState.first_name);
     form.append("last_name", formState.last_name);
     form.append("password", userData.password);
-    //check form values
+    // Check form values
     for (let [key, value] of form.entries()) {
       console.log(`${key}: ${value}`);
     }

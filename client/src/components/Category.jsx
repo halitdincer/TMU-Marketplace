@@ -9,6 +9,10 @@ import Sidebar from "components/Sidebar";
 import HeaderLoggedIn from "components/HeaderLoggedIn";
 import { AuthContext } from "components/AuthProvider";
 
+/**
+ * Object that maps category codes to their corresponding names.
+ * @type {Object<string, string>}
+ */
 const categories = {
   EL: "Electronics",
   CL: "Clothing",
@@ -26,6 +30,10 @@ const categories = {
   OT: "Others",
 };
 
+/**
+ * Component that displays ads for a specific category.
+ * @returns {JSX.Element} The Category component.
+ */
 const Category = () => {
   // State to store the ads
   const { userData } = useContext(AuthContext);
@@ -41,6 +49,10 @@ const Category = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
+    /**
+     * Fetches ads for the specified category.
+     * @returns {Promise<void>}
+     */
     const fetchAdsByCategory = async () => {
       setIsLoading(true);
       try {
@@ -61,6 +73,10 @@ const Category = () => {
     fetchAdsByCategory(); // Call the fetch function
   }, [category]); // Dependency array with category to refetch when category changes
 
+  /**
+   * Filters the ads based on the search query.
+   * @type {Array<Object>}
+   */
   const filteredAds = useMemo(
     () =>
       ads.filter((ad) => {
@@ -79,9 +95,14 @@ const Category = () => {
 
   const categoryName = categories[category] || "Category";
 
+  /**
+   * Handles the search submit event.
+   * @param {string} query - The search query.
+   */
   const handleSearchSubmit = (query) => {
     setSearchQuery(query);
   };
+
   return (
     <div className="flex">
       <Sidebar />

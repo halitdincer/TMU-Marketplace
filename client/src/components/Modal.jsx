@@ -1,5 +1,14 @@
 import React from "react";
 
+/**
+ * Modal component that displays a modal dialog box.
+ * @param {Object} props - The component props.
+ * @param {boolean} props.isOpen - Determines whether the modal is open or not.
+ * @param {Function} props.onClose - Callback function to close the modal.
+ * @param {string} props.title - The title of the modal.
+ * @param {string} props.message - The message to be displayed in the modal.
+ * @returns {JSX.Element|null} The Modal component.
+ */
 function Modal({ isOpen, onClose, title, message }) {
   if (!isOpen) return null;
 

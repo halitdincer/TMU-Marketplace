@@ -7,13 +7,17 @@ import { XMarkIcon } from "@heroicons/react/20/solid";
 import Modal from "./Modal";
 import OpenAI from "openai";
 
+/**
+ * Component for editing an ad.
+ * @returns JSX element
+ */
 function EditAdForm() {
   const navigate = useNavigate(); // Hook for navigation
 
-  //Get ad from url
+  // Get ad from URL
   const { ad } = useAdDetails();
 
-  //set form values
+  // Set form values
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -38,7 +42,7 @@ function EditAdForm() {
     dangerouslyAllowBrowser: true,
   });
 
-  //Init default Form values from "ad"
+  // Initialize default form values from "ad".
   useEffect(() => {
     setTitle(ad.title);
   }, [ad.title]);
@@ -119,7 +123,10 @@ function EditAdForm() {
     }
   }, [ad.images]);
 
-  //handle form submission
+  /**
+   * Handle form submission.
+   * @param {Event} event - The form submit event.
+   */
   const handleSubmit = async (event) => {
     event.preventDefault();
     const config = {
@@ -171,10 +178,15 @@ function EditAdForm() {
     }, 3000);
   };
 
+  // Close the modal.
   const closeModal = () => {
     setIsModalOpen(false);
   };
 
+  /**
+   * Handle image change.
+   * @param {Event} e - The image change event.
+   */
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     setImages(images.concat(files));
@@ -186,6 +198,11 @@ function EditAdForm() {
     setImagePreviews(imagePreviews.concat(mappedPreviews));
   };
 
+  /**
+   * Remove an image.
+   * @param {string} image_url - The URL of the image.
+   * @param {boolean} isExisting - Indicates if the image is an existing image.
+   */
   const removeImage = (image_url, isExisting) => {
     if (isExisting) {
       setExistingImages(
@@ -199,6 +216,10 @@ function EditAdForm() {
     );
   };
 
+  /**
+   * Handle ad deletion.
+   * @param {Event} event - The delete button click event.
+   */
   const handleDelete = async (event) => {
     const form = new FormData();
     form.append("pk", ad.id);
@@ -225,6 +246,7 @@ function EditAdForm() {
     }
   };
 
+  // Fetch description using OpenAI API.
   const fetchDescription = async () => {
     try {
       const completion = await openai.chat.completions.create({
@@ -245,10 +267,10 @@ function EditAdForm() {
     }
   };
 
-  //Conditional render based on if the selected ad is owned by the current logged in user
+  // Conditional render based on if the selected ad is owned by the current logged in user
   const owner = userData.username == ad.owned_by;
   if (!owner) {
-    //if the owners are not the same, return this page
+    // If the owners are not the same, return this page
     return (
       <div className="min-h-screen p-6  bg-gray-50 flex items-center justify-center lg:pb-0 pb-24">
         <div>
@@ -259,7 +281,7 @@ function EditAdForm() {
       </div>
     );
   } else {
-    //else return regular edit page
+    // Else return regular edit page
     return (
       <div className="min-h-screen p-6  bg-gray-50 flex items-center justify-center lg:pb-0 pb-24">
         <div className="container max-w-screen-lg mx-auto">

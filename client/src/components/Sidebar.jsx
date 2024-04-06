@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from "react";
-
 import LogoSmall from "../assets/LogoSmall.svg";
+
+/**
+ * Sidebar component for the TMU Marketplace application.
+ * Renders a sidebar with navigation links.
+ * @component
+ * @example
+ * return (
+ *   <Sidebar />
+ * )
+ */
 function Sidebar() {
   const [isMobile, setIsMobile] = useState(false);
 

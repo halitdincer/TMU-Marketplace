@@ -2,21 +2,33 @@ import React, { useState } from "react";
 import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
 import { RxDotFilled } from "react-icons/rx";
 
+/**
+ * ImageCarousel component displays a carousel of images with navigation arrows and slide indicators.
+ * @param {Object[]} images - An array of image objects.
+ * @param {string} images[].image_url - The URL of the image.
+ * @returns {JSX.Element} - The rendered ImageCarousel component.
+ */
 function ImageCarousel({ images }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  // Function to navigate to the previous slide.
   const prevSlide = () => {
     const isFirstSlide = currentIndex === 0;
     const newIndex = isFirstSlide ? images.length - 1 : currentIndex - 1;
     setCurrentIndex(newIndex);
   };
 
+  //  Function to navigate to the next slide.
   const nextSlide = () => {
     const isLastSlide = currentIndex === images.length - 1;
     const newIndex = isLastSlide ? 0 : currentIndex + 1;
     setCurrentIndex(newIndex);
   };
 
+  /**
+   * Function to navigate to a specific slide.
+   * @param {number} slideIndex - The index of the slide to navigate to.
+   */
   const goToSlide = (slideIndex) => {
     setCurrentIndex(slideIndex);
   };

@@ -131,29 +131,6 @@ function ProfilePage() {
 
                 <p className="text-md text-gray-700"> @{userData.username}</p>
                 <p className="text-sm text-gray-500 ">{userData.email}</p>
-                {/* <div className="mt-4 flex items-center">
-                  {[0, 1, 2, 3, 4].map((rating) => (
-                    <StarIcon
-                      key={rating}
-                      className={classNames(
-                        reviews.average > rating
-                          ? "text-custom-yellow"
-                          : "text-gray-200",
-                        "h-5 w-5 flex-shrink-0"
-                      )}
-                      aria-hidden="true"
-                    />
-                  ))}
-                  <p className="sr-only">
-                    {userData.averageRating} out of 5 stars
-                  </p>
-                  <a
-                    href={reviews.href}
-                    className="ml-3 text-sm font-medium text-custom-blue hover:text-indigo-500"
-                  >
-                    {reviews.totalCount} reviews
-                  </a>
-                </div> */}
               </div>
             </div>
 
@@ -197,23 +174,6 @@ function ProfilePage() {
                 )}
               </div>
             </div>
-            {/* <div className="mx-auto max-w-7xl px-6 lg:px-8 ">
-              <h4 className="mt-3 mb-1 text-2xl font-semibold text-gray-900 ">
-                Your Reviews
-              </h4>
-              <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
-                {Mreviews.map((review, index) => (
-                  <ReviewCard
-                    key={index}
-                    name={review.name}
-                    description={review.description}
-                    imageUrl={review.imageUrl}
-                    rating={review.rating}
-                    date={review.date}
-                  />
-                ))}
-              </div>
-            </div> */}
           </>
         ) : (
           <>

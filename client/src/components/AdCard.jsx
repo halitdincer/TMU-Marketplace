@@ -1,22 +1,44 @@
 import { React, useEffect, useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
+
+/**
+ * Formats a timestamp into a localized date string.
+ * @param {number} timestamp - The timestamp to format.
+ * @returns {string} The formatted date string.
+ */
 function formatDate(timestamp) {
   const date = new Date(timestamp);
   const options = { month: "long", day: "numeric", year: "numeric" };
   return date.toLocaleDateString("en-US", options);
 }
+
+/**
+ * Renders an advertisement card component.
+ * @param {Object} props - The component props.
+ * @param {Object} props.ad - The advertisement object.
+ * @returns {JSX.Element} The rendered advertisement card.
+ */
 function AdCard({ ad }) {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
+    /**
+     * Handles the window resize event.
+     */
     function handleResize() {
       setWindowWidth(window.innerWidth);
     }
+
+    // Add event listener for window resize
     window.addEventListener("resize", handleResize);
+
+    // Clean up event listener on component unmount
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  // Truncate description if it exceeds 100 characters
   const shortDescription =
     ad.description.length > 100
       ? `${ad.description.slice(0, 70)}...`
@@ -27,6 +49,7 @@ function AdCard({ ad }) {
   if (windowWidth < 640) {
     imageClasses = "w-full h-75 object-cover object-center";
   }
+
   return (
     <article className="max-w-md mx-auto bg-white border border-gray-200 shadow-lg rounded-lg overflow-hidden my-5">
       <div className="max-h-80 overflow-hidden">
@@ -65,10 +88,6 @@ function AdCard({ ad }) {
             {ad.title || "No Title"}
           </a>
         </h3>
-
-        {/* <div className="h-20 overflow-hidden">
-          <p className="text-base text-gray-600 mt-3">{shortDescription}</p>
-        </div> */}
       </div>
     </article>
   );

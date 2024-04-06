@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
 
+/**
+ * Renders the avatar component.
+ * @param {string} avatarUrl - The URL of the avatar image.
+ * @param {string} altText - The alt text for the avatar image.
+ * @returns {JSX.Element} The Avatar component.
+ */
 function Avatar({ avatarUrl, altText }) {
   return (
     <div className="w-9 h-9 rounded-full flex items-center justify-center mr-2">
@@ -7,6 +13,12 @@ function Avatar({ avatarUrl, altText }) {
     </div>
   );
 }
+
+/**
+ * Formats the timestamp to display in the chat message.
+ * @param {number} timestamp - The timestamp of the message.
+ * @returns {string} The formatted timestamp.
+ */
 function formatTimestamp(timestamp) {
   const date = new Date(timestamp);
   const hours = date.getHours().toString().padStart(2, "0"); // Get hours and pad with 0 if single digit
@@ -14,6 +26,12 @@ function formatTimestamp(timestamp) {
   return `${hours}:${minutes}`;
 }
 
+/**
+ * Renders the chat message component.
+ * @param {Object} message - The message object.
+ * @param {boolean} isSender - Indicates if the message is sent by the current user.
+ * @returns {JSX.Element} The ChatMessage component.
+ */
 function ChatMessage({ message, isSender }) {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -89,6 +107,13 @@ function ChatMessage({ message, isSender }) {
   );
 }
 
+/**
+ * Renders the chat window component.
+ * @param {Object[]} messages - The array of chat messages.
+ * @param {string} userId - The ID of the current user.
+ * @param {Function} sendMessage - The function to send a message.
+ * @returns {JSX.Element} The ChatWindow component.
+ */
 function ChatWindow({ messages, userId, sendMessage }) {
   const [messageText, setMessageText] = useState("");
 

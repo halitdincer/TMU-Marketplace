@@ -4,6 +4,10 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import { AuthContext } from "./AuthProvider";
 import Modal from "./Modal";
 
+/**
+ * Renders a form for reporting an ad.
+ * @returns {JSX.Element} The rendered component.
+ */
 function Report() {
   const { id: adId } = useParams();
   const { apiToken } = useContext(AuthContext);
@@ -16,6 +20,10 @@ function Report() {
     message: "",
   });
 
+  /**
+   * Handles the form submission.
+   * @param {Event} event - The form submission event.
+   */
   const handleSubmit = (event) => {
     event.preventDefault();
     let headers = {'Content-Type': 'application/json'};
@@ -53,6 +61,7 @@ function Report() {
     });
   };
 
+  // Closes the modal.
   const closeModal = () => {
     setIsModalOpen(false);
   };
