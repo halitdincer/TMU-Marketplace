@@ -16,8 +16,11 @@ import Home from "../assets/home.svg";
 import Music from "../assets/music.svg";
 import Sports from "../assets/sports.svg";
 
-
-
+/**
+ * Array of callouts representing different categories.
+ * Each callout contains the name, image source, image alt text, and short code of the category.
+ * @type {Array}
+ */
 const callouts = [
   {
     name: "Beauty & Personal Care",
@@ -106,11 +109,19 @@ const callouts = [
   },
 ];
 
-
+/**
+ * Component representing the category grid.
+ * Renders a grid of categories with their respective images and names.
+ * @returns {JSX.Element} The rendered component.
+ */
 const CategoryGrid = () => {
   const navigate = useNavigate();
 
-
+  /**
+   * Handles the click event on a category.
+   * Navigates to the category page based on the category's short code.
+   * @param {string} categoryShortCode - The short code of the clicked category.
+   */
   const handleCategoryClick = (categoryShortCode) => {
     navigate(`/category/${categoryShortCode}`); 
   };

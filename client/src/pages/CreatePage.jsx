@@ -1,3 +1,10 @@
+/**
+ * Represents the page for creating an ad and posting it.
+ * @param {Function} onAdSubmit - The function to be called when the ad is submitted.
+ * @returns {JSX.Element} The JSX element representing the CreatePage component.
+ */
+
+// Importing necessary components
 import React from "react";
 import Sidebar from "components/Sidebar";
 import Header from "components/Header";

@@ -1,3 +1,4 @@
+// Importing necessary components and libraries
 import React from "react";
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -25,16 +26,27 @@ import BuyAndSell from "pages/BuyAndSellPage";
 import ChangePassword from "pages/ChangePassword";
 import ReportPage from "pages/ReportPage";
 
+/**
+ * The main App component.
+ * @returns {JSX.Element} The rendered App component.
+ */
 function App() {
   const [ads, setAds] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Call this function from the Header component when the form is submitted
+  /**
+   * Handles the search form submission.
+   * @param {string} query - The search query.
+   */
   const handleSearchSubmit = (query) => {
     setSearchQuery(query);
     //console.log('query: ',query);
   };
 
+  /**
+   * Handles the ad submission.
+   * @param {object} ad - The ad object.
+   */
   const handleAdSubmit = (ad) => {
     setAds([...ads, ad]);
   };

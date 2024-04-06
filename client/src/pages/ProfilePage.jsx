@@ -1,30 +1,52 @@
+/**
+ * Represents the profile page of the user.
+ * @component
+ * @example
+ * return (
+ *   <ProfilePage />
+ * )
+ */
+
+// Importing Libraries, Frameworks and React Components
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Header from "components/Header";
 import HeaderLoggedIn from "components/HeaderLoggedIn";
 import Sidebar from "components/Sidebar";
-import AdCard from "components/AdCard"; // Import AdCard
+import AdCard from "components/AdCard";
 import { Link } from "react-router-dom";
 import { AuthContext } from "components/AuthProvider";
 import { StarIcon } from "@heroicons/react/20/solid";
 import ReviewCard from "components/ReviewCard";
 
+/**
+ * Helper function to join multiple CSS classes.
+ * @param  {...string} classes - The CSS classes to join.
+ * @returns {string} - The joined CSS classes.
+ */
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
+/**
+ * The profile page component.
+ * @returns {JSX.Element} - The profile page JSX element.
+ */
 function ProfilePage() {
   const { userData } = useContext(AuthContext);
   const [ads, setAds] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Call this function from the Header component when the form is submitted
+  /**
+   * Handles the search form submission.
+   * @param {string} query - The search query.
+   */
   const handleSearchSubmit = (query) => {
     setSearchQuery(query);
     //console.log('query: ',query);
   };
 
-  const Mreviews = [
+  const Mreviews = [ //Example reviews, replace with actual reviews from the database.
     {
       name: "John Doe",
       description:
@@ -43,7 +65,7 @@ function ProfilePage() {
     },
   ];
 
-  useEffect(() => {
+  useEffect(() => { //Fetches the ads owned by the user.
     const fetchAds = async () => {
       try {
         const response = await axios.get("/api/ads/", {
@@ -57,10 +79,11 @@ function ProfilePage() {
       }
     };
 
-    fetchAds();
+    fetchAds(); //Fetches the ads owned by the user.
   }, [userData]);
 
-  const reviews = { href: "#", average: 4, totalCount: 117 };
+  const reviews = { href: "#", average: 4, totalCount: 117 }; //Example reviews, replace with actual reviews from the database.
+
   return (
     <div className="flex">
       <Sidebar />
@@ -70,12 +93,14 @@ function ProfilePage() {
             <HeaderLoggedIn onSearchSubmit={handleSearchSubmit} />
             <div className="w-full bg-gray-50 border border-gray-200 rounded-lg shadow ">
               <div className="flex justify-end px-4 pt-4">
+                
+                {/* Blue Edit Profile Button */}
                 <Link
                   to="/edit-profile"
                   className="flex items-center font-semibold text-custom-blue  hover:text-gray-700 "
                 >
                   <h2 className="text-md font-medium mr-2">Edit Profile</h2>
-                  <svg
+                  <svg 
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -92,6 +117,7 @@ function ProfilePage() {
                 </Link>
               </div>
 
+              {/* Profile Container containing: Picture, Name, Username, Email */}
               <div className="flex items-center flex-col pb-10">
                 <img
                   className="w-40 h-40 mb-3 rounded-full shadow-lg"
@@ -105,31 +131,10 @@ function ProfilePage() {
 
                 <p className="text-md text-gray-700"> @{userData.username}</p>
                 <p className="text-sm text-gray-500 ">{userData.email}</p>
-                {/* <div className="mt-4 flex items-center">
-                  {[0, 1, 2, 3, 4].map((rating) => (
-                    <StarIcon
-                      key={rating}
-                      className={classNames(
-                        reviews.average > rating
-                          ? "text-custom-yellow"
-                          : "text-gray-200",
-                        "h-5 w-5 flex-shrink-0"
-                      )}
-                      aria-hidden="true"
-                    />
-                  ))}
-                  <p className="sr-only">
-                    {userData.averageRating} out of 5 stars
-                  </p>
-                  <a
-                    href={reviews.href}
-                    className="ml-3 text-sm font-medium text-custom-blue hover:text-indigo-500"
-                  >
-                    {reviews.totalCount} reviews
-                  </a>
-                </div> */}
               </div>
             </div>
+
+            {/* Listings Container containing the ads created by the user logged in */}
             <div className="mx-auto max-w-7xl px-6 lg:px-8 ">
               <h4 className="mt-4 mb-1 text-2xl font-semibold text-gray-900 ">
                 Your Listings
@@ -142,8 +147,8 @@ function ProfilePage() {
                         <div className="relative">
                           <AdCard key={ad.id} ad={ad} />
 
+                          {/* Pencil Icon to edit the ad */}
                           <Link to={`/edit/ad/${ad.id}`}>
-                            {/* Pencil Icon */}
                             <div className="absolute top-4 right-4 transform translate-x-2/3 -translate-y-2/3">
                               <button className="bg-gray-200 border border-gray-400 rounded-full p-2 hover:bg-gray-200">
                                 <svg
@@ -169,23 +174,6 @@ function ProfilePage() {
                 )}
               </div>
             </div>
-            {/* <div className="mx-auto max-w-7xl px-6 lg:px-8 ">
-              <h4 className="mt-3 mb-1 text-2xl font-semibold text-gray-900 ">
-                Your Reviews
-              </h4>
-              <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
-                {Mreviews.map((review, index) => (
-                  <ReviewCard
-                    key={index}
-                    name={review.name}
-                    description={review.description}
-                    imageUrl={review.imageUrl}
-                    rating={review.rating}
-                    date={review.date}
-                  />
-                ))}
-              </div>
-            </div> */}
           </>
         ) : (
           <>

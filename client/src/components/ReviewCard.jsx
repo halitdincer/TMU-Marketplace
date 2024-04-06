@@ -1,6 +1,19 @@
 import React from "react";
+
+/**
+ * A component that represents a review card.
+ * @component
+ * @param {Object} props - The properties of the review card.
+ * @param {string} props.name - The name of the reviewer.
+ * @param {string} props.description - The description of the review.
+ * @param {string} props.imageUrl - The URL of the reviewer's image.
+ * @param {number} props.rating - The rating given by the reviewer.
+ * @param {string} props.date - The date of the review.
+ * @returns {JSX.Element} The rendered review card component.
+ */
 function ReviewCard({ name, description, imageUrl, rating, date }) {
   const stars = Array.from({ length: rating }, (_, index) => (
+    // Renders a star icon for each rating.
     <svg
       key={index}
       xmlns="http://www.w3.org/2000/svg"
@@ -15,7 +28,7 @@ function ReviewCard({ name, description, imageUrl, rating, date }) {
       />
     </svg>
   ));
-
+  {/* Renders the review card component. */}
   return (
     <div className="flex flex-col lg:ml-14 lg:flex-row items-start lg:items-center justify-start gap-6 py-8 px-4 lg:px-0">
       <img

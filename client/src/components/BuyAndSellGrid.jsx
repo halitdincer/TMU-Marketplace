@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from 'react-router-dom'; // Import Link
 
-
 import Beauty from "../assets/beauty.svg";
 import Clothing from "../assets/clothes.svg";
 import Electronics from "../assets/electronics.svg";
@@ -77,17 +76,21 @@ const callouts = [
   },
 ];
 
-
-
-
+/**
+ * Represents the BuyAndSell component.
+ * This component displays a grid of categories for buying and selling items.
+ */
 const BuyAndSell = () => {
   const navigate = useNavigate();
 
-
+  /**
+   * Handles the click event on a category.
+   * Navigates to the category page based on the category's short code.
+   * @param {string} categoryShortCode - The short code of the category.
+   */
   const handleCategoryClick = (categoryShortCode) => {
     navigate(`/category/${categoryShortCode}`); 
   };
-
 
   return (
     <div className="bg-white-100">

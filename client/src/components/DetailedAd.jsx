@@ -5,7 +5,6 @@ import {
   XMarkIcon,
 } from "@heroicons/react/20/solid";
 import { FaMapMarkerAlt } from "react-icons/fa";
-
 import ImageCarousel from "./ImageCarousel";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import useAdDetails from "./useAdDetails";
@@ -18,12 +17,20 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
+/**
+ * Component for displaying detailed information about an ad.
+ * @returns {JSX.Element} - The DetailedAd component.
+ */
 function DetailedAd() {
   const { ad } = useAdDetails();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
   const { apiToken, userData } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  /**
+   * Sends a message to the owner of the ad.
+   * @returns {Promise<void>} - A promise that resolves when the message is sent.
+   */
   const sendMessage = async () => {
     // Ensure ad details are available
     if (!ad) {
@@ -95,6 +102,10 @@ function DetailedAd() {
     }
   }, [ad]);
 
+  /**
+   * Updates the list of recently viewed ads.
+   * @param {number} newAdId - The ID of the newly viewed ad.
+   */
   const updateRecentlyViewedAds = (newAdId) => {
     const recentlyViewedAdIds =
       JSON.parse(localStorage.getItem("recentlyViewedAdIds")) || [];
@@ -110,6 +121,11 @@ function DetailedAd() {
     localStorage.setItem("recentlyViewedAdIds", JSON.stringify(updatedAdIds));
   };
 
+  /**
+   * Formats a timestamp into a localized date string.
+   * @param {number} timestamp - The timestamp to format.
+   * @returns {string} - The formatted date string.
+   */
   function formatDate(timestamp) {
     const date = new Date(timestamp);
     const options = { month: "long", day: "numeric", year: "numeric" };
@@ -162,27 +178,6 @@ function DetailedAd() {
                   alt=""
                 />
                 <p className="text-base font-medium">{ad.owned_by}</p>
-                {/* <div className="flex items-center">
-                  {[0, 1, 2, 3, 4].map((rating) => (
-                    <StarIcon
-                      key={rating}
-                      className={classNames(
-                        reviews.average > rating
-                          ? "text-gray-900"
-                          : "text-gray-200",
-                        "h-5 w-5 flex-shrink-0"
-                      )}
-                      aria-hidden="true"
-                    />
-                  ))}
-                </div>
-                <p className="sr-only">{reviews.average} out of 5 stars</p>
-                <a
-                  href={reviews.href}
-                  className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500"
-                >
-                  {reviews.totalCount} reviews
-                </a> */}
               </div>
             </div>
 

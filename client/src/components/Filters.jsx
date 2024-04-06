@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+// Component for displaying filters and handling filter changes.
 function Filters() {
-  const [category, setCategory] = useState('');
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
-  const [location, setLocation] = useState('');
+  const [category, setCategory] = useState(''); // State for selected category
+  const [minPrice, setMinPrice] = useState(''); // State for minimum price
+  const [maxPrice, setMaxPrice] = useState(''); // State for maximum price
+  const [location, setLocation] = useState(''); // State for selected location
   const [isMobile, setIsMobile] = useState(false); // State to track if the view is mobile
   const [showFilters, setShowFilters] = useState(false); // State to toggle filter visibility
 
-
-
+  // Function to handle resize event and update isMobile state.
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1024); // Adjust this value based on your mobile breakpoint
@@ -60,7 +60,7 @@ function Filters() {
 
   const navigate = useNavigate();
 
-  // Function to update the URL parameters
+  // Function to update the URL parameters based on filter changes.
   useEffect(() => {
     const params = new URLSearchParams();
     
@@ -73,7 +73,7 @@ function Filters() {
     navigate(`?${params.toString()}`, { replace: true });
   }, [category, location, minPrice, maxPrice, navigate]);
 
-  // Toggle for showing/hiding filters
+  // Function to toggle filter visibility.
   const toggleFilters = () => {
     setShowFilters(!showFilters);
   };

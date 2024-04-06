@@ -1,3 +1,9 @@
+/**
+ * Renders the Ad Details page.
+ * @returns {JSX.Element} The rendered Ad Details page.
+ */
+
+// Import necessary components and hooks
 import React from "react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
